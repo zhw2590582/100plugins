@@ -1,2 +1,2 @@
 # 100plugins
-写100个javascript原生插件
+写100个javascript原生插件，每个repository里的docs可以查看demo。

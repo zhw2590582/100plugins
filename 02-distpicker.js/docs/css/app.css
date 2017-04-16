@@ -1,8 +1,11 @@
-.app {
-  margin-top: 100px;
-  text-align: center;
+.distpicker{
+  margin: 20px;
 }
 
-.demo {
+.distpicker select{
+  margin-right: 15px;
+}
 
+.title{
+  margin-left: 20px;
 }
