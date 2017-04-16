@@ -21,16 +21,16 @@ var distpicker = new Distpicker({
 distpicker.getDistricts(130000)
 
 //根据地区名返回编码
-distpicker01.getDistricts('广州市')
+distpicker.getDistricts('广州市')
 
 //返回当前值数组，可以是编码或者地区名
-distpicker01.getValue()
+distpicker.getValue()
 
 //重置实例
-distpicker03.reset();
+distpicker.reset();
 
 //销毁实例
-distpicker02.destroy();
+distpicker.destroy();
 
 ```
 ## 开发
