@@ -7,25 +7,19 @@ class Distpicker {
     } else if (typeof options.target === "undefined") {
       throw new TypeError("Distpicker required `target` option.");
     }
-
     if (options.target instanceof Element) {
       this.element = options.target;
     } else {
       this.element = document.querySelectorAll(options.target)[0];
     }
-
     this.selects = [].slice.call(this.element.getElementsByTagName("select"));
     this.selectsLength = this.selects.length;
     if (this.selectsLength === 0) {
       throw new TypeError("target element required `select` DOM.");
     }
-
     this.options = Object.assign({}, Distpicker.DEFAULTS, options);
-
     this.currentCity = [];
-
     this._change = this._change.bind(this);
-
     this._init();
   }
 
@@ -67,8 +61,10 @@ class Distpicker {
     Keys.forEach(item => {
       this.selects[index].options.add(new Option(obj[item], item));
     });
-
-    this.selectsLength === 3 && index === 1 && this._createDom(0, 2); //待优化
+    while (this.selectsLength - index > 1){
+      this._createDom(0, index + 1);
+      index++;
+    }
   }
 
   _autoSelect() {
