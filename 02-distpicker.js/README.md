@@ -5,7 +5,7 @@
 ## 使用
 ```js
 
-import Distpicker from './js/Distpicker'
+import Distpicker from './js/distpicker.js'
 
 var distpicker = new Distpicker({
   target: '#distpicker', //挂载DOM对象

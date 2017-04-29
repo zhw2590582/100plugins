@@ -1,0 +1,17 @@
+body{
+  background: #F0F0F0
+}
+
+.app{
+  width: 500px;
+  margin: 0 auto;
+  font-size: 14px;
+  text-align: center;
+}
+
+.app img{
+  width: 200px;
+  height: 200px;
+  background: #FFF url('../img/loading.gif') no-repeat center center;
+  border: 1px solid #AAA;
+}

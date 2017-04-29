@@ -5,7 +5,7 @@
 ## 使用
 ```js
 
-import MouseTooltip from './js/MouseTooltip'
+import MouseTooltip from './js/mouseTooltip.js'
 
 /**
 * 接受两个参数，第一个是DOM元素和id、class作为选择器
