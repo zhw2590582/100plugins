@@ -27,9 +27,15 @@
   <script>
     var slider = new Slider({
       container: '.slider',
-      direction: true,
-      controls: true,
-      captions: true
+      mode: 'fade', //fade或者slide
+      duration: 50, //过渡时间
+      delay: 2000, //停留时间
+      start: 0, //开始下标
+      auto: true, //自动播放
+      loop: true, //循环播放
+      direction: true, //显示方向箭头
+      controls: true, //显示分页控制
+      captions: true //显示图片标题
     });
   </script>
 </body>
