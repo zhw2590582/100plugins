@@ -1,18 +1,23 @@
 ## LazyLoad.js
 
-一个很简单的Javascript原生面向对象的图像懒加载插件
+一个很简单的Javascript原生面向对象的幻灯片插件
 
 ## 使用
 ```js
 
-import LazyLoad from './js/lazyLoad.js'
+import Slider from './js/slider.js'
 
-var LazyLoad = new LazyLoad({
-  offset: 200, //距离容差
-  throttle: 200, //加载时间容差
-  loadCallback: function(element) { //加载完成的回调函数，参数为对应的DOM对象
-    element.className = 'load';
-  }
+var slider = new Slider({
+  container: '.slider',
+  mode: 'fade', //fade或者slide
+  duration: 50, //过渡时间
+  delay: 2000, //停留时间
+  start: 0, //开始下标
+  auto: true, //自动播放
+  loop: true, //循环播放
+  direction: true, //显示方向箭头
+  controls: true, //显示分页控制
+  captions: true //显示图片标题
 });
 
 ```
