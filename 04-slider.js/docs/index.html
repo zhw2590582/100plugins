@@ -20,39 +20,16 @@
       <img src="./img/img1.png" title="轮播图01" class="slider_item">
       <img src="./img/img2.png" title="轮播图02" class="slider_item">
       <img src="./img/img3.png" title="轮播图03" class="slider_item">
-      <div class="slider_direction">
-        <a class="prev"></a>
-        <a class="next"></a>
-      </div>
-      <div class="slider_control">
-        <a class="active">1</a>
-        <a>2</a>
-        <a>3</a>
-      </div>
-      <div class="slider_caption">轮播图01</div>
     </div>
   </div>
   <script src="slider/slider.js"></script>
   <script src="js/app.js"></script>
   <script>
     var slider = new Slider({
-      container: '#slider',
-      mode: 'fade',
-      duration: 0.5,
-      delay: 3,
-      start: 0,
-      auto: true,
-      loop: true,
-      adaptiveHeight: true,
-      direction: false,
-      controls: false,
-      captions: false,
-      onChange: function (prevIndex, nextIndex) {
-        console.log(prevIndex, nextIndex);
-      },
-      onChangeEnd: function (prevIndex, nextIndex) {
-        console.log(prevIndex, nextIndex);
-      }
+      container: '.slider',
+      direction: true,
+      controls: true,
+      captions: true
     });
   </script>
 </body>

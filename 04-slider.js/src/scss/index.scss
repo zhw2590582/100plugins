@@ -11,7 +11,7 @@
   .slider_direction{
     a{
       position: absolute;
-      z-index: 1;
+      z-index: 998;
       top: 50%;
       display: inline-block;
       width: 30px;
@@ -39,7 +39,7 @@
   }
   .slider_control{
     position: absolute;
-    z-index: 3;
+    z-index: 1000;
     bottom: 0;
     right: 0;
     height: 25px;
@@ -73,7 +73,7 @@
     bottom: 0;
     color: #fff;
     width: 100%;
-    z-index: 2;
+    z-index: 999;
     padding: 0 10px;
     font-size: 13px;
     overflow: hidden;
