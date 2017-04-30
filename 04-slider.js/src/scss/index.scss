@@ -49,7 +49,7 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     a{
-      margin-right: 5px;
+      margin: 8px 5px 0 0;
       border-radius: 5px;
       width: 8px;
       height: 8px;
@@ -74,11 +74,11 @@
     color: #fff;
     width: 100%;
     z-index: 2;
-    padding: 5px 10px;
+    padding: 0 10px;
     font-size: 13px;
     overflow: hidden;
-    height: 35px;
-    line-height: 30px;
+    height: 25px;
+    line-height: 25px;
     background: #000;
     background: -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.2) 35%, rgba(0, 0, 0, 0.5) 65%, rgba(0, 0, 0, 0.66));
     background: -o-linear-gradient(transparent, rgba(0, 0, 0, 0.1) 20%, rgba(0, 0, 0, 0.2) 35%, rgba(0, 0, 0, 0.5) 65%, rgba(0, 0, 0, 0.66));
