@@ -35,7 +35,7 @@ class LazyLoad {
       let imgUrl = element.getAttribute('data-lazy');
       let eleTop = element.getBoundingClientRect().top;
       let eleBottom = element.getBoundingClientRect().bottom;
-      if ((eleTop + self.options.offset) < docHeight && eleTop > (eleBottom - eleTop - self.options.offset)) {
+      if ((eleTop + self.options.offset) < docHeight && eleBottom > self.options.offset) {
         element.src = imgUrl;
         element.removeAttribute('data-lazy');
         self.options.loadCallback(element);
