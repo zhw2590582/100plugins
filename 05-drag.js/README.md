@@ -10,7 +10,7 @@ import Drag from './js/drag.js'
 var drag = new Drag({
   container: '.drag_wrap', //被拖动的DOM
   dragEle: '.drag_header', //可被拖动的DOM
-  ondrag: function (event) {
+  ondrag: function (event) { //事件对象中有一个新对象drag包含当前container元素的坐标值
     document.querySelectorAll('.drag_x')[0].innerHTML = 'X: ' + event.drag.x;
     document.querySelectorAll('.drag_Y')[0].innerHTML = 'Y: ' + event.drag.y;
   }
