@@ -19,8 +19,8 @@
     <div class="drag_wrap">
       <div class="drag_header">点击这里移动</div>
       <div class="drag_body">
-        <p class="drag_x"></p>
-        <p class="drag_Y"></p>
+        <p class="drag_x">X: init</p>
+        <p class="drag_Y">Y: init</p>
       </div>
     </div>
   </div>
@@ -28,11 +28,11 @@
   <script src="js/app.js"></script>
   <script>
     var drag = new Drag({
-      container: '.drag_wrap',
-      dragEle: '.drag_header',
+      container: '.drag_wrap', //被拖动的DOM
+      dragEle: '.drag_header', //可被拖动的DOM
       ondrag: function (event) {
-        document.querySelectorAll('.drag_x')[0].innerHTML = 'x: ' + event.drag.x;
-        document.querySelectorAll('.drag_Y')[0].innerHTML = 'y: ' + event.drag.y;
+        document.querySelectorAll('.drag_x')[0].innerHTML = 'X: ' + event.drag.x;
+        document.querySelectorAll('.drag_Y')[0].innerHTML = 'Y: ' + event.drag.y;
       }
     });
   </script>

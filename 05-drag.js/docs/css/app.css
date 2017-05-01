@@ -8,8 +8,8 @@ body {
   position: fixed;
   width: 200px;
   height: 150px;
-  top: 40%;
-  left: 40%;
+  top: 100px;
+  left: 100px;
   background: #eee;
   border: 1px solid #ccc;
   box-sizing: border-box;
