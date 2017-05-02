@@ -31,5 +31,8 @@
     position: absolute;
     z-index: 9;
     transition: all 0.5s;
+    &.loading{
+      opacity: .8;
+    }
   }
 }
