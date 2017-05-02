@@ -1,20 +1,20 @@
 ## LazyLoad.js
 
-一个很简单的Javascript原生面向对象的DOM元素拖动插件
+一个很简单的Javascript原生面向对象的图片缩放插件
 
 ## 使用
 ```js
 
-import Drag from './js/drag.js'
+import Zoom from './js/zoom.js'
 
-var drag = new Drag({
-  container: '.drag_wrap', //被拖动的DOM
-  dragEle: '.drag_header', //可被拖动的DOM
-  ondrag: function (event) { //事件对象中有一个新对象drag包含当前container元素的坐标值
-    document.querySelectorAll('.drag_x')[0].innerHTML = 'X: ' + event.drag.x;
-    document.querySelectorAll('.drag_Y')[0].innerHTML = 'Y: ' + event.drag.y;
+var zoom = new Zoom({
+  callback: function (el) { //callback为图片加载并打开后的DOM对象
+    console.log(el);
   }
 });
+
+//销毁实例
+zoom.destroy()
 
 ```
 ## 开发
