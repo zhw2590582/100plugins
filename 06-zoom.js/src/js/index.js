@@ -17,15 +17,12 @@ class Zoom {
 
   _imgClick(e){
     this.imgTarget = e.target;
-    if (document.getElementById('zoom_modal') === null) {
-      this._createElement();
-    } else {
-      this._createElement(true);
-    }
+    let zoom_modal = document.getElementById('zoom_modal');
+    this._createElement(zoom_modal === null);
   }
 
   _createElement(type){
-    if (type) {
+    if (type === false) {
       this.zoomImg.src = this.imgTarget.getAttribute('data-zoom');
       this.zoomAnimate.src = this.imgTarget.src;
       this._showStart();
