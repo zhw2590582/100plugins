@@ -41,13 +41,13 @@ class Zoom {
     this.zoomAnimate = document.createElement('img');
     this.zoomAnimate.src = this.imgTarget.src;
     this.zoomAnimate.setAttribute('id', 'zoom_animate');
-    this.zoomAnimate.setAttribute('class', 'loading');
     this.zoomModal.appendChild(this.zoomAnimate);
     document.body.appendChild(this.zoomModal);
     this._showStart();
   }
 
   _showStart(){
+    this.zoomModal.setAttribute('class', 'loading');
     let imgTargetWidth = this._getStyle(this.imgTarget, 'width').replace(/px/, '') - 0;
     let imgTargetHeight = this._getStyle(this.imgTarget, 'height').replace(/px/, '') - 0;
     let imgTargetTop = this.imgTarget.getBoundingClientRect().top;
@@ -62,7 +62,7 @@ class Zoom {
   }
 
   _showEnd(){
-    this.zoomAnimate.setAttribute('class', '');
+    this.zoomModal.setAttribute('class', '');
     let imgLoadWidth = this._getStyle(this.zoomImg, 'width').replace(/px/, '') - 0;
     let imgLoadHeight = this._getStyle(this.zoomImg, 'height').replace(/px/, '') - 0;
     let imgLoadTop = this.zoomImg.getBoundingClientRect().top;
