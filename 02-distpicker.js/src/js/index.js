@@ -26,7 +26,7 @@ class Distpicker {
   static get DEFAULTS() {
     return {
       placeholder: ["---- 选择省 ----", "---- 选择市 ----", "---- 选择区 ----"],
-      autoselect: false,
+      autoselect: null,
       valueType: "name",
       callback: new Function()
     };
@@ -55,28 +55,37 @@ class Distpicker {
     this.selects[index].innerHTML = "";
     let obj = districts[code] || {};
     let Keys = Object.keys(obj) || [];
-    this.selects[index].options.add(
-      new Option(this.options.placeholder[index], 0)
-    );
+    this.selects[index].options.add(new Option(
+      this.options.placeholder[index],
+      0
+    ));
     Keys.forEach(item => {
       this.selects[index].options.add(new Option(obj[item], item));
     });
-    while (this.selectsLength - index > 1){
+    while (this.selectsLength - index > 1) {
       this._createDom(0, index + 1);
       index++;
     }
   }
 
-  _autoSelect() {
-    let codes = [];
+  _autoSelect(value = []) {
     let self = this;
-    this.options.autoselect.forEach(item => {
-      codes.push(self.getDistricts(item));
-    });
+    let codes = [];
+    if (value.length > 0) {
+      codes = value;
+      this.currentCity = this.options.valueType == "name"
+        ? codes.forEach(item => {
+          this.currentCity.push(self.getDistricts(item));
+        }) : codes;
+    } else {
+      this.options.autoselect.forEach(item => {
+        codes.push(self.getDistricts(item));
+      });
+      this.currentCity = this.options.valueType == "name"
+        ? this.options.autoselect
+        : codes;
+    }
     this._createElement(...codes);
-    this.currentCity = this.options.valueType == "name"
-      ? this.options.autoselect
-      : codes;
     this.selects.forEach((item, index) => {
       [].slice.call(item.childNodes).every(option => {
         if (option.value == codes[index]) {
@@ -96,15 +105,11 @@ class Distpicker {
     let self = this;
     this.selects.forEach((item, index) => {
       item.index = index;
-      item.addEventListener(
-        "change",
-        self._change,
-        false
-      );
+      item.addEventListener("change", self._change, false);
     });
   }
 
-  _change(event){
+  _change(event) {
     this.selectsLength - 1 > event.target.index &&
       this._createDom(event.target.value, event.target.index + 1);
     this.currentCity[event.target.index] = this.options.valueType == "name"
@@ -143,23 +148,23 @@ class Distpicker {
     return name;
   }
 
-  getValue(){
+  getValue() {
     return this.currentCity;
   }
 
-  reset(){
-    this._createElement()
+  autoselect(value) {
+    this._autoSelect(value);
   }
 
-  destroy(){
+  reset() {
+    this._createElement();
+  }
+
+  destroy() {
     let self = this;
     this.selects.forEach((item, index) => {
       item.innerHTML = "";
-      item.removeEventListener(
-        "change",
-        self._change,
-        false
-      )
+      item.removeEventListener("change", self._change, false);
     });
   }
 }

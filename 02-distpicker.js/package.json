@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "build": "WEBPACK_ENV=build webpack",
-    "dev": "WEBPACK_ENV=dev webpack-dev-server --open --inline --content-base docs/"
+    "build": "webpack",
+    "dev": "webpack-dev-server --open --inline --content-base docs/"
   },
   "description": "Javascript Plugin Templet",
   "keywords": ["javascript", "plugin", "templet"],
