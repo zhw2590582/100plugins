@@ -1,4 +1,4 @@
-class Upload {
+class Uploader {
   constructor(options) {
 
     this._init();
@@ -29,5 +29,5 @@ class Upload {
 
 }
 
-window.Upload = Upload
-export default window.Upload
+window.Uploader = Uploader
+export default window.Uploader
