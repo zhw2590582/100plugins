@@ -160,11 +160,7 @@ class Uploader {
     });
     [].slice.call(this.fileListContainer.querySelectorAll('.imgDel')).forEach((item, index) => {
       item.addEventListener('click', function () {
-        let fileItem = self.fileListContainer.querySelectorAll('.fileItem')[index];
-        //self.fileListContainer.removeChild(fileItem);
-        self.options.removedfile(self.fileList[index]);
-        self.fileList.splice(index, 1);
-        console.log(self.fileList, index);
+
       }, false);
     })
   }
