@@ -54,6 +54,7 @@ class Uploader {
     this._createUploader();
     this._createFileList();
     this._eventBind();
+    this.options.init()
   }
 
   /**
@@ -153,20 +154,42 @@ class Uploader {
           '<div class="imgInfo">' +
             '<p class="infoName">' + file.name +'</p>' +
           '</div>' +
-          '<span class="imgDel">×</span>' +
+          '<span class="imgDel" data-index="' + index + '">×</span>' +
           '<span class="imgUploaded">√</span>' +
         '</div>'
       );
     });
-    [].slice.call(this.fileListContainer.querySelectorAll('.imgDel')).forEach((item, index) => {
-      item.addEventListener('click', function () {
-
-      }, false);
-    })
   }
 
   _uploadOpen(){
-    console.log('_uploadOpen');
+    let self = this;
+    let xhr = new XMLHttpRequest();
+    let formData = new FormData();
+    xhr.open("post", this.options.url, true);
+    xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+    for(var i = 0; i < this.fileList.length; i++) {
+        var file = this.fileList[i];
+        formData.append('files', file, file.name);
+    }
+    xhr.onload = this._xhrOnload;
+    xhr.onerror = this._xhrOnerror;
+    xhr.upload.onprogress = this._xhrOnprogress;
+    xhr.send(formData)
+  }
+
+  _xhrOnload(event){
+    console.log(event);
+  }
+
+  _xhrOnerror(event){
+    console.log(event);
+  }
+
+  _xhrOnprogress(event){
+    if (event.lengthComputable) {
+      let percentComplete = (event.loaded / event.total) * 100;
+      console.log(percentComplete);
+    }
   }
 
 }
