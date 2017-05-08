@@ -32,6 +32,7 @@ class Uploader {
       addRemoveLinks: false,
       uploadMultiple: true,
       autoUpload: true,
+      headers: null,
       addedfile: new Function(),
       removedfile: new Function(),
       success: new Function(),
@@ -154,7 +155,7 @@ class Uploader {
           '<div class="imgInfo">' +
             '<p class="infoName">' + file.name +'</p>' +
           '</div>' +
-          '<span class="imgDel" data-index="' + index + '">×</span>' +
+          (this.options.addRemoveLinks ? '<span class="imgDel" data-index="' + index + '">×</span>' : '') +
           '<span class="imgUploaded">√</span>' +
         '</div>'
       );
@@ -166,7 +167,11 @@ class Uploader {
     let xhr = new XMLHttpRequest();
     let formData = new FormData();
     xhr.open("post", this.options.url, true);
-    xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+    if (!!this.options.headers) {
+      for(let header in this.options.headers) {
+          xhr.setRequestHeader(header, this.options.headers[header])
+      }
+    }
     for(var i = 0; i < this.fileList.length; i++) {
         var file = this.fileList[i];
         formData.append('files', file, file.name);
