@@ -168,12 +168,12 @@ class Uploader {
 
   _uploadOpen(){
     let self = this;
-    this.fileList.forEach(file => {
-      self._uploadSend(file)
+    this.fileList.forEach((file, index) => {
+      self._uploadSend(file, index)
     })
   }
 
-  _uploadSend(file){
+  _uploadSend(file, index){
     let xhr = new XMLHttpRequest();
     let formData = new FormData();
     xhr.open("post", this.options.url, true);
@@ -187,6 +187,7 @@ class Uploader {
     xhr.onabort = this._xhrOnabort.bind(this, event, file);
     xhr.onload = this._xhrOnload.bind(this, event, file);
     xhr.onerror = this._xhrOnerror.bind(this, event, file);
+    xhr.upload.index = index;
     xhr.upload.onprogress = this._xhrOnprogress;
     xhr.send(formData)
   }
@@ -210,10 +211,9 @@ class Uploader {
   }
 
   _xhrOnprogress(event){
-    console.log(event);
     if (event.lengthComputable) {
       let percentComplete = (event.loaded / event.total) * 100;
-      this.options.uploadprogress(this.fileList, event.total, percentComplete)
+      this.options.uploadprogress(this.fileList[event.target.index], event.total, percentComplete)
     }
   }
 
