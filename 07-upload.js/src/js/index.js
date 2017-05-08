@@ -23,7 +23,7 @@ class Uploader {
     this._xhrOnload = this._xhrOnload.bind(this);
     this._xhrOnerror = this._xhrOnerror.bind(this);
     this._xhrOnprogress = this._xhrOnprogress.bind(this);
-
+    this._uploadSend = this._uploadSend.bind(this);
     this._init();
   }
 
@@ -39,12 +39,12 @@ class Uploader {
       headers: null,
       addedfile: new Function(),
       removedfile: new Function(),
+      start: new Function(),
+      abort: new Function(),
       success: new Function(),
       error: new Function(),
       complete: new Function(),
-      canceled: new Function(),
       uploadprogress: new Function(),
-      init: new Function(),
       message: {
         uploadText: '将文件拖到此处，或点击上传',
         maxFilesText: '到达最多上传数目',
@@ -60,7 +60,6 @@ class Uploader {
     this._createUploader();
     this._createFileList();
     this._eventBind();
-    this.options.init()
   }
 
   /**
@@ -169,6 +168,12 @@ class Uploader {
 
   _uploadOpen(){
     let self = this;
+    this.fileList.forEach(file => {
+      self._uploadSend(file)
+    })
+  }
+
+  _uploadSend(file){
     let xhr = new XMLHttpRequest();
     let formData = new FormData();
     xhr.open("post", this.options.url, true);
@@ -177,29 +182,35 @@ class Uploader {
           xhr.setRequestHeader(header, this.options.headers[header])
       }
     }
-    for(var i = 0; i < this.fileList.length; i++) {
-        var file = this.fileList[i];
-        formData.append('files', file, file.name);
-    }
-    xhr.onload = this._xhrOnload;
-    xhr.onerror = this._xhrOnerror;
+    formData.append('file', file, file.name);
+    xhr.onloadstart = this._xhrOnloadstart.bind(this, event, file);
+    xhr.onabort = this._xhrOnabort.bind(this, event, file);
+    xhr.onload = this._xhrOnload.bind(this, event, file);
+    xhr.onerror = this._xhrOnerror.bind(this, event, file);
     xhr.upload.onprogress = this._xhrOnprogress;
     xhr.send(formData)
   }
 
-  _xhrOnload(event){
-    console.log('-------success---------');
-    this.options.success(event);
-    this.options.complete(event);
+  _xhrOnloadstart(event, file){
+    this.options.start(event, file);
   }
 
-  _xhrOnerror(event){
-    console.log('-------error---------');
-    this.options.error(event);
-    this.options.complete(event);
+  _xhrOnabort(event, file){
+    this.options.abort(event, file);
+  }
+
+  _xhrOnload(event, file){
+    this.options.success(event, file);
+    this.options.complete(event, file);
+  }
+
+  _xhrOnerror(event, file){
+    this.options.error(event, file);
+    this.options.complete(event, file);
   }
 
   _xhrOnprogress(event){
+    console.log(event);
     if (event.lengthComputable) {
       let percentComplete = (event.loaded / event.total) * 100;
       this.options.uploadprogress(this.fileList, event.total, percentComplete)

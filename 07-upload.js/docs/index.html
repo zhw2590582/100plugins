@@ -36,21 +36,27 @@
               'accessToken': 'accessToken'
             },
             addedfile: function(fileList) { //添加文件回调
+              console.log('----addedfile-----');
               console.log(fileList);
             },
             removedfile: function(file) { //删除文件回调
+              console.log('----removedfile-----');
               console.log(file);
             },
-            success: function(event) { //上传成功的回调
-              console.log(event);
+            success: function(event, file) { //上传成功的回调
+              console.log('----success-----');
+              console.log(event, file);
             },
-            complete: function(event) { //上传成功和失败的回调
-              console.log(event);
+            error: function(event, file) { //上传失败的回调
+              console.log('----error-----');
+              console.log(event, file);
             },
-            canceled: function(file) { //取消上传的回调
-              console.log(file);
+            complete: function(event, file) { //上传成功和失败的回调
+              console.log('----complete-----');
+              console.log(event, file);
             },
             uploadprogress: function(file, total, progress) { //上传进度的回调
+              console.log('----uploadprogress-----');
               console.log(file, total, progress);
             }
         });
