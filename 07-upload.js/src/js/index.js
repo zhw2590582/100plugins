@@ -20,6 +20,10 @@ class Uploader {
       this.options.fileList = document.querySelectorAll(options.fileList)[0];
     }
 
+    this._xhrOnload = this._xhrOnload.bind(this);
+    this._xhrOnerror = this._xhrOnerror.bind(this);
+    this._xhrOnprogress = this._xhrOnprogress.bind(this);
+
     this._init();
   }
 
@@ -36,6 +40,7 @@ class Uploader {
       addedfile: new Function(),
       removedfile: new Function(),
       success: new Function(),
+      error: new Function(),
       complete: new Function(),
       canceled: new Function(),
       uploadprogress: new Function(),
@@ -183,17 +188,21 @@ class Uploader {
   }
 
   _xhrOnload(event){
-    console.log(event);
+    console.log('-------success---------');
+    this.options.success(event);
+    this.options.complete(event);
   }
 
   _xhrOnerror(event){
-    console.log(event);
+    console.log('-------error---------');
+    this.options.error(event);
+    this.options.complete(event);
   }
 
   _xhrOnprogress(event){
     if (event.lengthComputable) {
       let percentComplete = (event.loaded / event.total) * 100;
-      console.log(percentComplete);
+      this.options.uploadprogress(this.fileList, event.total, percentComplete)
     }
   }
 

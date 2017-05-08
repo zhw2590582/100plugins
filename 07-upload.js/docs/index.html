@@ -41,11 +41,11 @@
             removedfile: function(file) { //删除文件回调
               console.log(file);
             },
-            success: function(file) { //上传成功的回调
-              console.log(file);
+            success: function(event) { //上传成功的回调
+              console.log(event);
             },
-            complete: function(file) { //上传成功和失败的回调
-              console.log(file);
+            complete: function(event) { //上传成功和失败的回调
+              console.log(event);
             },
             canceled: function(file) { //取消上传的回调
               console.log(file);
