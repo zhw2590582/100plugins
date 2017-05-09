@@ -8,6 +8,8 @@ class Uploader {
 
     this.options = Object.assign({}, Uploader.DEFAULTS, options);
 
+    this.fileList = [];
+
     if (options.target instanceof Element) {
       this.options.target = options.target;
     } else {
@@ -71,9 +73,11 @@ class Uploader {
       'beforeend',
       '<div class="uploader_container"><div class="upload_dragger"><span class="upload_icon"></span><span class="upload_text">' +
         this.options.message.uploadText +
+        '<input type="file" id="file_input" class="file_input" ' + (this.options.uploadMultiple ? 'multiple' : '') + ' name="' + this.options.paramName + '"></input>' +
       '</span><div></div>'
     );
     this.uploaderContainer = this.options.target.querySelectorAll('.uploader_container')[0];
+    this.fileInput = this.options.target.querySelectorAll('#file_input')[0];
   }
 
   _createFileList(fileList) {
@@ -104,12 +108,18 @@ class Uploader {
     this.uploaderContainer.addEventListener('drop', function(e) {
       self._eventDrop(e);
     }, false);
+    this.uploaderContainer.addEventListener('click', function(e) {
+      self.fileInput.click(e);
+    }, false);
+    this.fileInput.addEventListener('change', function(e) {
+      self._eventDrop(e);
+    }, false);
   }
 
   _eventDrop(e) {
     e.preventDefault();
     this.uploaderContainer.classList.remove('dragenter');
-    let fileList = [].slice.call(e.dataTransfer.files);
+    let fileList = e.type === 'drop' ? [].slice.call(e.dataTransfer.files) : [].slice.call(this.fileInput.files);
     let flag = true;
     if (fileList.length == 0) {return false};
     if (this.options.uploadMultiple === false && fileList.length > 1) {
@@ -136,7 +146,11 @@ class Uploader {
       return true
     })
     if (flag) {
-      this.fileList = fileList;
+      if (this.options.autoUpload) {
+        this.fileList = fileList;
+      } else {
+        this.fileList.push(...fileList);
+      }
       this.options.addedfile(this.fileList);
       this._createPreview();
       this.options.autoUpload && this._uploadOpen();
@@ -145,6 +159,7 @@ class Uploader {
 
   _createPreview(){
     let self = this;
+    self.fileListContainer.innerHTML = '';
     this.fileList.forEach((file, index) => {
       let ObjectURL;
       if (window.URL.createObjectURL) {
@@ -160,7 +175,7 @@ class Uploader {
             '<p class="infoName">' + file.name +'</p>' +
           '</div>' +
           (this.options.addRemoveLinks ? '<span class="imgDel" data-index="' + index + '">×</span>' : '') +
-          '<span class="imgUploaded">√</span>' +
+          '<span class="imgUploaded"></span>' +
         '</div>'
       );
     });
@@ -215,6 +230,14 @@ class Uploader {
       let percentComplete = (event.loaded / event.total) * 100;
       this.options.uploadprogress(this.fileList[event.target.index], event.total, percentComplete)
     }
+  }
+
+  /**
+  * ================================== PUBLIC METHODS ==================================
+  */
+
+  upload(){
+    this._uploadOpen()
   }
 
 }
