@@ -122,6 +122,19 @@ class Uploader {
     let fileList = e.type === 'drop' ? [].slice.call(e.dataTransfer.files) : [].slice.call(this.fileInput.files);
     let flag = true;
     if (fileList.length == 0) {return false};
+    fileList.every(file => {
+      if (file.type.indexOf('image') === -1 || this.options.acceptedFiles.indexOf(file.type.split('/')[1]) === -1) {
+        this.options.messageFn(this.options.message.acceptedFilesText);
+        flag = false;
+        return false;
+      }
+      if (file.size > this.options.maxFilesize*1024) {
+        this.options.messageFn(this.options.message.maxFilesizeText);
+        flag = false;
+        return false;
+      }
+      return true
+    })
     if (this.options.uploadMultiple === false && fileList.length > 1) {
       this.options.messageFn(this.options.message.singleFileText);
       flag = false;
@@ -132,19 +145,6 @@ class Uploader {
       flag = false;
       return false;
     }
-    fileList.every(file => {
-      if (file.size > this.options.maxFilesize*1024) {
-        this.options.messageFn(this.options.message.maxFilesizeText);
-        flag = false;
-        return false;
-      }
-      if (file.type.indexOf('image') === -1 || this.options.acceptedFiles.indexOf(file.type.split('/')[1]) === -1) {
-        this.options.messageFn(this.options.message.acceptedFilesText);
-        flag = false;
-        return false;
-      }
-      return true
-    })
     if (flag) {
       if (this.options.autoUpload) {
         this.fileList = fileList;
@@ -161,6 +161,7 @@ class Uploader {
     let self = this;
     self.fileListContainer.innerHTML = '';
     this.fileList.forEach((file, index) => {
+      file.index = index;
       let ObjectURL;
       if (window.URL.createObjectURL) {
       　ObjectURL = window.URL.createObjectURL(file);
@@ -176,9 +177,17 @@ class Uploader {
           '</div>' +
           (this.options.addRemoveLinks ? '<span class="imgDel" data-index="' + index + '">×</span>' : '') +
           '<span class="imgUploaded"></span>' +
+          '<span class="progressbar"></span>' +
         '</div>'
       );
     });
+    this.options.addRemoveLinks && [].slice.call(self.fileListContainer.querySelectorAll('.imgDel')).forEach((item, index) => {
+      item.addEventListener('click', function(e) {
+        let fileItem = item.parentNode;
+        fileItem.parentNode.removeChild(fileItem);
+        self.fileList = self.fileList.filter(file => { return file.index != index; });
+      }, false);
+    })
   }
 
   _uploadOpen(){
@@ -216,6 +225,8 @@ class Uploader {
   }
 
   _xhrOnload(event, file){
+    let fileDom = this.fileListContainer.querySelectorAll('.fileItem')[file.index];
+    fileDom.classList.add('success');
     this.options.success(event, file);
     this.options.complete(event, file);
   }
@@ -228,6 +239,8 @@ class Uploader {
   _xhrOnprogress(event){
     if (event.lengthComputable) {
       let percentComplete = (event.loaded / event.total) * 100;
+      let progressbar = this.fileListContainer.querySelectorAll('.fileItem .progressbar')[event.target.index];
+      progressbar.style.width = percentComplete + '%';
       this.options.uploadprogress(this.fileList[event.target.index], event.total, percentComplete)
     }
   }

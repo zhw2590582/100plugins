@@ -97,6 +97,15 @@
       background-size: cover;
       background-repeat: no-repeat;
     }
+    .progressbar{
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: #20a0ff;
+    }
     &.success{
       .imgUploaded{
         display: block;
