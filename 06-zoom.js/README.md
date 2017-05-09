@@ -1,4 +1,4 @@
-## LazyLoad.js
+## Zoom.js
 
 一个很简单的Javascript原生面向对象的图片缩放插件
 

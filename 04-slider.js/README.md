@@ -1,4 +1,4 @@
-## LazyLoad.js
+## Slider.js
 
 一个很简单的Javascript原生面向对象的幻灯片插件
 

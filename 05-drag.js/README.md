@@ -1,4 +1,4 @@
-## LazyLoad.js
+## Drag.js
 
 一个很简单的Javascript原生面向对象的DOM元素拖动插件
 
