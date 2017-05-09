@@ -189,6 +189,7 @@ class Uploader {
       item.addEventListener('click', function(e) {
         let fileItem = item.parentNode;
         fileItem.parentNode.removeChild(fileItem);
+        self.options.removedfile(self.fileList[index]);
         self.fileList = self.fileList.filter(file => { return file.index != index; });
       }, false);
     })
