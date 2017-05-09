@@ -34,7 +34,7 @@ class Uploader {
       paramName: 'file',
       maxFiles: 10,
       maxFilesize: 512,
-      acceptedFiles: '.jpg, .jpge, .png, .gif',
+      acceptedFiles: '.jpg, .jpeg, .png, .gif',
       addRemoveLinks: false,
       uploadMultiple: true,
       autoUpload: true,
@@ -120,19 +120,20 @@ class Uploader {
   }
 
   _eventDrop(e) {
+    let self = this;
     e.preventDefault();
     this.uploaderContainer.classList.remove('dragenter');
     let fileList = e.type === 'drop' ? [].slice.call(e.dataTransfer.files) : [].slice.call(this.fileInput.files);
     let flag = true;
     if (fileList.length == 0) {return false};
     fileList.every(file => {
-      if (file.type.indexOf('image') === -1 || this.options.acceptedFiles.indexOf(file.type.split('/')[1]) === -1) {
-        this.options.messageFn(this.options.message.acceptedFilesText);
+      if (file.type.indexOf('image') === -1 || self.options.acceptedFiles.indexOf(file.type.split('/')[1]) === -1) {
+        this.options.messageFn(self.options.message.acceptedFilesText);
         flag = false;
         return false;
       }
-      if (file.size > this.options.maxFilesize*1024) {
-        this.options.messageFn(this.options.message.maxFilesizeText);
+      if (file.size > self.options.maxFilesize*1024) {
+        this.options.messageFn(self.options.message.maxFilesizeText);
         flag = false;
         return false;
       }

@@ -14,7 +14,7 @@ var uploader = new Uploader({
     paramName: 'file', //input的name属性
     maxFiles: 5, //最多可上传数量
     maxFilesize: 512, //最大文件体积
-    acceptedFiles: ".jpg, .jpge, .png, .gif", //允许文件格式
+    acceptedFiles: '.jpg, .jpeg, .png, .gif', //允许文件格式
     autoUpload: true, //是否自动上传
     addRemoveLinks: true, //添加删除按钮
     uploadMultiple: true, //允许同时上传多个文件
