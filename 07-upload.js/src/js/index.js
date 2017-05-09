@@ -210,7 +210,7 @@ class Uploader {
           xhr.setRequestHeader(header, this.options.headers[header])
       }
     }
-    formData.append('file', file, file.name);
+    formData.append(this.options.paramName, file, file.name);
     xhr.onloadstart = this._xhrOnloadstart.bind(this, event, file);
     xhr.onabort = this._xhrOnabort.bind(this, event, file);
     xhr.onload = this._xhrOnload.bind(this, event, file);
