@@ -71,10 +71,13 @@ class Uploader {
   _createUploader() {
     this.options.target.insertAdjacentHTML(
       'beforeend',
-      '<div class="uploader_container"><div class="upload_dragger"><span class="upload_icon"></span><span class="upload_text">' +
-        this.options.message.uploadText +
-        '<input type="file" id="file_input" class="file_input" ' + (this.options.uploadMultiple ? 'multiple' : '') + ' name="' + this.options.paramName + '"></input>' +
-      '</span><div></div>'
+      '<div class="uploader_container">' +
+        '<div class="upload_dragger">' +
+          '<span class="upload_icon"></span>' +
+          '<span class="upload_text">' + this.options.message.uploadText + '</span>' +
+          '<input type="file" id="file_input" class="file_input" ' + (this.options.uploadMultiple ? 'multiple' : '') + ' name="' + this.options.paramName + '">' +
+        '</div>' +
+      '</div>'
     );
     this.uploaderContainer = this.options.target.querySelectorAll('.uploader_container')[0];
     this.fileInput = this.options.target.querySelectorAll('#file_input')[0];

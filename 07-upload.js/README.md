@@ -44,6 +44,16 @@ var uploader = new Uploader({
     uploadprogress: function(file, total, progress) { //上传进度的回调
       console.log('----uploadprogress-----');
       console.log(file, total, progress);
+    },
+    message: { //提示信息
+      uploadText: '将文件拖到此处，或点击上传',
+      maxFilesText: '到达最多上传数目',
+      maxFilesizeText: '文件过大',
+      singleFileText: '只能上传单个文件',
+      acceptedFilesText: '不支持该文件格式'
+    },
+    messageFn: function(tip) { //提示信息方式接口，可以结合其它插件
+      alert(tip);
     }
 });
 
