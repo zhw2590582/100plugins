@@ -111,6 +111,9 @@
       width: 0%;
       background: #20a0ff;
     }
+    &.error{
+      border: 1px solid #f13030;
+    }
     &.success{
       .imgUploaded{
         display: block;
@@ -118,6 +121,11 @@
     }
     &.success:hover {
       .imgUploaded{
+        display: none;
+      }
+    }
+    &.complete{
+      .progressbar{
         display: none;
       }
     }

@@ -231,11 +231,15 @@ class Uploader {
   _xhrOnload(event, file){
     let fileDom = this.fileListContainer.querySelectorAll('.fileItem')[file.index];
     fileDom.classList.add('success');
+    fileDom.classList.add('complete');
     this.options.success(event, file);
     this.options.complete(event, file);
   }
 
   _xhrOnerror(event, file){
+    let fileDom = this.fileListContainer.querySelectorAll('.fileItem')[file.index];
+    fileDom.classList.add('error');
+    fileDom.classList.add('complete');
     this.options.error(event, file);
     this.options.complete(event, file);
   }
