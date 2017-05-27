@@ -8,6 +8,8 @@ class Crop {
       throw new TypeError('Crop required `container` option.');
     } else if (typeof options.imgUrl === 'undefined') {
       throw new TypeError('Crop required `imgUrl` option.');
+    } else if (typeof options.ratio < 1) {
+      throw new TypeError('options.ratio must biger than or equal to 1');
     }
 
     this.options = Object.assign({}, Crop.DEFAULTS, options);
@@ -31,6 +33,7 @@ class Crop {
     return {
       width: 500,
       height: 500,
+      ratio: 1,
       tipText: {
 
       },
@@ -57,7 +60,6 @@ class Crop {
         '<div class="crop_box crop_wh"></div>' +
       '</div>'
     );
-
     this.cropCanvas = this.options.container.querySelectorAll('.crop_canvas')[0];
     this.cropModal = this.options.container.querySelectorAll('.crop_modal')[0];
     this.cropBox = this.options.container.querySelectorAll('.crop_box')[0];
@@ -65,6 +67,13 @@ class Crop {
     this.config.imgTop = this.cropCanvas.getBoundingClientRect().top;
     this.config.imgWidth = this.cropCanvas.getBoundingClientRect().width;
     this.config.imgHeight = this.cropCanvas.getBoundingClientRect().height;
+    this._cropBoxInit();
+  }
+
+  _cropBoxInit(){
+    let imgRatio = this.config.imgWidth / this.config.imgHeight;
+    this.cropBox.style.width = this.config.imgWidth * 0.5 / imgRatio + 'px';
+    this.cropBox.style.height = this.config.imgHeight / this.options.ratio / imgRatio + 'px';
   }
 
   _createCropBox(){
@@ -91,10 +100,6 @@ class Crop {
       '<span class="crop_point point_se"></span>'
     );
     this.cropView = this.options.container.querySelectorAll('.crop_view')[0];
-
-    this.cropView.style.width = this.config.imgWidth*80/100 + 'px';
-    this.cropView.style.height = this.config.imgHeight*80/100 + 'px';
-
   }
 
   _destroyCropBox(){
@@ -107,6 +112,7 @@ class Crop {
 
   _eventBind(){
     this.listenList._cropModalEvent = listen(this.cropModal, 'mousedown', this._cropModalEvent);
+    this.listenList._cropBoxEvent = listen(this.cropModal, 'mousedown', this._cropBoxEvent);
   }
 
   _cropModalEvent(e){
@@ -116,6 +122,11 @@ class Crop {
     this.config.cache = { x: e.pageX, y: e.pageY };
     this.listenList._cropModalMove = listen(document.body, 'mousemove', this._cropModalMove);
     this.listenList._cropModalMouseup = listen(document.body, 'mouseup', this._cropModalMouseup);
+  }
+
+  _cropBoxEvent(e){
+    e.preventDefault();
+    
   }
 
   _cropModalMove(e){
