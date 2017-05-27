@@ -80,7 +80,7 @@ class Crop {
     this.cropBox.insertAdjacentHTML(
       'beforeend',
       '<span class="crop_view">' +
-        '<img src="' + this.options.imgUrl + '" style="width: 825px; height: 464.063px; transform: translateX(-416.931px) translateY(-48.8578px);">' +
+        '<img src="' + this.options.imgUrl + '">' +
       '</span>' +
       '<span class="crop_dashed dashed_h"></span>' +
       '<span class="crop_dashed dashed_v"></span>' +
@@ -99,7 +99,10 @@ class Crop {
       '<span class="crop_point point_sw"></span>' +
       '<span class="crop_point point_se"></span>'
     );
-    this.cropView = this.options.container.querySelectorAll('.crop_view')[0];
+
+    this.cropViewImg = this.options.container.querySelectorAll('.crop_view img')[0];
+    this.cropViewImg.style.width = this.config.imgWidth + 'px';
+    this.cropViewImg.style.height = this.config.imgHeight + 'px';
   }
 
   _destroyCropBox(){
@@ -126,7 +129,7 @@ class Crop {
 
   _cropBoxEvent(e){
     e.preventDefault();
-    
+
   }
 
   _cropModalMove(e){
