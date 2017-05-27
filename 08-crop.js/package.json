@@ -7,7 +7,11 @@
     "dev": "webpack-dev-server --open --inline --content-base docs/"
   },
   "description": "Javascript Plugin Templet",
-  "keywords": ["javascript", "plugin", "templet"],
+  "keywords": [
+    "javascript",
+    "plugin",
+    "templet"
+  ],
   "homepage": "https://github.com/zhw2590582",
   "bugs": {
     "url": "https://github.com/zhw2590582",
@@ -36,5 +40,7 @@
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "good-listener": "^1.2.2"
+  }
 }
