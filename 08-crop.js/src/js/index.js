@@ -150,10 +150,15 @@ class Crop {
     this.config.state = true;
     this.config.Width = e.pageX - this.config.cache.x;
     this.config.Height = e.pageY - this.config.cache.y;
-    this.cropBox.style.width = this.config.Width + 'px';
-    this.cropBox.style.height = this.config.Width * this.options.ratio + 'px';
-    this.cropBox.style.transform = this._translate(this.config.X, this.config.Y);
-    this.cropViewImg.style.transform = this._translate(-this.config.X, -this.config.Y);
+
+    if ((this.config.Width + this.config.X) >= this.options.width || (this.config.Width * this.options.ratio + this.config.Y) >= this.options.height) {
+      return;
+    } else {
+      this.cropBox.style.width = this.config.Width + 'px';
+      this.cropBox.style.height = this.config.Width * this.options.ratio + 'px';
+      this.cropBox.style.transform = this._translate(this.config.X, this.config.Y);
+      this.cropViewImg.style.transform = this._translate(-this.config.X, -this.config.Y);
+    }
   }
 
   _cropModalMouseup(e){
