@@ -27,6 +27,7 @@ class Crop {
     this._cropModalEvent = this._cropModalEvent.bind(this);
     this._cropModalMove = this._cropModalMove.bind(this);
     this._cropModalMouseup = this._cropModalMouseup.bind(this);
+    this._cropBoxInit = this._cropBoxInit.bind(this);
   }
 
   static get DEFAULTS() {
@@ -55,59 +56,73 @@ class Crop {
     this.options.container.insertAdjacentHTML(
       'beforeend',
       '<div class="crop_wrap crop_wh">' +
-        '<div class="crop_canvas crop_wh" style="background-image:url(' + this.options.imgUrl + ')"></div>' +
+        '<div class="crop_canvas crop_wh">' +
+          '<img src="' + this.options.imgUrl + '">' +
+        '</div>' +
         '<div class="crop_modal crop_wh crop_crop"></div>' +
-        '<div class="crop_box crop_wh"></div>' +
+        '<div class="crop_box crop_wh">' +
+          '<span class="crop_view">' +
+            '<img src="' + this.options.imgUrl + '">' +
+          '</span>' +
+          '<span class="crop_dashed dashed_h"></span>' +
+          '<span class="crop_dashed dashed_v"></span>' +
+          '<span class="crop_center"></span>' +
+          '<span class="crop_face crop_move"></span>' +
+          '<span class="crop_line line_e"></span>' +
+          '<span class="crop_line line_n"></span>' +
+          '<span class="crop_line line_w"></span>' +
+          '<span class="crop_line line_s"></span>' +
+          '<span class="crop_point point_e"></span>' +
+          '<span class="crop_point point_n"></span>' +
+          '<span class="crop_point point_w"></span>' +
+          '<span class="crop_point point_s"></span>' +
+          '<span class="crop_point point_ne"></span>' +
+          '<span class="crop_point point_nw"></span>' +
+          '<span class="crop_point point_sw"></span>' +
+          '<span class="crop_point point_se"></span>' +
+        '</div>' +
       '</div>'
     );
     this.cropCanvas = this.options.container.querySelectorAll('.crop_canvas')[0];
+    this.cropCanvasImg = this.options.container.querySelectorAll('.crop_canvas img')[0];
     this.cropModal = this.options.container.querySelectorAll('.crop_modal')[0];
     this.cropBox = this.options.container.querySelectorAll('.crop_box')[0];
+    this.cropViewImg = this.options.container.querySelectorAll('.crop_view img')[0];
     this.config.imgLeft = this.cropCanvas.getBoundingClientRect().left;
     this.config.imgTop = this.cropCanvas.getBoundingClientRect().top;
-    this.config.imgWidth = this.cropCanvas.getBoundingClientRect().width;
-    this.config.imgHeight = this.cropCanvas.getBoundingClientRect().height;
-    this._cropBoxInit();
+    this._imgLoad();
+  }
+
+  _imgLoad(){
+    let self = this;
+    let imgObj = new Image();
+    imgObj.src = this.options.imgUrl;
+    imgObj.onload = function(){
+      self.config.imgRealWidth = imgObj.width;
+      self.config.imgRealHeight = imgObj.height;
+      self.config.imgRatio = imgObj.width / imgObj.height;
+      if (self.options.width >= self.options.height) {
+        self.config.imgHeight = self.options.height;
+        self.config.imgWidth = self.options.height * self.config.imgRatio;
+        self.cropViewImg.style.height = self.cropCanvasImg.style.height = self.config.imgHeight + 'px';
+        self.cropViewImg.style.width = self.cropCanvasImg.style.width = self.config.imgWidth + 'px';
+      } else {
+        self.config.imgHeight = self.options.width * self.config.imgRatio;
+        self.config.imgWidth = self.options.width;
+        self.cropViewImg.style.height = self.cropCanvasImg.style.height = self.config.imgHeight + 'px';
+        self.cropViewImg.style.width = self.cropCanvasImg.style.width = self.config.imgWidth + 'px';
+      }
+      self._cropBoxInit(self);
+    };
   }
 
   _cropBoxInit(){
+    console.log(this);
     let imgRatio = this.config.imgWidth / this.config.imgHeight;
     this.cropBox.style.width = this.config.imgWidth * 0.5 / imgRatio + 'px';
     this.cropBox.style.height = this.config.imgHeight / this.options.ratio / imgRatio + 'px';
   }
 
-  _createCropBox(){
-    this.cropBox.insertAdjacentHTML(
-      'beforeend',
-      '<span class="crop_view">' +
-        '<img src="' + this.options.imgUrl + '">' +
-      '</span>' +
-      '<span class="crop_dashed dashed_h"></span>' +
-      '<span class="crop_dashed dashed_v"></span>' +
-      '<span class="crop_center"></span>' +
-      '<span class="crop_face crop_move"></span>' +
-      '<span class="crop_line line_e"></span>' +
-      '<span class="crop_line line_n"></span>' +
-      '<span class="crop_line line_w"></span>' +
-      '<span class="crop_line line_s"></span>' +
-      '<span class="crop_point point_e"></span>' +
-      '<span class="crop_point point_n"></span>' +
-      '<span class="crop_point point_w"></span>' +
-      '<span class="crop_point point_s"></span>' +
-      '<span class="crop_point point_ne"></span>' +
-      '<span class="crop_point point_nw"></span>' +
-      '<span class="crop_point point_sw"></span>' +
-      '<span class="crop_point point_se"></span>'
-    );
-
-    this.cropViewImg = this.options.container.querySelectorAll('.crop_view img')[0];
-    this.cropViewImg.style.width = this.config.imgWidth + 'px';
-    this.cropViewImg.style.height = this.config.imgHeight + 'px';
-  }
-
-  _destroyCropBox(){
-    this.cropBox.innerHTML = '';
-  }
 
   /**
   * ================================== Event Bind ==================================
@@ -120,6 +135,7 @@ class Crop {
 
   _cropModalEvent(e){
     e.preventDefault();
+    console.log(e.pageX, this.config.imgLeft);
     this.config.X = e.pageX - this.config.imgLeft;
     this.config.Y = e.pageY - this.config.imgTop;
     this.config.cache = { x: e.pageX, y: e.pageY };
@@ -129,14 +145,16 @@ class Crop {
 
   _cropBoxEvent(e){
     e.preventDefault();
-
   }
 
   _cropModalMove(e){
     this.config.state = true;
     this.config.Width = e.pageX - this.config.cache.x;
     this.config.Height = e.pageY - this.config.cache.y;
-    console.log(this.config.Width, this.config.Height);
+    this.cropBox.style.width = this.config.Width + 'px';
+    this.cropBox.style.height = this.config.Height + 'px';
+    this.cropBox.style.transform = this._translate(this.config.X, this.config.Y);
+    this.cropViewImg.style.transform = this._translate(-this.config.X, -this.config.Y);
   }
 
   _cropModalMouseup(e){
@@ -145,13 +163,24 @@ class Crop {
     this.listenList._cropModalMouseup.destroy();
   }
 
+  _translate(x, y){
+    return 'translateX(' + x + 'px) translateY(' + y + 'px)';
+  }
+
+  _getStyle(el, attr) {
+    if (el && el.currentStyle) {
+      return el.currentStyle[attr]
+    } else {
+      return window.getComputedStyle(el)[attr]
+    }
+  }
+
   /**
   * ================================== PUBLIC METHODS ==================================
   */
 
   init(){
     this._createElement();
-    this._createCropBox();
     this._eventBind();
   }
 
