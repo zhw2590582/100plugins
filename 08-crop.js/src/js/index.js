@@ -117,7 +117,6 @@ class Crop {
   }
 
   _cropBoxInit(){
-    console.log(this);
     let imgRatio = this.config.imgWidth / this.config.imgHeight;
     this.cropBox.style.width = this.config.imgWidth * 0.5 / imgRatio + 'px';
     this.cropBox.style.height = this.config.imgHeight / this.options.ratio / imgRatio + 'px';
@@ -152,7 +151,7 @@ class Crop {
     this.config.Width = e.pageX - this.config.cache.x;
     this.config.Height = e.pageY - this.config.cache.y;
     this.cropBox.style.width = this.config.Width + 'px';
-    this.cropBox.style.height = this.config.Height + 'px';
+    this.cropBox.style.height = this.config.Width * this.options.ratio + 'px';
     this.cropBox.style.transform = this._translate(this.config.X, this.config.Y);
     this.cropViewImg.style.transform = this._translate(-this.config.X, -this.config.Y);
   }
