@@ -23,8 +23,10 @@ class Pullrefresh {
 
     this.listeners = {};
     this.config = {
+      state: 'false',
+      refreshDistance: 200,
       startX: 0,
-      startY: 0,
+      startY: 0
     };
 
     this._onTouchStart = this._onTouchStart.bind(this);
@@ -32,7 +34,6 @@ class Pullrefresh {
     this._onTouchEnd = this._onTouchEnd.bind(this);
 
     this._init();
-
   }
 
   static get DEFAULTS() {
@@ -42,7 +43,7 @@ class Pullrefresh {
       loadingText: 'Refreshing',
       distanceIndex: 2,
       loadDistance: 70,
-      onLoad: new Function()
+      onRefresh: new Function()
     };
   }
 
@@ -58,10 +59,9 @@ class Pullrefresh {
     this.options.container.classList.add('__pr__container');
     document.body.insertAdjacentHTML(
       'afterBegin',
-      '<div class="__pr__symbol"><div class="__pr__msg">' +
-        this.options.pullText +
-      '</div></div>'
+      '<div class="__pr__symbol"><div class="__pr__msg"></div></div>'
     );
+    this.options.symbolDom = document.querySelectorAll('.__pr__symbol')[0];
     this.options.msgDom = document.querySelectorAll('.__pr__msg')[0];
   }
 
@@ -84,6 +84,9 @@ class Pullrefresh {
   }
 
   _onTouchStart(e) {
+    document.body.classList.add('__pr__pulling');
+    this.config.state = 'pulling';
+    this.options.msgDom.textContent = this.options.pullText;
     let targetEvent = e.changedTouches[0];
     this.config.startX = targetEvent.clientX;
     this.config.startY = targetEvent.clientY;
@@ -95,22 +98,42 @@ class Pullrefresh {
     let y = targetEvent.clientY;
     let diffX = x - this.config.startX;
     let diffY = y - this.config.startY;
-
-    if(diffY > 0){
-      this._onPullDownMove(this.config.startY, y);
-    } else {
-
-    }
-    //console.log(diffX, diffY);
+    this._onPullDownMove(this.config.startY, y);
   }
 
   _onTouchEnd(e) {
-    console.log(this);
+    document.body.classList.remove('__pr__pulling');
+    this.config.state = 'release';
+    let targetEvent = e.changedTouches[0];
+    let x = targetEvent.clientX;
+    let y = targetEvent.clientY;
+    let diffX = x - this.config.startX;
+    let diffY = y - this.config.startY;
+    if(diffY >= this.config.refreshDistance){
+      this._onPullDownRefresh();
+    } else {
+      this._setChange(0);
+    }
   }
 
-  _onPullDownMove(startY, y){
-    //event.preventDefault();
-    console.log(startY, y);
+  _onPullDownMove(startY, y) {
+    event.preventDefault();
+    if (this.config.state !== 'pulling') return false;
+    let diff = y - startY < 0 ? 0 : y - startY;
+    this._setChange(this._easing(diff));
+  }
+
+  _onPullDownRefresh(){
+    this.config.state = 'refresh';
+    this.options.msgDom.textContent = this.options.loadingText;
+    this._setChange(50);
+    this._wait(1).then(() => {
+      this._setChange(0);
+      this.config.state = 'reset';
+      if (typeof this.options.onRefresh === "function") {
+        this.options.onRefresh();
+      }
+    })
   }
 
   /**
@@ -129,6 +152,24 @@ class Pullrefresh {
   /**
   * ================================== HELPER ==================================
   */
+
+  _setChange(pullHeight) {
+    let lbodyTop = pullHeight !== 0 ? 'translate3d(0, ' + pullHeight + 'px, 0)' : '';
+    let symbolTop = pullHeight - 50 > 0 ? pullHeight - 50 : 0;
+    let lSymbol = symbolTop !== 0 ? 'translate3d(0, ' + symbolTop + 'px, 0)' : '';
+    this.options.container.style.WebkitTransform = lbodyTop;
+    this.options.container.style.transform = lbodyTop;
+    this.options.symbolDom.style.WebkitTransform = lSymbol;
+    this.options.symbolDom.style.transform = lSymbol;
+  }
+
+  _easing(distance) {
+    let t = distance;
+    let b = 0;
+    let d = screen.availHeight;
+    let c = d / 2.5;
+    return c * Math.sin(t / d * (Math.PI / 2)) + b;
+  }
 
   _isMobile() {
     return navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
