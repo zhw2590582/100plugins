@@ -1,7 +1,11 @@
 .__pr__wrap{
   .__pr__symbol{
+    transition: transform .2s;
     .__pr__msg{
       text-align: center;
     }
+  }
+  .__pr__container{
+    transition: transform .2s;
   }
 }

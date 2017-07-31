@@ -21,8 +21,9 @@ class Pullrefresh {
       )[0];
     }
 
-    this.listeners = {};
+    this.listeners = [];
     this.config = {
+      className: '__pr__',
       state: 'false',
       refreshDistance: 200,
       startX: 0,
@@ -32,6 +33,8 @@ class Pullrefresh {
     this._onTouchStart = this._onTouchStart.bind(this);
     this._onTouchMove = this._onTouchMove.bind(this);
     this._onTouchEnd = this._onTouchEnd.bind(this);
+    this._listen = this._listen.bind(this);
+
 
     this._init();
   }
@@ -55,28 +58,28 @@ class Pullrefresh {
   }
 
   _createDom() {
-    document.body.classList.add('__pr__wrap');
-    this.options.container.classList.add('__pr__container');
+    document.body.classList.add(this.config.className + 'wrap');
+    this.options.container.classList.add(this.config.className + 'container');
     document.body.insertAdjacentHTML(
       'afterBegin',
-      '<div class="__pr__symbol"><div class="__pr__msg"></div></div>'
+      '<div class="' + this.config.className + 'symbol"><div class="' + this.config.className + 'msg"></div></div>'
     );
-    this.options.symbolDom = document.querySelectorAll('.__pr__symbol')[0];
-    this.options.msgDom = document.querySelectorAll('.__pr__msg')[0];
+    this.config.symbolDom = document.querySelectorAll('.' + this.config.className + 'symbol')[0];
+    this.config.msgDom = document.querySelectorAll('.' + this.config.className + 'msg')[0];
   }
 
   _eventBind() {
-    this.listeners._onTouchStart = listen(
+    this._listen(
       document.body,
       'touchstart',
       this._onTouchStart
     );
-    this.listeners._onTouchMove = listen(
+    this._listen(
       document.body,
       'touchmove',
       this._onTouchMove
     );
-    this.listeners._onTouchEnd = listen(
+    this._listen(
       document.body,
       'touchend',
       this._onTouchEnd
@@ -84,9 +87,8 @@ class Pullrefresh {
   }
 
   _onTouchStart(e) {
-    document.body.classList.add('__pr__pulling');
-    this.config.state = 'pulling';
-    this.options.msgDom.textContent = this.options.pullText;
+    this._setState('pulling');
+    this.config.msgDom.textContent = this.options.pullText;
     let targetEvent = e.changedTouches[0];
     this.config.startX = targetEvent.clientX;
     this.config.startY = targetEvent.clientY;
@@ -102,8 +104,7 @@ class Pullrefresh {
   }
 
   _onTouchEnd(e) {
-    document.body.classList.remove('__pr__pulling');
-    this.config.state = 'release';
+    this._setState('release');
     let targetEvent = e.changedTouches[0];
     let x = targetEvent.clientX;
     let y = targetEvent.clientY;
@@ -124,12 +125,12 @@ class Pullrefresh {
   }
 
   _onPullDownRefresh(){
-    this.config.state = 'refresh';
-    this.options.msgDom.textContent = this.options.loadingText;
+    this._setState('refresh');
+    this.config.msgDom.textContent = this.options.loadingText;
     this._setChange(50);
     this._wait(1).then(() => {
       this._setChange(0);
-      this.config.state = 'reset';
+      this._setState('reset');
       if (typeof this.options.onRefresh === "function") {
         this.options.onRefresh();
       }
@@ -141,12 +142,12 @@ class Pullrefresh {
   */
 
   destory() {
-    Object.keys(this.listeners).map(listener => {
-      this.listeners[listener].destroy();
+    his.listeners.map(listener => {
+      listener.destroy();
     });
     document.body.classList.remove('__pr__wrap');
     this.options.container.classList.remove('__pr__container');
-    this.options.symbolDom.innerHTML = '';
+    this.config.symbolDom.innerHTML = '';
   }
 
   /**
@@ -159,8 +160,14 @@ class Pullrefresh {
     let lSymbol = symbolTop !== 0 ? 'translate3d(0, ' + symbolTop + 'px, 0)' : '';
     this.options.container.style.WebkitTransform = lbodyTop;
     this.options.container.style.transform = lbodyTop;
-    this.options.symbolDom.style.WebkitTransform = lSymbol;
-    this.options.symbolDom.style.transform = lSymbol;
+    this.config.symbolDom.style.WebkitTransform = lSymbol;
+    this.config.symbolDom.style.transform = lSymbol;
+  }
+
+  _setState(state){
+    this.config.state = state;
+    document.body.className = this.config.className + 'wrap';
+    document.body.classList.add(this.config.className + state);
   }
 
   _easing(distance) {
@@ -181,6 +188,10 @@ class Pullrefresh {
 
   _blur() {
     document.activeElement && document.activeElement.blur();
+  }
+
+  _listen(el, type, event){
+    this.listeners.push(listen(el, type, event));
   }
 }
 
