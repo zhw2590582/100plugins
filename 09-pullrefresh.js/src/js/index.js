@@ -142,7 +142,7 @@ class Pullrefresh {
   */
 
   destory() {
-    his.listeners.map(listener => {
+    this.listeners.map(listener => {
       listener.destroy();
     });
     document.body.classList.remove('__pr__wrap');
