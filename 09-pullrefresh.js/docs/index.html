@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <div class="app">pullrefresh_demo</div>
+    <div class="app">请在手机调试模式下浏览</div>
     <script src="pullrefresh/pullrefresh.js"></script>
     <script src="js/app.js"></script>
     <script>
@@ -23,8 +23,9 @@
         container: '.app',
         pullText: '↓ 下拉',
         dropText: '↑ 释放',
-        loadingText: '加载中...',
+        loadingText: '刷新中...',
         onRefresh: function () {
+          alert('刷新中...');
           window.location.reload();
         }
       });
