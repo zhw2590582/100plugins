@@ -71,14 +71,17 @@ class Validate {
       if(rule.required){
         if(item.value === ''){
           this._errorMsg(item, rule.message || this.options.errorMsg.required());
+          console.log(0);
         } else {
           this._removeError(item);
         }
       } else if (rule.min || rule.max) {
         if(item.value.length < rule.min){
           this._errorMsg(item, rule.message || this.options.errorMsg.min(rule.min));
+          console.log(1);
         } else if (item.value.length > rule.max) {
           this._errorMsg(item, rule.message || this.options.errorMsg.max(rule.max));
+          console.log(2);
         } else {
           this._removeError(item);
         }
@@ -88,7 +91,6 @@ class Validate {
   }
 
   _errorMsg(item, message){
-    if(this.config.errorDom[item.name]) return;
     item.insertAdjacentHTML('afterEnd', `<label id="${item.name}-error" class="error" for="${item.name}">${message}</label>`);
     this.config.errorDom[item.name] = document.getElementById(`${item.name}-error`);
   }
