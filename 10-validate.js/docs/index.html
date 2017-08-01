@@ -18,11 +18,11 @@
   <form class="validate-demo">
     <p>
       <label>输入框</label>
-      <input type="text" required>
+      <input type="text" name="vInput">
     </p>
     <p>
       <label>文本框</label>
-      <textarea></textarea>
+      <textarea name="vTextarea"></textarea>
     </p>
     <p>
       <label>单选框</label>
@@ -42,19 +42,28 @@
     <p>
       <label>下拉框</label>
       <select>
-          <option value ="volvo">Volvo</option>
-          <option value ="saab">Saab</option>
-          <option value="opel">Opel</option>
-          <option value="audi">Audi</option>
-        </select>
+        <option value ="volvo">Volvo</option>
+        <option value ="saab">Saab</option>
+        <option value="opel">Opel</option>
+        <option value="audi">Audi</option>
+      </select>
     </p>
     <input class="submit" type="submit" value="Submit">
   </form>
   <script src="validate/validate.js"></script>
   <script src="js/app.js"></script>
   <script>
-    var validate_demo = new Validate({
-
+    new Validate({
+      container: '.validate-demo',
+      rules: {
+        vInput: [
+          { required: true, message: '请输入', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        vTextarea: [
+          { required: true, message: '请选择活动资源', trigger: 'blur' }
+        ]
+      }
     });
   </script>
 </body>
