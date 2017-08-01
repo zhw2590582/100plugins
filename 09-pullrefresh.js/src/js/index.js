@@ -112,6 +112,7 @@ class Pullrefresh {
       this._onPullDownRefresh();
     } else {
       this._setChange(0);
+      this._setState('reset');
     }
   }
 
