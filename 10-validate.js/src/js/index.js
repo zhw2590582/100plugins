@@ -72,6 +72,11 @@ class Validate {
     let rules = {};
     this.config.rules.map(item => {
       rules[item.name] = [];
+
+      if(item.type.toLowerCase() === 'radio' || item.type.toLowerCase() === 'checkbox'){
+        
+      }
+
       if(item.required){
         rules[item.name].push({
           required: true,
@@ -111,10 +116,6 @@ class Validate {
           validator: this.options.validators[item.getAttribute("validator")] || '',
           trigger: item.getAttribute("trigger") || ''
         })
-      }
-
-      if(item.type.toLowerCase() === 'radio' || item.type.toLowerCase() === 'checkbox'){
-
       }
 
     });
