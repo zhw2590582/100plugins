@@ -16,7 +16,7 @@ class Validate {
     if (this.options.container instanceof Element) {
       this.options.container = options.target;
     } else {
-      this.options.container = document.querySelectorAll(this.options.container)[0];
+      this.options.container = document.querySelector(this.options.container);
     }
 
     this.config = {
@@ -235,7 +235,7 @@ class Validate {
     } else {
       item.insertAdjacentHTML('afterEnd', `<label id="${item.name}-error" class="error" for="${item.name}">${message}</label>`);
     }
-    this.config.errorDom[item.name] = this.options.container.querySelectorAll(`#${item.name}-error`)[0];
+    this.config.errorDom[item.name] = this.options.container.querySelector(`#${item.name}-error`);
   }
 
   _removeError(item){
