@@ -67,32 +67,32 @@
     <h4>02.通过HTML属性验证</h4>
     <p>
       <label class="title">字符串长度：</label>
-      <input type="text" name="vInput" required>
+      <input type="text" name="vInput" required requiredmsg="此项为必填" minLength="3" maxLength="5" lengthmsg="长度在 3 到 5 个字符" trigger="blur">
     </p>
     <p>
       <label class="title">数字大小：</label>
-      <input type="number" name="vNumber" required>
+      <input type="number" name="vNumber" required requiredmsg="此项为必填" min="3" max="10" nummsg="大小在 3 到 10 的数字" trigger="blur">
     </p>
     <p>
       <label class="title">正则表达式：</label>
-      <input type="text" name="vRegex" required>
+      <input type="text" name="vRegex" required regexmsg="正则不匹配" regex="/^1[34578]\d{9}$/" trigger="blur">
     </p>
     <p>
       <label class="title">自定义密码验证：</label>
-      <input type="password" name="vPassword" required>
+      <input type="password" name="vPassword" validator="validatorPassword" trigger="blur">
     </p>
     <p>
       <label class="title">文本框长度：</label>
-      <textarea name="vTextarea" required></textarea>
+      <textarea name="vTextarea" required requiredmsg="此项为必填" trigger="blur"></textarea>
     </p>
-    <p required>
+    <p validator="validatorRadio" trigger="change">
       <label class="title">单选框：</label>
       <label><input name="vRadio" type="radio" value="1" />苹果</label>
       <label><input name="vRadio" type="radio" value="2" />桃子</label>
       <label><input name="vRadio" type="radio" value="3" />香蕉</label>
       <label><input name="vRadio" type="radio" value="4" />梨</label>
     </p>
-    <p required>
+    <p validator="validatorCheckbox" trigger="change">
       <label class="title">复选框：</label>
       <label><input name="vCheckbox" type="checkbox" value="1" />苹果</label>
       <label><input name="vCheckbox" type="checkbox" value="2" />桃子</label>
@@ -101,7 +101,7 @@
     </p>
     <p>
       <label class="title">下拉框：</label>
-      <select name="vSelect" required>
+      <select name="vSelect" validator="validatorSelect" trigger="change">
         <option value="1">苹果</option>
         <option value="2">桃子</option>
         <option value="3">香蕉</option>
@@ -197,6 +197,12 @@
       itemParent: 'p',
       submitHandler: function(form) {
         form.submit();
+      },
+      validators: {
+        validatorPassword: validatorPassword,
+        validatorRadio: validatorRadio,
+        validatorCheckbox: validatorCheckbox,
+        validatorSelect: validatorSelect
       }
     });
   </script>

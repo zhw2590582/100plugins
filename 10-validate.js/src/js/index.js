@@ -41,6 +41,7 @@ class Validate {
       itemParent: '',
       submitHandler: new Function(),
       rules: {},
+      validators: {},
       errorMsg: {
         requiredMsg: () => `This field is required.`,
         minlengthMsg: num => `This field must consist of at least ${num} characters`,
@@ -56,7 +57,7 @@ class Validate {
 
   _init(){
     this._getElement();
-    this._createRule();
+    this._createRules();
     this._validate();
     this._formSubmit();
     console.log(this);
@@ -67,8 +68,58 @@ class Validate {
     this.config.rules = [].slice.call(this.options.container.querySelectorAll('[name]'));
   }
 
-  _createRule(){
+  _createRules(){
+    let rules = {};
+    this.config.rules.map(item => {
+      rules[item.name] = [];
+      if(item.required){
+        rules[item.name].push({
+          required: true,
+          message: item.getAttribute("requiredmsg") || '',
+          trigger: item.getAttribute("trigger") || ''
+        })
+      }
 
+      if (!!item.getAttribute("minLength") || !!item.getAttribute("maxLength")) {
+        rules[item.name].push({
+          minlength: +item.getAttribute("minLength") || '',
+          maxlength: +item.getAttribute("maxLength") || '',
+          message: item.getAttribute("lengthmsg") || '',
+          trigger: item.getAttribute("trigger") || ''
+        })
+      }
+
+      if (!!item.getAttribute("min") || !!item.getAttribute("max")) {
+        rules[item.name].push({
+          min: +item.getAttribute("min") || '',
+          max: +item.getAttribute("max") || '',
+          message: item.getAttribute("nummsg") || '',
+          trigger: item.getAttribute("trigger") || ''
+        })
+      }
+
+      if (!!item.getAttribute("regex")) {
+        rules[item.name].push({
+          regex: new RegExp(item.getAttribute("regex")) || '',
+          message: item.getAttribute("regexmsg") || '',
+          trigger: item.getAttribute("trigger") || ''
+        })
+      }
+
+      if(!!item.getAttribute("validator") && !!this.options.validators[item.getAttribute("validator")]){
+        rules[item.name].push({
+          validator: this.options.validators[item.getAttribute("validator")] || '',
+          trigger: item.getAttribute("trigger") || ''
+        })
+      }
+
+      if(item.type.toLowerCase() === 'radio' || item.type.toLowerCase() === 'checkbox'){
+
+      }
+
+    });
+
+    console.log(rules);
   }
 
   _validate(submit){
