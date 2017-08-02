@@ -60,67 +60,77 @@ class Validate {
     this._createRules();
     this._validate();
     this._formSubmit();
-    console.log(this);
   }
 
   _getElement(){
     this.options.container.classList.add('__validate__form');
+    this.options.container.setAttribute('novalidate', true);
     this.config.rules = [].slice.call(this.options.container.querySelectorAll('[name]'));
   }
 
   _createRules(){
+    if(Object.keys(this.options.rules).length !== 0) return;
+
     let rules = {};
     this.config.rules.map(item => {
-      rules[item.name] = [];
 
+      let itemCopy = item;
       if(item.type.toLowerCase() === 'radio' || item.type.toLowerCase() === 'checkbox'){
-        
+        if(this.options.itemParent){
+          itemCopy = this._closest(item, this.options.itemParent);
+          itemCopy.name = item.name;
+        }
       }
 
-      if(item.required){
-        rules[item.name].push({
+      rules[itemCopy.name] = [];
+      if(itemCopy.required){
+        rules[itemCopy.name].push({
           required: true,
-          message: item.getAttribute("requiredmsg") || '',
-          trigger: item.getAttribute("trigger") || ''
+          message: itemCopy.getAttribute("requiredmsg") || '',
+          trigger: itemCopy.getAttribute("trigger") || ''
         })
       }
 
-      if (!!item.getAttribute("minLength") || !!item.getAttribute("maxLength")) {
-        rules[item.name].push({
-          minlength: +item.getAttribute("minLength") || '',
-          maxlength: +item.getAttribute("maxLength") || '',
-          message: item.getAttribute("lengthmsg") || '',
-          trigger: item.getAttribute("trigger") || ''
+      if (!!itemCopy.getAttribute("minLength") || !!itemCopy.getAttribute("maxLength")) {
+        rules[itemCopy.name].push({
+          minlength: +itemCopy.getAttribute("minLength") || '',
+          maxlength: +itemCopy.getAttribute("maxLength") || '',
+          message: itemCopy.getAttribute("lengthmsg") || '',
+          trigger: itemCopy.getAttribute("trigger") || ''
         })
       }
 
-      if (!!item.getAttribute("min") || !!item.getAttribute("max")) {
-        rules[item.name].push({
-          min: +item.getAttribute("min") || '',
-          max: +item.getAttribute("max") || '',
-          message: item.getAttribute("nummsg") || '',
-          trigger: item.getAttribute("trigger") || ''
+      if (!!itemCopy.getAttribute("min") || !!itemCopy.getAttribute("max")) {
+        rules[itemCopy.name].push({
+          min: +itemCopy.getAttribute("min") || '',
+          max: +itemCopy.getAttribute("max") || '',
+          message: itemCopy.getAttribute("nummsg") || '',
+          trigger: itemCopy.getAttribute("trigger") || ''
         })
       }
 
       if (!!item.getAttribute("regex")) {
         rules[item.name].push({
-          regex: new RegExp(item.getAttribute("regex")) || '',
+          regex: eval(item.getAttribute("regex")) || '',
           message: item.getAttribute("regexmsg") || '',
           trigger: item.getAttribute("trigger") || ''
         })
       }
 
-      if(!!item.getAttribute("validator") && !!this.options.validators[item.getAttribute("validator")]){
-        rules[item.name].push({
-          validator: this.options.validators[item.getAttribute("validator")] || '',
-          trigger: item.getAttribute("trigger") || ''
+      if(!!itemCopy.getAttribute("validator") && !!this.options.validators[itemCopy.getAttribute("validator")]){
+        rules[itemCopy.name].push({
+          validator: this.options.validators[itemCopy.getAttribute("validator")] || '',
+          trigger: itemCopy.getAttribute("trigger") || ''
         })
       }
 
     });
 
-    console.log(rules);
+    this.options.rules = {
+      ...this.options.rules,
+      ...rules
+    }
+
   }
 
   _validate(submit){
