@@ -51,6 +51,7 @@ var validatorSelect = function (value, callback) {
   }
 }
 
+//实例化
 var validateDemo = new Validate({
   container: '.demo01', //表单form元素，必填
   itemParent: 'p', //表单元素的父级，当使用'radio'和'checkbox'的Dom属性验证时为必填
@@ -84,11 +85,32 @@ var validateDemo = new Validate({
     }
   },
 
-  //rules当使用js规则验证时为必填，当使用Dom属性验证时不要写，目前只能二选一，不能混合。
-  //rules的属性必需与元素的name属性一一对应。
-  //规则包含'required(是否必填)', 'minlength(至少字符串)', 'maxlength(至多字符串)', 'min(至小数字)', 'max(至大数字)', 'regex(正则表达式)'。
-  //trigger为触发条件，包含'input(值实时变化时)', 'blur(失去焦点时)', 'change(值改变且失去焦点时)',为必填项。
-  //validator为自定义规则的函数，第一个参数为传入的值('checkbox'时传入的是数组)，第二个参数为回调函数，为空时表示验证通过，不为空且为Error时为提示文本。
+  //validators当使用Dom属性验证时为必填
+  validators: {
+    validatorPassword: validatorPassword,
+    validatorRadio: validatorRadio,
+    validatorCheckbox: validatorCheckbox,
+    validatorSelect: validatorSelect
+  },
+
+  //rules当使用js规则验证时为必填，rules的属性必需与元素的name属性一一对应
+
+  //验证规则包含以下
+  //'required(是否必填)'
+  //'minlength(至少字符串)'
+  //'maxlength(至多字符串)',
+  //'min(至小数字)'
+  //'max(至大数字)'
+  //'regex(正则表达式)'
+
+  //trigger为触发条件且为必填项
+  //'input(值实时变化时)'
+  //'blur(失去焦点时)'
+  //'change(值改变且失去焦点时)'
+
+  //validator为自定义规则的函数
+  //第一个参数为传入的值('checkbox'时传入的是数组)
+  //第二个参数为回调函数，为空时表示验证通过，不为空且为Error时为提示文本
 
   rules: {
     vInput: [
