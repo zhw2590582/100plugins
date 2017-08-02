@@ -25,7 +25,6 @@ class Validate {
       inputType: ['text', 'checkbox', 'radio', 'file', 'password'],
       ruleType: ['required', 'minlength', 'maxlength', 'min', 'max', 'regex'],
       rules: [],
-      listeners: [],
       errorDom: {}
     }
 
