@@ -141,9 +141,6 @@ var validateDemo = new Validate({
   }
 });
 
-//销毁插件
-validateDemo.destory();
-
 //手动触发验证, 参数为空时表示验证全部, 不为空且为name组成的数组时为个别验证
 validateDemo.validate(['vInput', 'vNumber']);
 
