@@ -87,10 +87,10 @@
     }
 
     var validator3 = function (value, callback) {
-      if(value === ''){
+      if(value.length === 0){
         callback(new Error('请选择'));
-      } else if (value !== '1') {
-        callback(new Error('请选择苹果'));
+      } else if (value.length < 3) {
+        callback(new Error('请至少选择三个'));
       } else {
         callback();
       }
@@ -99,8 +99,8 @@
     var validator4 = function (value, callback) {
       if(value === ''){
         callback(new Error('请选择'));
-      } else if (value !== '1') {
-        callback(new Error('请选择苹果'));
+      } else if (value !== '2') {
+        callback(new Error('请选择桃子'));
       } else {
         callback();
       }
@@ -110,6 +110,9 @@
     new Validate({
       container: '.validate-demo',
       itemParent: 'p',
+      submitHandler: function(form) {
+        form.submit();
+      },
       rules: {
         vInput: [
           { required: true, message: '请输入', trigger: 'blur' },

@@ -30,6 +30,7 @@ class Validate {
     }
 
     this._eventBind = this._eventBind.bind(this);
+    this._formSubmit = this._formSubmit.bind(this);
 
     this._init();
 
@@ -38,15 +39,16 @@ class Validate {
   static get DEFAULTS() {
     return {
       itemParent: '',
+      submitHandler: new Function(),
       errorMsg: {
-        required: () => `This field is required.`,
-        minlength: num => `This field must consist of at least ${num} characters`,
-        maxlength: num => `This field must consist of at most ${num} characters`,
-        min: num => `Please enter a value greater than or equal to ${num}`,
-        max: num => `Please enter a value less than or equal to ${num}`,
-        regex: regex => `Please enter the value of the matching ${regex}`,
-        isNaN: () => `This field is requires a number type`,
-        function: () => `This field is requires a function type`
+        requiredMsg: () => `This field is required.`,
+        minlengthMsg: num => `This field must consist of at least ${num} characters`,
+        maxlengthMsg: num => `This field must consist of at most ${num} characters`,
+        minMsg: num => `Please enter a value greater than or equal to ${num}`,
+        maxMsg: num => `Please enter a value less than or equal to ${num}`,
+        regexMsg: regex => `Please enter the value of the matching ${regex}`,
+        isNaNMsg: () => `This field is requires a number type`,
+        functionMsg: () => `This field is requires a function type`
       }
     };
   }
@@ -54,6 +56,7 @@ class Validate {
   _init(){
     this._getElement();
     this._validate();
+    this._formSubmit();
     console.log(this);
   }
 
@@ -62,81 +65,106 @@ class Validate {
     this.config.rules = [].slice.call(this.options.container.querySelectorAll('[name]'));
   }
 
-  _validate(){
+  _validate(submit){
     this.config.rules.map(item => {
       let rules = this.options.rules[item.name];
-      rules && rules.map(rule => {
+      this.config.tabNames.indexOf(item.tagName.toLowerCase()) !== -1 && rules && rules.map(rule => {
         if(!rule.trigger || this.config.triggerType.indexOf(rule.trigger) === -1){
           throw new TypeError(`Rule required 'trigger' Attributes: ${this.config.triggerType.join(',')}`);
         } else {
-          this.config.tabNames.indexOf(item.tagName.toLowerCase()) !== -1 && this._eventBind(item, rule);
+          this._eventBind(item, rule, submit);
         }
       })
     })
   }
 
-  _eventBind(item, rule){
-    this._listen(item, rule.trigger, e => {
+  _eventBind(item, rule, submit){
 
-      console.log(item.value);
-
+    let _event = e => {
       if(rule.validator){
         if(typeof rule.validator !== 'function'){
-          this._errorMsg(item, rule.message || this.options.errorMsg.function());
+          this._errorMsg(item, rule.message || this.options.errorMsg.functionMsg());
         } else {
-          rule.validator(item.value, error => {
+
+          let errorFn = error => {
             if(error){
               this._errorMsg(item, error.message);
             } else {
               this._removeError(item);
             }
-          })
+          }
+
+          if(item.type.toLowerCase() === 'checkbox'){
+            let checkboxValue = this.config.rules.filter(inputDom => {
+              return inputDom.name === item.name
+            }).filter(checkboxDom => {
+              return checkboxDom.checked
+            }).map(check => check.value);
+            rule.validator(checkboxValue, errorFn);
+          } else if (item.type.toLowerCase() === 'radio') {
+            let radioValue = this.config.rules.filter(inputDom => {
+              return inputDom.name === item.name
+            }).filter(radioDom => {
+              return radioDom.checked
+            })[0];
+            if(radioValue){
+              rule.validator(radioValue.value, errorFn)
+            } else {
+              rule.validator('', errorFn)
+            }
+          } else {
+            rule.validator(item.value, errorFn)
+          }
+
         }
         return;
       }
 
       if(rule.required){
         if(item.value === ''){
-          this._errorMsg(item, rule.message || this.options.errorMsg.required());
+          this._errorMsg(item, rule.message || this.options.errorMsg.requiredMsg());
         } else {
           this._removeError(item);
         }
       } else if (rule.minlength || rule.maxlength) {
         if(this.config.errorDom[item.name]) return;
         if (item.value.length < rule.minlength){
-          this._errorMsg(item, rule.message || this.options.errorMsg.minlength(rule.minlength));
+          this._errorMsg(item, rule.message || this.options.errorMsg.minlengthMsg(rule.minlength));
         } else if (item.value.length > rule.maxlength) {
-          this._errorMsg(item, rule.message || this.options.errorMsg.maxlength(rule.maxlength));
+          this._errorMsg(item, rule.message || this.options.errorMsg.maxlengthMsg(rule.maxlength));
         } else {
           this._removeError(item);
         }
       } else if (rule.min || rule.max){
         if(this.config.errorDom[item.name]) return;
         if(isNaN(item.value)){
-          this._errorMsg(item, this.options.errorMsg.isNaN());
+          this._errorMsg(item, this.options.errorMsg.isNaNMsg());
         } else if (item.value < rule.min){
-          this._errorMsg(item, rule.message || this.options.errorMsg.min(rule.min));
+          this._errorMsg(item, rule.message || this.options.errorMsg.minMsg(rule.min));
         } else if (item.value > rule.max) {
-          this._errorMsg(item, rule.message || this.options.errorMsg.max(rule.max));
+          this._errorMsg(item, rule.message || this.options.errorMsg.maxMsg(rule.max));
         } else {
           this._removeError(item);
         }
       } else if (rule.regex) {
         if(this.config.errorDom[item.name]) return;
         if(!new RegExp(rule.regex).test(item.value)){
-          this._errorMsg(item, rule.message || this.options.errorMsg.regex(rule.regex));
+          this._errorMsg(item, rule.message || this.options.errorMsg.regexMsg(rule.regex));
         } else {
           this._removeError(item);
         }
       }
+    }
 
-    });
+    submit && _event() || this._listen(item, rule.trigger, _event);
   }
 
   _errorMsg(item, message){
     this._removeError(item);
-    item.classList.add('error');
-    item.classList.remove('valid');
+    if(item.type.toLowerCase() !== 'checkbox'){
+      item.classList.add('error');
+      item.classList.remove('valid');
+    }
     if(this.options.itemParent && this._closest(item, this.options.itemParent)){
       this._closest(item, this.options.itemParent).classList.add('parent-error');
       this._closest(item, this.options.itemParent).classList.remove('parent-valid');
@@ -148,16 +176,25 @@ class Validate {
   }
 
   _removeError(item){
-    if(this.config.errorDom[item.name]){
+    if(item.type.toLowerCase() !== 'checkbox'){
       item.classList.remove('error');
       item.classList.add('valid');
-      if(this.options.itemParent && this._closest(item, this.options.itemParent)){
-        this._closest(item, this.options.itemParent).classList.remove('parent-error');
-        this._closest(item, this.options.itemParent).classList.add('parent-valid');
-      }
+    }
+    if(this.options.itemParent && this._closest(item, this.options.itemParent)){
+      this._closest(item, this.options.itemParent).classList.remove('parent-error');
+      this._closest(item, this.options.itemParent).classList.add('parent-valid');
+    }
+    if(this.config.errorDom[item.name]){
       this._removeDom(this.config.errorDom[item.name]);
       this.config.errorDom[item.name] = false;
     }
+  }
+
+  _formSubmit(){
+    this._listen(this.options.container, 'submit', e => {
+      e.preventDefault();
+      this._validate(true);
+    })
   }
 
   /**
