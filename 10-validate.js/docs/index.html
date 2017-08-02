@@ -21,6 +21,10 @@
       <input type="text" name="vInput">
     </p>
     <p>
+      <label>输入框</label>
+      <input type="number" name="vNumber">
+    </p>
+    <p>
       <label>文本框</label>
       <textarea name="vTextarea"></textarea>
     </p>
@@ -58,7 +62,11 @@
       rules: {
         vInput: [
           { required: true, message: '请输入', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { minlength: 3, maxlength: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        vNumber: [
+          { required: true, trigger: 'blur' },
+          { min: 3, max: 10, trigger: 'blur' }
         ],
         vTextarea: [
           { required: true, message: '请选择活动资源', trigger: 'blur' }

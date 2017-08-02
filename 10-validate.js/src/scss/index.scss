@@ -1,3 +1,14 @@
-body{
-  color: #666
+.__validate__form {
+  label {
+    &.error {
+      color: red;
+      font-style: italic;
+    }
+  }
+
+  input {
+    &.error {
+      border: 1px dotted red;
+    }
+  }
 }

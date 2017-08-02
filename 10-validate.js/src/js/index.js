@@ -21,6 +21,9 @@ class Validate {
 
     this.config = {
       triggerType: ['blur', 'change'],
+      tabNames: ['input', 'select', 'textarea'],
+      inputType: ['text', 'checkbox', 'radio', 'file', 'password'],
+      ruleType: ['required', 'minlength', 'maxlength', 'min', 'max', 'regex'],
       rules: [],
       listeners: [],
       errorDom: {}
@@ -36,8 +39,11 @@ class Validate {
     return {
       errorMsg: {
         required: () => `This field is required.`,
-        min: num => `This field must consist of at least ${num} characters`,
-        max: num => `This field must consist of at most ${num} characters`,
+        minlength: num => `This field must consist of at least ${num} characters`,
+        maxlength: num => `This field must consist of at most ${num} characters`,
+        min: num => `Please enter a value greater than or equal to ${num}`,
+        max: num => `Please enter a value less than or equal to ${num}`,
+        regex: regex => `Please enter the value of the matching ${regex}`,
       }
     };
   }
@@ -49,6 +55,7 @@ class Validate {
   }
 
   _getElement(){
+    this.options.container.classList.add('__validate__form');
     this.config.rules = [].slice.call(this.options.container.querySelectorAll('[name]'));
   }
 
@@ -59,7 +66,7 @@ class Validate {
         if(!rule.trigger || this.config.triggerType.indexOf(rule.trigger) === -1){
           throw new TypeError(`Rule required 'trigger' Attributes: ${this.config.triggerType.join(',')}`);
         } else {
-          this._eventBind(item, rule)
+          this.config.tabNames.indexOf(item.tagName.toLowerCase()) !== -1 && this._eventBind(item, rule);
         }
       })
     })
@@ -71,17 +78,24 @@ class Validate {
       if(rule.required){
         if(item.value === ''){
           this._errorMsg(item, rule.message || this.options.errorMsg.required());
-          console.log(0);
         } else {
           this._removeError(item);
         }
-      } else if (rule.min || rule.max) {
-        if(item.value.length < rule.min){
+      } else if (rule.minlength || rule.maxlength) {
+        if(this.config.errorDom[item.name]) return;
+        if(item.value.length < rule.minlength){
+          this._errorMsg(item, rule.message || this.options.errorMsg.minlength(rule.minlength));
+        } else if (item.value.length > rule.maxlength) {
+          this._errorMsg(item, rule.message || this.options.errorMsg.maxlength(rule.maxlength));
+        } else {
+          this._removeError(item);
+        }
+      } else if (rule.min || rule.max){
+        if(this.config.errorDom[item.name]) return;
+        if(item.value < rule.min){
           this._errorMsg(item, rule.message || this.options.errorMsg.min(rule.min));
-          console.log(1);
-        } else if (item.value.length > rule.max) {
+        } else if (item.value > rule.max) {
           this._errorMsg(item, rule.message || this.options.errorMsg.max(rule.max));
-          console.log(2);
         } else {
           this._removeError(item);
         }
@@ -91,12 +105,17 @@ class Validate {
   }
 
   _errorMsg(item, message){
+    this._removeError(item);
+    item.classList.add('error');
+    item.classList.remove('valid');
     item.insertAdjacentHTML('afterEnd', `<label id="${item.name}-error" class="error" for="${item.name}">${message}</label>`);
     this.config.errorDom[item.name] = document.getElementById(`${item.name}-error`);
   }
 
   _removeError(item){
     if(this.config.errorDom[item.name]){
+      item.classList.remove('error');
+      item.classList.add('valid');
       this._removeDom(this.config.errorDom[item.name]);
       this.config.errorDom[item.name] = false;
     }
