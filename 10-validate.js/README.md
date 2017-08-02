@@ -93,7 +93,7 @@ var validateDemo = new Validate({
     validatorSelect: validatorSelect
   },
 
-  //rules为当使用js规则验证时为必填，rules的属性必需与元素的name属性对应，验证规则包含以下
+  //rules为当使用js规则验证时为必填，rules的属性必需与元素的name属性对应，自带验证规则包含以下
   //required: 是否必填
   //minlength: 至少字符串
   //maxlength: 至多字符串
@@ -101,12 +101,12 @@ var validateDemo = new Validate({
   //max: 至大数字
   //regex: 正则表达式
 
-  //trigger为触发条件且为必填项
+  //trigger为触发条件，且为必填项
   //input: 值实时变化时
   //blur: 失去焦点时
   //change: 值改变且失去焦点时
 
-  //validator为自定义规则的函数
+  //validator为自定义规则的函数, 在验证规则里权限最高，假如存在validator，则会忽视其他自带规则
   //value: 传入的值('checkbox'时传入的是数组)
   //callback: 回调函数，为空时表示验证通过，不为空且为Error时为提示文本
 

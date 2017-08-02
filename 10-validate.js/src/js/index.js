@@ -138,7 +138,7 @@ class Validate {
       let rules = this.options.rules[item.name];
       this.config.tabNames.indexOf(item.tagName.toLowerCase()) !== -1 && rules && rules.map(rule => {
         if(!rule.trigger || this.config.triggerType.indexOf(rule.trigger) === -1){
-          throw new TypeError(`Rule required 'trigger' Attributes: ${this.config.triggerType.join(',')}`);
+          throw new TypeError(`Rule ${item.name} --> required trigger attributes: ${this.config.triggerType.join('、')}`);
         } else {
           this._eventBind(item, rule, submit);
         }

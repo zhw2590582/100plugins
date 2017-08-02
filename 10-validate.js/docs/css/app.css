@@ -1,6 +1,6 @@
 .validate-demo{
   display: inline-block;
-  margin-right: 50px;
+  width: 45%;
 }
 
 .validate-demo h4{
@@ -14,7 +14,7 @@
 }
 
 .validate-demo p label{
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .validate-demo .submit{
