@@ -40,6 +40,7 @@ class Validate {
     return {
       itemParent: '',
       submitHandler: new Function(),
+      rules: {},
       errorMsg: {
         requiredMsg: () => `This field is required.`,
         minlengthMsg: num => `This field must consist of at least ${num} characters`,
@@ -55,6 +56,7 @@ class Validate {
 
   _init(){
     this._getElement();
+    this._createRule();
     this._validate();
     this._formSubmit();
     console.log(this);
@@ -63,6 +65,10 @@ class Validate {
   _getElement(){
     this.options.container.classList.add('__validate__form');
     this.config.rules = [].slice.call(this.options.container.querySelectorAll('[name]'));
+  }
+
+  _createRule(){
+
   }
 
   _validate(submit){
@@ -79,13 +85,11 @@ class Validate {
   }
 
   _eventBind(item, rule, submit){
-
     let _event = e => {
       if(rule.validator){
         if(typeof rule.validator !== 'function'){
           this._errorMsg(item, rule.message || this.options.errorMsg.functionMsg());
         } else {
-
           let errorFn = error => {
             if(error){
               this._errorMsg(item, error.message);
@@ -93,7 +97,6 @@ class Validate {
               this._removeError(item);
             }
           }
-
           if(item.type.toLowerCase() === 'checkbox'){
             let checkboxValue = this.config.rules.filter(inputDom => {
               return inputDom.name === item.name
@@ -115,7 +118,6 @@ class Validate {
           } else {
             rule.validator(item.value, errorFn)
           }
-
         }
         return;
       }
@@ -194,6 +196,10 @@ class Validate {
     this._listen(this.options.container, 'submit', e => {
       e.preventDefault();
       this._validate(true);
+      let flag = Object.keys(this.config.errorDom).every(item => {
+        return this.config.errorDom[item] === false
+      });
+      flag && this.options.submitHandler(this.options.container);
     })
   }
 

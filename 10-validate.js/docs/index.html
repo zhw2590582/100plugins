@@ -15,80 +15,129 @@
 </head>
 
 <body>
-  <form class="validate-demo">
+  <form class="validate-demo demo01">
+    <h4>01.通过JS规则验证</h4>
     <p>
-      <label>字符串</label>
+      <label class="title">字符串长度：</label>
       <input type="text" name="vInput">
     </p>
     <p>
-      <label>数字</label>
+      <label class="title">数字大小：</label>
       <input type="number" name="vNumber">
     </p>
     <p>
-      <label>正则表达式</label>
+      <label class="title">正则表达式：</label>
       <input type="text" name="vRegex">
     </p>
     <p>
-      <label>自定义验证</label>
-      <input type="text" name="vCustomize">
+      <label class="title">自定义密码验证：</label>
+      <input type="password" name="vPassword">
     </p>
     <p>
-      <label>文本框</label>
+      <label class="title">文本框长度：</label>
       <textarea name="vTextarea"></textarea>
     </p>
     <p>
-      <label>单选框</label>
-      <label><input name="vFruit" type="radio" value="1" />苹果</label>
-      <label><input name="vFruit" type="radio" value="2" />桃子</label>
-      <label><input name="vFruit" type="radio" value="3" />香蕉</label>
-      <label><input name="vFruit" type="radio" value="4" />梨</label>
-      <label><input name="vFruit" type="radio" value="5" />其它</label>
+      <label class="title">单选框：</label>
+      <label><input name="vRadio" type="radio" value="1" />苹果</label>
+      <label><input name="vRadio" type="radio" value="2" />桃子</label>
+      <label><input name="vRadio" type="radio" value="3" />香蕉</label>
+      <label><input name="vRadio" type="radio" value="4" />梨</label>
     </p>
     <p>
-      <label>复选框</label>
-      <label><input name="vFruit2" type="checkbox" value="1" />苹果</label>
-      <label><input name="vFruit2" type="checkbox" value="2" />桃子</label>
-      <label><input name="vFruit2" type="checkbox" value="3" />香蕉</label>
-      <label><input name="vFruit2" type="checkbox" value="4" />梨</label>
+      <label class="title">复选框：</label>
+      <label><input name="vCheckbox" type="checkbox" value="1" />苹果</label>
+      <label><input name="vCheckbox" type="checkbox" value="2" />桃子</label>
+      <label><input name="vCheckbox" type="checkbox" value="3" />香蕉</label>
+      <label><input name="vCheckbox" type="checkbox" value="4" />梨</label>
     </p>
     <p>
-      <label>下拉框</label>
-      <select name="vFruit3">
+      <label class="title">下拉框：</label>
+      <select name="vSelect">
         <option value="1">苹果</option>
         <option value="2">桃子</option>
         <option value="3">香蕉</option>
         <option value="4">梨</option>
       </select>
     </p>
-    <input class="submit" type="submit" value="Submit">
+    <input class="submit" type="submit" value="提交表单">
   </form>
+
+  <form class="validate-demo demo02">
+    <h4>02.通过HTML属性验证</h4>
+    <p>
+      <label class="title">字符串长度：</label>
+      <input type="text" name="vInput" required>
+    </p>
+    <p>
+      <label class="title">数字大小：</label>
+      <input type="number" name="vNumber" required>
+    </p>
+    <p>
+      <label class="title">正则表达式：</label>
+      <input type="text" name="vRegex" required>
+    </p>
+    <p>
+      <label class="title">自定义密码验证：</label>
+      <input type="password" name="vPassword" required>
+    </p>
+    <p>
+      <label class="title">文本框长度：</label>
+      <textarea name="vTextarea" required></textarea>
+    </p>
+    <p required>
+      <label class="title">单选框：</label>
+      <label><input name="vRadio" type="radio" value="1" />苹果</label>
+      <label><input name="vRadio" type="radio" value="2" />桃子</label>
+      <label><input name="vRadio" type="radio" value="3" />香蕉</label>
+      <label><input name="vRadio" type="radio" value="4" />梨</label>
+    </p>
+    <p required>
+      <label class="title">复选框：</label>
+      <label><input name="vCheckbox" type="checkbox" value="1" />苹果</label>
+      <label><input name="vCheckbox" type="checkbox" value="2" />桃子</label>
+      <label><input name="vCheckbox" type="checkbox" value="3" />香蕉</label>
+      <label><input name="vCheckbox" type="checkbox" value="4" />梨</label>
+    </p>
+    <p>
+      <label class="title">下拉框：</label>
+      <select name="vSelect" required>
+        <option value="1">苹果</option>
+        <option value="2">桃子</option>
+        <option value="3">香蕉</option>
+        <option value="4">梨</option>
+      </select>
+    </p>
+    <input class="submit" type="submit" value="提交表单">
+  </form>
+
   <script src="validate/validate.js"></script>
   <script src="js/app.js"></script>
   <script>
 
-    var validator1 = function (value, callback) {
+    var validatorPassword = function (value, callback) {
       if(value === ''){
         callback(new Error('请输入密码'));
-      } else if (value.length < 6) {
-        callback(new Error('至少6个字符'));
+      } else if (!/^[A-Za-z0-9]{6,20}$/.test(value)) {
+        callback(new Error('6-20位字母数字组合'));
       } else {
         callback();
       }
     }
 
-    var validator2 = function (value, callback) {
+    var validatorRadio = function (value, callback) {
       if(value === ''){
-        callback(new Error('请选择'));
+        callback(new Error('请选择一种水果'));
       } else if (value !== '1') {
-        callback(new Error('请选择苹果'));
+        callback(new Error('请选择苹果哦'));
       } else {
         callback();
       }
     }
 
-    var validator3 = function (value, callback) {
+    var validatorCheckbox = function (value, callback) {
       if(value.length === 0){
-        callback(new Error('请选择'));
+        callback(new Error('请选择三种水果'));
       } else if (value.length < 3) {
         callback(new Error('请至少选择三个'));
       } else {
@@ -96,51 +145,58 @@
       }
     }
 
-    var validator4 = function (value, callback) {
+    var validatorSelect = function (value, callback) {
       if(value === ''){
-        callback(new Error('请选择'));
+        callback(new Error('请选择一种水果'));
       } else if (value !== '2') {
-        callback(new Error('请选择桃子'));
+        callback(new Error('请选择桃子哦'));
       } else {
         callback();
       }
     }
 
-
-    new Validate({
-      container: '.validate-demo',
+    var validateDemo01 = new Validate({
+      container: '.demo01',
       itemParent: 'p',
       submitHandler: function(form) {
         form.submit();
       },
       rules: {
         vInput: [
-          { required: true, message: '请输入', trigger: 'blur' },
+          { required: true, message: '此项为必填', trigger: 'blur' },
           { minlength: 3, maxlength: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
         vNumber: [
-          { required: true, trigger: 'blur' },
+          { required: true, message: '此项为必填', trigger: 'blur' },
           { min: 3, max: 10, trigger: 'blur' }
         ],
         vRegex: [
-          { required: true, trigger: 'blur' },
+          { required: true, message: '此项为必填', trigger: 'blur' },
           { regex: /^1[34578]\d{9}$/, trigger: 'blur' }
         ],
-        vCustomize: [
-          { validator: validator1, trigger: 'blur' }
+        vPassword: [
+          { validator: validatorPassword, trigger: 'blur' }
         ],
         vTextarea: [
-          { required: true, message: '请选择活动资源', trigger: 'blur' }
+          { required: true, message: '此项为必填', trigger: 'blur' },
         ],
-        vFruit: [
-          { validator: validator2, trigger: 'change' }
+        vRadio: [
+          { validator: validatorRadio, trigger: 'change' }
         ],
-        vFruit2: [
-          { validator: validator3, trigger: 'change' }
+        vCheckbox: [
+          { validator: validatorCheckbox, trigger: 'change' }
         ],
-        vFruit3: [
-          { validator: validator4, trigger: 'change' }
+        vSelect: [
+          { validator: validatorSelect, trigger: 'change' }
         ]
+      }
+    });
+
+    var validateDemo01 = new Validate({
+      container: '.demo02',
+      itemParent: 'p',
+      submitHandler: function(form) {
+        form.submit();
       }
     });
   </script>

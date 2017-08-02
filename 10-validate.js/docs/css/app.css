@@ -1,0 +1,22 @@
+.validate-demo{
+  display: inline-block;
+  margin-right: 50px;
+}
+
+.validate-demo h4{
+  margin-left: 50px;
+}
+
+.validate-demo p .title{
+  display: inline-block;
+  width: 150px;
+  text-align: right;
+}
+
+.validate-demo p label{
+  margin-right: 10px;
+}
+
+.validate-demo .submit{
+  margin-left: 150px;
+}
