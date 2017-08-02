@@ -6,7 +6,7 @@
     }
   }
 
-  input {
+  input, textarea, select {
     &.error {
       border: 1px dotted red;
     }

@@ -53,11 +53,11 @@
     </p>
     <p>
       <label>下拉框</label>
-      <select>
-        <option value ="volvo">Volvo</option>
-        <option value ="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
+      <select name="vFruit3">
+        <option value="1">苹果</option>
+        <option value="2">桃子</option>
+        <option value="3">香蕉</option>
+        <option value="4">梨</option>
       </select>
     </p>
     <input class="submit" type="submit" value="Submit">
@@ -96,6 +96,17 @@
       }
     }
 
+    var validator4 = function (value, callback) {
+      if(value === ''){
+        callback(new Error('请选择'));
+      } else if (value !== '1') {
+        callback(new Error('请选择苹果'));
+      } else {
+        callback();
+      }
+    }
+
+
     new Validate({
       container: '.validate-demo',
       itemParent: 'p',
@@ -123,6 +134,9 @@
         ],
         vFruit2: [
           { validator: validator3, trigger: 'change' }
+        ],
+        vFruit3: [
+          { validator: validator4, trigger: 'change' }
         ]
       }
     });
