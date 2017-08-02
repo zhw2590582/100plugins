@@ -61,7 +61,7 @@
       </select>
     </p>
     <input class="submit" type="submit" value="提交表单">
-    <input class="destory" type="button" value="销毁实例">
+    <input class="validate01" type="button" value="个别验证">
   </form>
 
   <form class="validate-demo demo02">
@@ -110,7 +110,7 @@
       </select>
     </p>
     <input class="submit" type="submit" value="提交表单">
-    <input class="validate" type="button" value="个别验证">
+    <input class="validate02" type="button" value="个别验证">
   </form>
 
   <script src="validate/validate.js"></script>
@@ -195,7 +195,7 @@
       }
     });
 
-    var validateDemo01 = new Validate({
+    var validateDemo02 = new Validate({
       container: '.demo02',
       itemParent: 'p',
       submitHandler: function(form) {
@@ -209,6 +209,17 @@
         validatorSelect: validatorSelect
       }
     });
+
+    document.querySelector('.validate01').addEventListener('click', function (e) {
+      validateDemo02.validate(['vInput', 'vNumber']);
+      alert('validate01');
+    })
+
+    document.querySelector('.validate02').addEventListener('click', function (e) {
+      validateDemo02.validate(['vInput', 'vNumber']);
+      alert('validate02');
+    })
+
   </script>
 </body>
 

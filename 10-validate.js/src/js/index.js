@@ -220,7 +220,7 @@ class Validate {
       }
     }
 
-    submit && _event() || this._listen(item, rule.trigger, _event);
+    submit && _event() || listen(item, rule.trigger, _event);
   }
 
   _errorMsg(item, message){
@@ -256,28 +256,22 @@ class Validate {
 
   _formSubmit(type){
     let _validate = e => {
-      e.preventDefault();
+      e && e.preventDefault();
       this._validate(true);
       let flag = Object.keys(this.config.errorDom).every(item => {
         return this.config.errorDom[item] === false
       });
       flag && this.options.submitHandler(this.options.container);
     }
-    type && _validate() || this._listen(this.options.container, 'submit', _validate);
+    type && _validate() || listen(this.options.container, 'submit', _validate);
   }
 
   /**
   * ================================== PUBLIC METHODS ==================================
   */
 
-  destory() {
-    this.config.listeners.map(listener => {
-      listener.destroy();
-    });
-  }
-
   validate(names){
-    this._formSubmit(true);
+    this._formSubmit();
   }
 
   /**
@@ -297,10 +291,6 @@ class Validate {
 
   _removeDom(el){
     el.parentNode.removeChild(el);
-  }
-
-  _listen(el, type, event) {
-    this.config.listeners.push(listen(el, type, event));
   }
 
 }
