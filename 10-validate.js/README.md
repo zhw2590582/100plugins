@@ -144,11 +144,8 @@ var validateDemo = new Validate({
 //销毁插件
 validateDemo.destory();
 
-//手动触发全部验证
-validateDemo.validate();
-
-//手动触发个别验证，参数为表单项的name值
-validateDemo.validate('vInput', 'vNumber');
+//手动触发验证, 参数为空时表示验证全部, 不为空且为name组成的数组时为个别验证
+validateDemo.validate(['vInput', 'vNumber']);
 
 ```
 ## 开发
