@@ -1,26 +1,134 @@
 ## Pullrefresh.js
 
-一个很简单的Javascript原生面向对象的下拉刷新插件
+一个很简单的Javascript原生面向对象的表单验证插件
 
 ## 使用
 ```js
 
-import Pullrefresh from './js/pullrefresh.js'
+import Validate from './js/validate.js'
 
-var pullrefresh_demo = new Pullrefresh({
-  container: '.app', //被下拉的元素，默认整体容器为'document.body'
-  pullText: '↓ 下拉', //下拉时显示文字
-  dropText: '↑ 释放', //释放时显示文字
-  loadingText: '刷新中...', //加载时显示的文字，默认维持1秒钟
-  loadDistance: 200, //刷新距离，最大可拉动距离为屏幕的1/3
-  onRefresh: function () { //刷新回调
-    alert('刷新中...');
-    window.location.reload();
+//自定义规则01
+var validatorPassword = function (value, callback) {
+  if(value === ''){
+    callback(new Error('请输入密码'));
+  } else if (!/^[A-Za-z0-9]{6,20}$/.test(value)) {
+    callback(new Error('6-20位字母数字组合'));
+  } else {
+    callback();
+  }
+}
+
+//自定义规则02
+var validatorRadio = function (value, callback) {
+  if(value === ''){
+    callback(new Error('请选择一种水果'));
+  } else if (value !== '1') {
+    callback(new Error('请选择苹果哦'));
+  } else {
+    callback();
+  }
+}
+
+//自定义规则03
+var validatorCheckbox = function (value, callback) {
+  if(value.length === 0){
+    callback(new Error('请选择三种水果'));
+  } else if (value.length < 3) {
+    callback(new Error('请至少选择三个'));
+  } else {
+    callback();
+  }
+}
+
+//自定义规则04
+var validatorSelect = function (value, callback) {
+  if(value === ''){
+    callback(new Error('请选择一种水果'));
+  } else if (value !== '2') {
+    callback(new Error('请选择桃子哦'));
+  } else {
+    callback();
+  }
+}
+
+var validateDemo = new Validate({
+  container: '.demo01', //表单form元素，必填
+  itemParent: 'p', //表单元素的父级，当使用'radio'和'checkbox'的Dom属性验证时为必填
+  submitHandler: function(form) { //表单通过时的回调，参数为表单Dom元素
+    form.submit();
+  },
+  errorMsg: { //默认提示文本
+    requiredMsg: function () {
+      return '此项为必填项'
+    },
+    minlengthMsg: function (num) {
+      return '至少' + num + '个字符';
+    },
+    maxlengthMsg: function (num) {
+      return '至多' + num + '个字符';
+    },
+    minMsg: function (num) {
+      return '至小' + num + '的数字';
+    },
+    maxMsg: function (num) {
+      return '至大' + num + '的数字';
+    },
+    regexMsg: function (regex) {
+      return '不匹配正则：' + regex;
+    },
+    isNaNMsg: function () {
+      return '此值为非数字'
+    },
+    functionMsg: function () {
+      return '此值为非函数'
+    }
+  },
+
+  //rules当使用js规则验证时为必填，当使用Dom属性验证时不要写，目前只能二选一，不能混合。
+  //rules的属性必需与元素的name属性一一对应。
+  //规则包含'required(是否必填)', 'minlength(至少字符串)', 'maxlength(至多字符串)', 'min(至小数字)', 'max(至大数字)', 'regex(正则表达式)'。
+  //trigger为触发条件，包含'input(值实时变化时)', 'blur(失去焦点时)', 'change(值改变且失去焦点时)',为必填项。
+  //validator为自定义规则的函数，第一个参数为传入的值('checkbox'时传入的是数组)，第二个参数为回调函数，为空时表示验证通过，不为空且为Error时为提示文本。
+
+  rules: {
+    vInput: [
+      { required: true, message: '此项为必填', trigger: 'input' },
+      { minlength: 3, maxlength: 5, message: '长度在 3 到 5 个字符', trigger: 'input' }
+    ],
+    vNumber: [
+      { required: true, message: '此项为必填', trigger: 'input' },
+      { min: 3, max: 10, trigger: 'input' }
+    ],
+    vRegex: [
+      { required: true, message: '此项为必填', trigger: 'blur' },
+      { regex: /^1[34578]\d{9}$/, trigger: 'blur' }
+    ],
+    vPassword: [
+      { validator: validatorPassword, trigger: 'input' }
+    ],
+    vTextarea: [
+      { required: true, message: '此项为必填', trigger: 'blur' },
+    ],
+    vRadio: [
+      { validator: validatorRadio, trigger: 'change' }
+    ],
+    vCheckbox: [
+      { validator: validatorCheckbox, trigger: 'change' }
+    ],
+    vSelect: [
+      { validator: validatorSelect, trigger: 'change' }
+    ]
   }
 });
 
 //销毁插件
-pullrefresh_demo.destory()
+validateDemo.destory();
+
+//手动触发全部验证
+validateDemo.validate();
+
+//手动触发个别验证，参数为表单项的name值
+validateDemo.validate('vInput', 'vNumber');
 
 ```
 ## 开发

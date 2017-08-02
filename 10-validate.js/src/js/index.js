@@ -20,7 +20,7 @@ class Validate {
     }
 
     this.config = {
-      triggerType: ['blur', 'change'],
+      triggerType: ['blur', 'change', 'input'],
       tabNames: ['input', 'select', 'textarea'],
       inputType: ['text', 'checkbox', 'radio', 'file', 'password'],
       ruleType: ['required', 'minlength', 'maxlength', 'min', 'max', 'regex'],
@@ -254,15 +254,16 @@ class Validate {
     }
   }
 
-  _formSubmit(){
-    this._listen(this.options.container, 'submit', e => {
+  _formSubmit(type){
+    let _validate = e => {
       e.preventDefault();
       this._validate(true);
       let flag = Object.keys(this.config.errorDom).every(item => {
         return this.config.errorDom[item] === false
       });
       flag && this.options.submitHandler(this.options.container);
-    })
+    }
+    type && _validate() || this._listen(this.options.container, 'submit', _validate);
   }
 
   /**
@@ -273,6 +274,10 @@ class Validate {
     this.config.listeners.map(listener => {
       listener.destroy();
     });
+  }
+
+  validate(names){
+    this._formSubmit(true);
   }
 
   /**

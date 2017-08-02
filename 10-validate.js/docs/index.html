@@ -67,7 +67,7 @@
     <h4>02.通过HTML属性验证</h4>
     <p>
       <label class="title">字符串长度：</label>
-      <input type="text" name="vInput" required requiredmsg="此项为必填" minLength="3" maxLength="5" lengthmsg="长度在 3 到 5 个字符" trigger="blur">
+      <input type="text" name="vInput" required requiredmsg="此项为必填" minLength="3" maxLength="5" lengthmsg="长度在 3 到 5 个字符" trigger="input">
     </p>
     <p>
       <label class="title">数字大小：</label>
@@ -79,7 +79,7 @@
     </p>
     <p>
       <label class="title">自定义密码验证：</label>
-      <input type="password" name="vPassword" validator="validatorPassword" trigger="blur">
+      <input type="password" name="vPassword" validator="validatorPassword" trigger="input">
     </p>
     <p>
       <label class="title">文本框长度：</label>
@@ -163,19 +163,19 @@
       },
       rules: {
         vInput: [
-          { required: true, message: '此项为必填', trigger: 'blur' },
-          { minlength: 3, maxlength: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '此项为必填', trigger: 'input' },
+          { minlength: 3, maxlength: 5, message: '长度在 3 到 5 个字符', trigger: 'input' }
         ],
         vNumber: [
-          { required: true, message: '此项为必填', trigger: 'blur' },
-          { min: 3, max: 10, trigger: 'blur' }
+          { required: true, message: '此项为必填', trigger: 'input' },
+          { min: 3, max: 10, trigger: 'input' }
         ],
         vRegex: [
           { required: true, message: '此项为必填', trigger: 'blur' },
           { regex: /^1[34578]\d{9}$/, trigger: 'blur' }
         ],
         vPassword: [
-          { validator: validatorPassword, trigger: 'blur' }
+          { validator: validatorPassword, trigger: 'input' }
         ],
         vTextarea: [
           { required: true, message: '此项为必填', trigger: 'blur' },
