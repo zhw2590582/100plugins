@@ -10,3 +10,4 @@
 * [08-crop.js(图片剪裁插件--未完成)](http://zhw-island.com/100plugins_demo/08-crop.js/)
 * [09-pullrefresh.js(下拉刷新插件)](http://zhw-island.com/100plugins_demo/09-pullrefresh.js/)
 * [10-validate.js(表单验证插件)](http://zhw-island.com/100plugins_demo/10-validate.js/)
+* [11-parallax.js(时差滚动插件)](http://zhw-island.com/100plugins_demo/11-parallax.js/)
