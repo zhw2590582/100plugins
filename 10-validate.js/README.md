@@ -144,7 +144,8 @@ var validateDemo = new Validate({
 
 //手动触发验证, 参数为空时表示验证全部, 不为空且为name组成的数组时为个别验证,
 //注意此方法只做验证，不会触发submitHandler方法
-validateDemo.validate(['vInput', 'vNumber']);
+//返回值为一个对象，包含指定元素的验证结果true或者false
+var validateState = validateDemo.validate(['vInput', 'vNumber']);
 
 ```
 ## 开发
