@@ -85,7 +85,7 @@ var validateDemo = new Validate({
     }
   },
 
-  //validators为当使用Dom属性验证时为必填
+  //validators为当使用Dom属性验证时且使用了validators作为属性则为必填
   validators: {
     validatorPassword: validatorPassword,
     validatorRadio: validatorRadio,
