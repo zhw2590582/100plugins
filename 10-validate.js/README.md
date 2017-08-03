@@ -54,11 +54,12 @@ var validatorSelect = function (value, callback) {
 //实例化
 var validateDemo = new Validate({
   container: '.demo01', //表单form元素，必填
-  itemParent: 'p', //表单元素的父级，当使用'radio'和'checkbox'的Dom属性验证时为必填
-  submitHandler: function(form) { //表单通过时的回调，参数为表单Dom元素
+  itemParent: 'p', //表单元素的父级，当使用'radio'和'checkbox'的Dom属性验证时为必填, 默认为空
+  focusError: true, //错误表单元素是否获取焦点，默认为true，选填
+  submitHandler: function(form) { //表单通过时的回调，参数为表单Dom元素，选填
     form.submit();
   },
-  errorMsg: { //默认提示文本
+  errorMsg: { //默认提示文本，选填
     requiredMsg: function () {
       return '此项为必填项'
     },
@@ -141,7 +142,8 @@ var validateDemo = new Validate({
   }
 });
 
-//手动触发验证, 参数为空时表示验证全部, 不为空且为name组成的数组时为个别验证
+//手动触发验证, 参数为空时表示验证全部, 不为空且为name组成的数组时为个别验证,
+//注意此方法只做验证，不会触发submitHandler方法
 validateDemo.validate(['vInput', 'vNumber']);
 
 ```

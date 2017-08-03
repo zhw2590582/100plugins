@@ -160,6 +160,7 @@
     var validateDemo01 = new Validate({
       container: '.demo01',
       itemParent: 'p',
+      focusError: true,
       submitHandler: function(form) {
         alert('验证通过');
         form.submit();
@@ -198,6 +199,7 @@
     var validateDemo02 = new Validate({
       container: '.demo02',
       itemParent: 'p',
+      focusError: true,
       submitHandler: function(form) {
         alert('验证通过');
         form.submit();
@@ -211,13 +213,13 @@
     });
 
     document.querySelector('.validate01').addEventListener('click', function (e) {
-      var validate = validateDemo01.validate(['vInput', 'vRegex', 'vTextarea', 'vCheckbox']);
-      alert(JSON.stringify(validate));
+      var validateState = validateDemo01.validate(['vInput', 'vRegex', 'vTextarea', 'vCheckbox']);
+      alert(JSON.stringify(validateState));
     })
 
     document.querySelector('.validate02').addEventListener('click', function (e) {
-      var validate = validateDemo02.validate(['vNumber', 'vPassword', 'vRadio', 'vSelect']);
-      alert(JSON.stringify(validate));
+      var validateState = validateDemo02.validate(['vNumber', 'vPassword', 'vRadio', 'vSelect']);
+      alert(JSON.stringify(validateState));
     })
 
   </script>

@@ -25,7 +25,8 @@ class Validate {
       inputType: ['text', 'checkbox', 'radio', 'file', 'password'],
       ruleType: ['required', 'minlength', 'maxlength', 'min', 'max', 'regex'],
       rules: [],
-      errorDom: {}
+      errorDom: {},
+      validateState: {}
     }
 
     this._eventBind = this._eventBind.bind(this);
@@ -37,6 +38,7 @@ class Validate {
 
   static get DEFAULTS() {
     return {
+      focusError: true,
       itemParent: '',
       submitHandler: new Function(),
       rules: {},
@@ -254,16 +256,18 @@ class Validate {
     }
   }
 
-  _formSubmit(type){
+  _formSubmit(){
     let _validate = e => {
       e && e.preventDefault();
       this._validate(true);
-      let flag = Object.keys(this.config.errorDom).every(item => {
-        return this.config.errorDom[item] === false
+      this._validateState();
+      this.options.focusError && this._focus();
+      let flag = Object.keys(this.config.validateState).every(item => {
+        return this.config.validateState[item]
       });
       flag && this.options.submitHandler(this.options.container);
     }
-    type && _validate() || listen(this.options.container, 'submit', _validate);
+    listen(this.options.container, 'submit', _validate);
   }
 
   /**
@@ -271,18 +275,32 @@ class Validate {
   */
 
   validate(names){
-    names = !names ? Object.keys(this.options.rules) : names;
     this._validate(true, names);
-    let validate = {};
-    names.map(item => {
-      validate[item] = !this.config.errorDom[item]
-    });
-    return validate;
+    this._validateState(names);
+    this.options.focusError && this._focus();
+    return this.config.validateState;
   }
 
   /**
   * ================================== HELPER ==================================
   */
+
+  _validateState(names){
+    this.config.validateState = {};
+    names = !names ? Object.keys(this.options.rules) : names;
+    names.map(item => {
+      this.config.validateState[item] = !this.config.errorDom[item]
+    });
+  }
+
+  _focus(){
+    let errorList = Object.keys(this.config.validateState).filter(item => {
+      return !this.config.validateState[item]
+    });
+    if(errorList.length > 0){
+      this.options.container.querySelector(`[name = ${errorList[0]}]`).focus();
+    }
+  }
 
   _closest(el, selector) {
     let matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
