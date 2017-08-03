@@ -64,16 +64,16 @@ var validateDemo = new Validate({
       return '此项为必填项'
     },
     minlengthMsg: function (num) {
-      return '至少' + num + '个字符';
+      return '至少为' + num + '个字符';
     },
     maxlengthMsg: function (num) {
-      return '至多' + num + '个字符';
+      return '至多为' + num + '个字符';
     },
     minMsg: function (num) {
-      return '至小' + num + '的数字';
+      return '至小为' + num + '的数字';
     },
     maxMsg: function (num) {
-      return '至大' + num + '的数字';
+      return '至大为' + num + '的数字';
     },
     regexMsg: function (regex) {
       return '不匹配正则：' + regex;
