@@ -61,7 +61,7 @@
       </select>
     </p>
     <input class="submit" type="submit" value="提交表单">
-    <input class="validate01" type="button" value="个别验证">
+    <input class="validate01" type="button" value="个别验证(1、3、5、7)">
   </form>
 
   <form class="validate-demo demo02">
@@ -110,7 +110,7 @@
       </select>
     </p>
     <input class="submit" type="submit" value="提交表单">
-    <input class="validate02" type="button" value="个别验证">
+    <input class="validate02" type="button" value="个别验证(2、4、6、8)">
   </form>
 
   <script src="validate/validate.js"></script>
@@ -211,13 +211,13 @@
     });
 
     document.querySelector('.validate01').addEventListener('click', function (e) {
-      validateDemo02.validate(['vInput', 'vNumber']);
-      alert('validate01');
+      var validate = validateDemo01.validate(['vInput', 'vRegex', 'vTextarea', 'vCheckbox']);
+      alert(JSON.stringify(validate));
     })
 
     document.querySelector('.validate02').addEventListener('click', function (e) {
-      validateDemo02.validate(['vInput', 'vNumber']);
-      alert('validate02');
+      var validate = validateDemo02.validate(['vNumber', 'vPassword', 'vRadio', 'vSelect']);
+      alert(JSON.stringify(validate));
     })
 
   </script>

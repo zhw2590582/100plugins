@@ -132,20 +132,21 @@ class Validate {
 
   }
 
-  _validate(submit){
+  _validate(submit, names){
     this.config.rules.map(item => {
       let rules = this.options.rules[item.name];
       this.config.tabNames.indexOf(item.tagName.toLowerCase()) !== -1 && rules && rules.map(rule => {
         if(!rule.trigger || this.config.triggerType.indexOf(rule.trigger) === -1){
           throw new TypeError(`Rule ${item.name} --> required trigger attributes: ${this.config.triggerType.join('、')}`);
         } else {
-          this._eventBind(item, rule, submit);
+          this._eventBind(item, rule, submit, names);
         }
       })
     })
   }
 
-  _eventBind(item, rule, submit){
+  _eventBind(item, rule, submit, names){
+    if(names && names.indexOf(item.name) === -1) return;
     let _event = e => {
       if(rule.validator){
         if(typeof rule.validator !== 'function'){
@@ -270,7 +271,13 @@ class Validate {
   */
 
   validate(names){
-    this._formSubmit();
+    names = !names ? Object.keys(this.options.rules) : names;
+    this._validate(true, names);
+    let validate = {};
+    names.map(item => {
+      validate[item] = !this.config.errorDom[item]
+    });
+    return validate;
   }
 
   /**
