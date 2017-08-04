@@ -16,12 +16,20 @@
 
 <body>
 
+  <div class="parallax" data-parallax-speed="-6">-6</div>
+  <div class="parallax" data-parallax-speed="-4">-4</div>
+  <div class="parallax" data-parallax-speed="-2">-2</div>
+  <div class="parallax" data-parallax-speed="0">0</div>
+  <div class="parallax" data-parallax-speed="2">2</div>
+  <div class="parallax" data-parallax-speed="4">4</div>
+  <div class="parallax" data-parallax-speed="6">6</div>
+
   <script src="parallax/parallax.js"></script>
   <script src="js/app.js"></script>
   <script>
 
-    var parallaxDemo01 = new Parallax({
-
+    var parallaxDemo01 = new Parallax('.parallax', {
+      speed: 2
     });
 
   </script>

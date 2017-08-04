@@ -1,14 +1,3 @@
-.__validate__form {
-  label {
-    &.error {
-      color: red;
-      font-style: italic;
-    }
-  }
+.parallax {
 
-  input, textarea, select {
-    &.error {
-      border: 1px dotted red;
-    }
-  }
 }
