@@ -13,7 +13,6 @@
   text-align: center;
   background: #2bb8c3;
   color: #fff;
-  transition: transform .01s; //防止抖动严重
 }
 
 .parallaxWrap

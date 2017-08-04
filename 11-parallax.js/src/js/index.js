@@ -1,5 +1,3 @@
-import 'smoothscroll-for-websites';
-
 class Parallax {
   constructor(el = '.parallax', options) {
     this.options = {
@@ -8,8 +6,6 @@ class Parallax {
     };
 
     this.config = {
-      min: -10,
-      max: 10,
       pause: false,
       posY: 0,
       screenY: this._screenY(),
@@ -51,7 +47,8 @@ class Parallax {
 
   static get DEFAULTS() {
     return {
-      speed: -2
+      speed: -2,
+      interval: [-10, 10]
     };
   }
 
@@ -143,8 +140,8 @@ class Parallax {
   }
 
   _clamp(num) {
-    let min = this.config.min;
-    let max = this.config.max;
+    let min = this.options.interval[0];
+    let max = this.options.interval[1];
     return num <= min ? min : num >= max ? max : num;
   }
 }
