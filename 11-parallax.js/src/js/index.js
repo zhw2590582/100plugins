@@ -1,3 +1,5 @@
+import 'smoothscroll-for-websites';
+
 class Parallax {
   constructor(el = '.parallax', options) {
     this.options = {
@@ -10,6 +12,7 @@ class Parallax {
       max: 10,
       pause: false,
       posY: 0,
+      screenY: this._screenY(),
       transformProp: this._transformProp(),
       screenHeight: window.innerHeight || 0,
       elems: [],
@@ -29,7 +32,7 @@ class Parallax {
       );
     })();
 
-    this.options.speed = this._clamp(this.options.speed, this.config.min, this.config.max);
+    this.options.speed = this._clamp(this.options.speed);
 
     let elements = document.querySelectorAll(el);
     if (elements.length > 0) {
@@ -48,7 +51,7 @@ class Parallax {
 
   static get DEFAULTS() {
     return {
-      speed: -2,
+      speed: -2
     };
   }
 
@@ -67,7 +70,7 @@ class Parallax {
 
   _createInit(el) {
     return {
-      speed: +el.getAttribute('data-parallax-speed') || this.options.speed,
+      speed: this._clamp(+el.getAttribute('data-parallax-speed')),
       top: el.getBoundingClientRect().top,
       height: el.clientHeight || el.offsetHeight || el.scrollHeight || 0
     };
@@ -77,41 +80,34 @@ class Parallax {
     this._setPosition();
     window.addEventListener('resize', this._animate);
     this._update();
-    this._animate();
+    this._animate(true);
   }
 
   _setPosition() {
     let oldY = this.config.posY;
-    if (window.pageYOffset !== undefined) {
-      this.config.posY = window.pageYOffset;
-    } else {
-      this.config.posY = (document.documentElement ||
-        document.body.parentNode ||
-        document.body).scrollTop;
-    }
+    this.config.posY = this._screenY();
+
     if (oldY != this.config.posY) {
       return true;
     }
     return false;
   }
 
-  _updatePosition(percentage, speed) {
-    return (speed * (100 * (1 - percentage)));
-  };
+  _screenY(type) {
+    if (window.pageYOffset !== undefined) {
+      return window.pageYOffset;
+    } else {
+      return (document.documentElement ||
+        document.body.parentNode ||
+        document.body).scrollTop;
+    }
+  }
 
-  _animate(e) {
+  _animate(init) {
     for (let i = 0; i < this.config.elemsInit.length; i++) {
       let el = this.config.elemsInit[i];
-
-
-      let percentage = ((this.config.posY - el.top + this.config.screenHeight) / (el.height + this.config.screenHeight));
-      // let position = this._updatePosition(percentage, el.speed);
-
-      this.config.elems[i].setAttribute('test', percentage);
-
-      let position = this.config.posY * el.speed;
-
-      let translate = 'translate3d(0,' + position + 'px,0)';
+      let position = (this.config.screenY - this.config.posY) * (1 + el.speed * 0.1) + this.config.posY;
+      let translate = 'translate3d(0, ' + position + 'px, 0)';
       this.config.elems[i].style[this.config.transformProp] = translate;
     }
   }
@@ -145,10 +141,11 @@ class Parallax {
     );
   }
 
-  _clamp(num, min, max) {
+  _clamp(num) {
+    let min = this.config.min;
+    let max = this.config.max;
     return num <= min ? min : num >= max ? max : num;
   }
-
 }
 
 window.Parallax = Parallax;
