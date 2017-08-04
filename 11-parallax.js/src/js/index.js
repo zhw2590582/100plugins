@@ -6,6 +6,8 @@ class Parallax {
     };
 
     this.config = {
+      min: -10,
+      max: 10,
       pause: false,
       posY: 0,
       transformProp: this._transformProp(),
@@ -27,7 +29,7 @@ class Parallax {
       );
     })();
 
-    this.options.speed = this._clamp(this.options.speed, -10, 10);
+    this.options.speed = this._clamp(this.options.speed, this.config.min, this.config.max);
 
     let elements = document.querySelectorAll(el);
     if (elements.length > 0) {
@@ -46,7 +48,7 @@ class Parallax {
 
   static get DEFAULTS() {
     return {
-      speed: -2
+      speed: -2,
     };
   }
 
@@ -101,8 +103,13 @@ class Parallax {
     for (let i = 0; i < this.config.elemsInit.length; i++) {
       let el = this.config.elemsInit[i];
 
+
       let percentage = ((this.config.posY - el.top + this.config.screenHeight) / (el.height + this.config.screenHeight));
-      let position = this._updatePosition(percentage, el.speed);
+      // let position = this._updatePosition(percentage, el.speed);
+
+      this.config.elems[i].setAttribute('test', percentage);
+
+      let position = this.config.posY * el.speed;
 
       let translate = 'translate3d(0,' + position + 'px,0)';
       this.config.elems[i].style[this.config.transformProp] = translate;
