@@ -1,14 +1,13 @@
 .parallaxWrap{
-  height: 2000px;
+  height: 2500px;
   margin-top: 500px;
-  margin-bottom: 500px;
+  text-align: center;
 }
 
 .parallax{
   display: inline-block;
-  width: 7%;
-  margin: 0 1%;
-  float: left;
+  width: 40px;
+  margin-right: 10px;
   height: 100px;
   line-height: 100px;
   text-align: center;

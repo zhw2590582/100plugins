@@ -69,8 +69,9 @@ class Parallax {
   }
 
   _createInit(el) {
+    let speed = el.getAttribute('data-parallax-speed');
     return {
-      speed: this._clamp(+el.getAttribute('data-parallax-speed')),
+      speed: !!speed ? this._clamp(+speed) : this.options.speed,
       top: el.getBoundingClientRect().top,
       height: el.clientHeight || el.offsetHeight || el.scrollHeight || 0
     };
