@@ -1,5 +1,3 @@
-import listen from 'good-listener';
-
 class Parallax {
   constructor(el = '.parallax', options) {
     this.options = {
@@ -13,9 +11,21 @@ class Parallax {
       transformProp: this._transformProp(),
       screenHeight: window.innerHeight || 0,
       elems: [],
-      elemsInit: [],
-      listeners: []
+      elemsInit: []
     };
+
+    window.requestAnimFrame = (function() {
+      return (
+        window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        }
+      );
+    })();
 
     this.options.speed = this._clamp(this.options.speed, -10, 10);
 
@@ -29,6 +39,7 @@ class Parallax {
     }
 
     this._animate = this._animate.bind(this);
+    this._update = this._update.bind(this);
 
     this._init();
   }
@@ -54,14 +65,13 @@ class Parallax {
 
   _createInit(el) {
     return {
-      el: el,
       speed: +el.getAttribute('data-parallax-speed') || this.options.speed,
       top: el.getBoundingClientRect().top,
       height: el.clientHeight || el.offsetHeight || el.scrollHeight || 0
     };
   }
 
-  _eventBind(){
+  _eventBind() {
     this._setPosition();
     window.addEventListener('resize', this._animate);
     this._update();
@@ -70,53 +80,45 @@ class Parallax {
 
   _setPosition() {
     let oldY = this.config.posY;
-
     if (window.pageYOffset !== undefined) {
       this.config.posY = window.pageYOffset;
     } else {
-      this.config.posY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
+      this.config.posY = (document.documentElement ||
+        document.body.parentNode ||
+        document.body).scrollTop;
     }
-
     if (oldY != this.config.posY) {
       return true;
     }
-
     return false;
   }
 
-  _animate(e){
-    for (var i = 0; i < this.config.elems.length; i++){
+  _updatePosition(percentage, speed) {
+    return (speed * (100 * (1 - percentage)));
+  };
 
+  _animate(e) {
+    for (let i = 0; i < this.config.elemsInit.length; i++) {
+      let el = this.config.elemsInit[i];
+
+      let percentage = ((this.config.posY - el.top + this.config.screenHeight) / (el.height + this.config.screenHeight));
+      let position = this._updatePosition(percentage, el.speed);
+
+      let translate = 'translate3d(0,' + position + 'px,0)';
+      this.config.elems[i].style[this.config.transformProp] = translate;
     }
   }
 
-  _update(){
-    let time = 0;
-    time++;
-    console.log(time);
+  _update() {
     if (this._setPosition() && this.config.pause === false) {
       this._animate();
     }
-
-    this._loop(this._update);
+    window.requestAnimFrame(this._update);
   }
 
   /**
   * ================================== HELPER ==================================
   */
-
-  _loop() {
-    return (
-      window.requestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      window.msRequestAnimationFrame ||
-      window.oRequestAnimationFrame ||
-      function(callback) {
-        setTimeout(callback, 1000 / 60);
-      }
-    );
-  }
 
   _transformProp() {
     return (
@@ -138,10 +140,6 @@ class Parallax {
 
   _clamp(num, min, max) {
     return num <= min ? min : num >= max ? max : num;
-  }
-
-  _listen(el, type, event) {
-    this.config.listeners.push(listen(el, type, event));
   }
 
 }
