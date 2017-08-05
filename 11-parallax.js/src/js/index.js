@@ -6,9 +6,11 @@ class Parallax {
     };
 
     this.config = {
+      el: el,
       pause: false,
+      update: false,
       posY: 0,
-      screenY: this._screenY(),
+      screenY: 0,
       transformProp: this._transformProp(),
       screenHeight: window.innerHeight || 0,
       elems: [],
@@ -30,15 +32,6 @@ class Parallax {
 
     this.options.speed = this._clamp(this.options.speed);
 
-    let elements = document.querySelectorAll(el);
-    if (elements.length > 0) {
-      this.config.elems = [].slice.call(elements);
-    } else {
-      throw new Error(
-        `The elements(${el}) you're trying to select don't exist.`
-      );
-    }
-
     this._animate = this._animate.bind(this);
     this._update = this._update.bind(this);
 
@@ -59,6 +52,16 @@ class Parallax {
   }
 
   _elemsInit() {
+
+    let elements = document.querySelectorAll(this.config.el);
+    if (elements.length > 0) {
+      this.config.elems = [].slice.call(elements);
+    } else {
+      throw new Error(
+        `The elements(${el}) you're trying to select don't exist.`
+      );
+    }
+
     for (var i = 0; i < this.config.elems.length; i++) {
       var initInfo = this._createInit(this.config.elems[i]);
       this.config.elemsInit.push(initInfo);
@@ -70,7 +73,8 @@ class Parallax {
     return {
       speed: !!speed ? this._clamp(+speed) : this.options.speed,
       top: el.getBoundingClientRect().top,
-      height: el.clientHeight || el.offsetHeight || el.scrollHeight || 0
+      height: el.clientHeight || el.offsetHeight || el.scrollHeight || 0,
+      style: this.config.update ? '' : el.style.cssText
     };
   }
 
@@ -115,6 +119,24 @@ class Parallax {
       this._animate();
     }
     window.requestAnimFrame(this._update);
+  }
+
+  /**
+  * ================================== PUBLIC METHODS ==================================
+  */
+
+  update(){
+    this.config.update = true;
+    this.config.elemsInit = [];
+    this._init();
+  }
+
+  destory(){
+    window.removeEventListener("resize", this._animate);
+    for (var i = 0; i < this.config.elems.length; i++){
+      this.config.elems[i].style.cssText = this.config.elemsInit[i].style;
+    }
+    this.config.pause = true;
   }
 
   /**

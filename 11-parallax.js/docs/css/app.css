@@ -15,4 +15,14 @@
   color: #fff;
 }
 
-.parallaxWrap
+.addblock{
+  position: fixed;
+  left: 10px;
+  top: 10px;
+}
+
+.destory{
+  position: fixed;
+  left: 100px;
+  top: 10px;
+}
