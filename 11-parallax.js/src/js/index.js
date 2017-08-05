@@ -48,11 +48,9 @@ class Parallax {
   _init() {
     this._elemsInit();
     this._eventBind();
-    console.log(this);
   }
 
   _elemsInit() {
-
     let elements = document.querySelectorAll(this.config.el);
     if (elements.length > 0) {
       this.config.elems = [].slice.call(elements);
@@ -82,7 +80,7 @@ class Parallax {
     this._setPosition();
     window.addEventListener('resize', this._animate);
     this._update();
-    this._animate(true);
+    this._animate();
   }
 
   _setPosition() {
@@ -95,7 +93,7 @@ class Parallax {
     return false;
   }
 
-  _screenY(type) {
+  _screenY() {
     if (window.pageYOffset !== undefined) {
       return window.pageYOffset;
     } else {
@@ -105,10 +103,12 @@ class Parallax {
     }
   }
 
-  _animate(init) {
+  _animate() {
     for (let i = 0; i < this.config.elemsInit.length; i++) {
       let el = this.config.elemsInit[i];
-      let position = (this.config.screenY - this.config.posY) * (1 + el.speed * 0.1) + this.config.posY;
+      let position =
+        (this.config.screenY - this.config.posY) * (1 + el.speed * 0.1) +
+        this.config.posY;
       let translate = 'translate3d(0, ' + position + 'px, 0)';
       this.config.elems[i].style[this.config.transformProp] = translate;
     }
@@ -125,15 +125,15 @@ class Parallax {
   * ================================== PUBLIC METHODS ==================================
   */
 
-  update(){
+  update() {
     this.config.update = true;
     this.config.elemsInit = [];
     this._init();
   }
 
-  destory(){
-    window.removeEventListener("resize", this._animate);
-    for (var i = 0; i < this.config.elems.length; i++){
+  destory() {
+    window.removeEventListener('resize', this._animate);
+    for (var i = 0; i < this.config.elems.length; i++) {
       this.config.elems[i].style.cssText = this.config.elemsInit[i].style;
     }
     this.config.pause = true;
