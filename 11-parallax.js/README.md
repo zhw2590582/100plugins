@@ -1,6 +1,6 @@
 ## Pullrefresh.js
 
-一个很简单的Javascript原生面向对象的视差滚动插件
+一个很简单的Javascript原生面向对象的视差滚动插件(整体逻辑参考了[rellax](https://github.com/dixonandmoe/rellax))
 
 ## 使用
 ```js
@@ -20,6 +20,12 @@ var parallaxDemo = new Parallax('.parallax', {
   speed: -2,
   interval: [-10, 10]
 });
+
+//动态添加视差元素后更新实例
+parallaxDemo.update();
+
+//销毁实例(注意：假如动态添加的元素含有行内样式，会被清空)
+parallaxDemo.destory();
 
 ```
 ## 开发
