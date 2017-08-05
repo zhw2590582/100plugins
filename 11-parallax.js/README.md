@@ -10,7 +10,7 @@ import Parallax from './js/parallax.js';
 //第一个参数为视差滚动的元素，默认值为".parallax"
 
 //第二个参数为配置对象，可选
-//speed: 默认滚动速度，默认-2
+//speed: 默认滚动速度，可以为视差元素添加'data-parallax-speed'属性指定滚动速度，默认-2
 //interval: 滚动速度的可控区间，最慢和最快都不会超过该区间，默认[-10, 10]
 
 //speed比 0 小表示速度更小，比 0 大表示速度更大。
