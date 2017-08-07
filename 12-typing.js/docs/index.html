@@ -19,7 +19,7 @@
   <script src="typing/typing.js"></script>
   <script src="js/app.js"></script>
   <script>
-    var typingDemo01 = new Typing({
+    var typingDemo01 = new Typing('.typingDemo01', {
       strings: ['Dead simple animated typing.', 'No dependencies'],
       typeSpeed: 55,
       backSpeed: 30,
@@ -27,8 +27,8 @@
       backDelay: 500,
       loop: false,
       showCursor: true,
-      cursorChar: "|",
-      onFinished: function(){}
+      cursorChar: '|',
+      onFinished: function() {}
     });
   </script>
 </body>

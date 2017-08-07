@@ -1,5 +1,5 @@
 class Typing {
-  constructor(el = '.parallax', options) {
+  constructor(el = '.typing', options) {
     this.options = {
       ...Typing.DEFAULTS,
       ...options
@@ -14,7 +14,15 @@ class Typing {
 
   static get DEFAULTS() {
     return {
-
+      strings: [''],
+      typeSpeed: 100,
+      backSpeed: 50,
+      startDelay: 500,
+      backDelay: 500,
+      loop: false,
+      showCursor: false,
+      cursorChar: '',
+      onFinished: new Function()
     };
   }
 
