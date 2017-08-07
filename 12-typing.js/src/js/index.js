@@ -6,7 +6,11 @@ class Typing {
     };
 
     this.config = {
-
+      el: el instanceof Element ? el : document.querySelector(el),
+      play: false,
+      back: false,
+      typingIndex: 0,
+      stringsIndex: 0
     };
 
     this._init();
@@ -28,6 +32,14 @@ class Typing {
 
   _init() {
     console.log(this);
+  }
+
+  /**
+  * ================================== HELPER ==================================
+  */
+
+  _wait(time) {
+    return new Promise(resolve => setTimeout(resolve, time || 0));
   }
 }
 
