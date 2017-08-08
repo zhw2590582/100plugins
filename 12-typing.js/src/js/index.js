@@ -1,7 +1,7 @@
 class Typing {
   constructor(el = '.typing', options) {
 
-    if (options && !(options.strings instanceof Array)) {
+    if (!options || !(options.strings instanceof Array)) {
       throw new TypeError('strings required Array type');
     } else if (options.strings.length === 0) {
       throw new TypeError('The strings length can not be 0');
