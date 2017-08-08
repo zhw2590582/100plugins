@@ -15,20 +15,36 @@
 </head>
 
 <body>
-  <div class="typingDemo01"></div>
+
+  <div class="typingWrap">
+    <span class="typingDemo1"></span>
+    <div class="title">《离骚》 屈原</div>
+  </div>
+
+  <div class="typingWrap">
+    <span class="typingDemo2"></span>
+    <div class="title">《琵琶行》 白居易</div>
+  </div>
+
   <script src="typing/typing.js"></script>
   <script src="js/app.js"></script>
   <script>
-    var typingDemo01 = new Typing('.typingDemo01', {
-      strings: ['Dead simple animated typing.', 'No dependencies'],
-      typeSpeed: 55,
-      backSpeed: 30,
+    new Typing('.typingDemo1', {
+      strings: ['帝高阳之苗裔兮，朕皇考曰伯庸。', '摄提贞于孟陬兮，惟庚寅吾以降。', '皇览揆余初度兮，肇锡余以嘉名。', '名余曰正则兮，字余曰灵均。', '纷吾既有此内美兮，又重之以修能。'],
+      typeSpeed: 100,
+      backSpeed: 50,
       startDelay: 500,
-      backDelay: 500,
-      loop: false,
+      backDelay: 1000,
+      loop: true,
       showCursor: true,
       cursorChar: '|',
-      onFinished: function() {}
+      onFinished: function(a, b) {
+        console.log('结束了', a, b);
+      }
+    });
+
+    new Typing('.typingDemo2', {
+      strings: ['浔阳江头夜送客，枫叶荻花秋瑟瑟。', '主人下马客在船，举酒欲饮无管弦。', '醉不成欢惨将别，别时茫茫江浸月。', '忽闻水上琵琶声，主人忘归客不发。', '寻声暗问弹者谁？琵琶声停欲语迟。']
     });
   </script>
 </body>
