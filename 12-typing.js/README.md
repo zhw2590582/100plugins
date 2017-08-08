@@ -1,31 +1,32 @@
 ## Pullrefresh.js
 
-一个很简单的Javascript原生面向对象的视差滚动插件(整体逻辑参考了[rellax](https://github.com/dixonandmoe/rellax))
+一个很简单的Javascript原生面向对象的打字效果插件
 
 ## 使用
 ```js
 
-import Parallax from './js/parallax.js';
+import Typing from './js/typing.js';
 
-//第一个参数为视差滚动的元素，默认值为".parallax"
+//接收两个参数
+//第一个参数为字符串或者DOM，假如使用光标，则建议为浮动元素（例如span），默认为'.typing'，为必填
+//第二个参数为对象，为选填
 
-//第二个参数为配置对象，可选
-//speed: 默认滚动速度，可以为视差元素添加'data-parallax-speed'属性指定滚动速度，默认-2
-//interval: 滚动速度的可控区间，最慢和最快都不会超过该区间，默认[-10, 10]
-
-//speed比 0 小表示速度更小，比 0 大表示速度更大。
-//默认speed存在三个临界值: 等于 -10 表示相对静止；等于 0 表示正常速度；等于 10 表示两倍速度
-
-var parallaxDemo = new Parallax('.parallax', {
-  speed: -2,
-  interval: [-10, 10]
+var typingDemo = new Typing('.typingDemo1', {
+  strings: ['帝高阳之苗裔兮，朕皇考曰伯庸。', '摄提贞于孟陬兮，惟庚寅吾以降。'], //需要被显示的字符串数组
+  typeSpeed: 100, //打字速度
+  backSpeed: 50, //删除速度
+  startDelay: 500, //开始延迟
+  backDelay: 1000, //删除延迟
+  loop: true, //是否循环
+  showCursor: true, //是否显示
+  cursorChar: '|', //光标字符串
+  onFinished: function(a, b) { //当loop为false且打字结束时回调，a参数为strings的长度，b为最后一个的字符串长度
+    console.log('结束了', a, b);
+  }
 });
 
-//动态添加视差元素后更新实例
-parallaxDemo.update();
-
-//销毁实例(注意：假如动态添加的元素含有行内样式，会被清空)
-parallaxDemo.destory();
+//销毁实例
+typingDemo.destory();
 
 ```
 ## 开发
