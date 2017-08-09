@@ -69,9 +69,7 @@ class Turntable {
     this.config.elWidth = +this._getStyle(this.config.el, 'width').replace(/px/, '');
     this.config.elHeidth = +this._getStyle(this.config.el, 'height').replace(/px/, '');
     this.options.images.map(url => {
-      setTimeout(() => {
-        this._preload(url);
-      }, 0);
+      this._preload(url);
     });
   }
 

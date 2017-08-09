@@ -20,13 +20,13 @@
     <div class="demo">
       <div class="turntableDemo1"></div>
       <input class="play01" type="button" value="播放">
-      鼠标经过(28张图片)
+      鼠标经过
     </div>
 
     <div class="demo">
       <div class="turntableDemo2"></div>
       <input class="play02" type="button" value="播放">
-      页面滚动(100张图片，需要加载时间，假如卡顿请刷新多几次)
+      页面滚动
     </div>
 
   </div>
@@ -35,13 +35,13 @@
   <script src="js/app.js"></script>
   <script>
 
-    var images1 = [];
+    var images = [];
     for (var i = 1; i < 29; i++) {
-      images1.push('./img/demo01/plant' + i + '.JPG')
+      images.push('./img/plant' + i + '.JPG')
     }
 
     var turntableDemo01 = new Turntable('.turntableDemo1', {
-      images: images1,
+      images: images,
       trigger: 'hover'
     });
 
@@ -51,19 +51,8 @@
 
     //-----------------------------------------------------
 
-    var images2 = [];
-    for (var i = 1; i < 100; i++) {
-      var index;
-      if(i < 10){
-        index = '000' + i;
-      } else if (i < 100) {
-        index = '00' + i;
-      }
-      images2.push('./img/demo02/vid-' + index + '.jpg')
-    }
-
     var turntableDemo02 = new Turntable('.turntableDemo2', {
-      images: images2,
+      images: images,
       trigger: 'scroll'
     });
 
