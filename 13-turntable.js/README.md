@@ -20,6 +20,9 @@ var turntableDemo = new Turntable('.turntableDemo1', {
 //销毁实例
 turntableDemo.destory();
 
+//手动播放
+turntableDemo.play();
+
 ```
 ## 开发
 
