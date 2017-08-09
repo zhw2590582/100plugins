@@ -84,8 +84,8 @@ class Turntable {
   }
 
   _eventBind(){
-    this._setImg(this.config.imagesLoad[0]);
     if(this.options.trigger === 'hover'){
+      this._setImg(this.config.imagesLoad[0]);
       this.config.el.addEventListener('mousemove', this._eventHover);
     } else if (this.options.trigger === 'scroll') {
       this._eventScroll();
@@ -97,7 +97,6 @@ class Turntable {
 
   _eventHover(event){
     let ImgIndex = Math.floor((event.clientX - this.config.elLeft) / (this.config.elWidth / this.config.imagesLoad.length));
-    console.log(ImgIndex);
     (ImgIndex <= this.config.imagesLoad.length - 1) && this._setImg(this.config.imagesLoad[ImgIndex]);
   }
 
