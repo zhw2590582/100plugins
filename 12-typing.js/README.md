@@ -1,4 +1,4 @@
-## Pullrefresh.js
+## Typing.js
 
 一个很简单的Javascript原生面向对象的打字效果插件（源码明明只有2.8kb，打包后却有20kb）
 
