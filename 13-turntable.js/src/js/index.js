@@ -96,7 +96,8 @@ class Turntable {
   }
 
   _eventHover(event){
-    let ImgIndex = Math.floor((event.clientX - this.config.el.offsetLeft) / (this.config.elWidth / this.config.imagesLoad.length));
+    let ImgIndex = Math.floor((event.clientX - this.config.elLeft) / (this.config.elWidth / this.config.imagesLoad.length));
+    console.log(ImgIndex);
     (ImgIndex <= this.config.imagesLoad.length - 1) && this._setImg(this.config.imagesLoad[ImgIndex]);
   }
 
