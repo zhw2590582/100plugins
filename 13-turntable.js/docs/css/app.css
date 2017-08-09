@@ -16,8 +16,9 @@ body{
 }
 
 .turntableDemo1, .turntableDemo2 {
-  width: 500px;
-  height: 273px;
+  width: 475px;
+  height: 260px;
+  overflow: hidden;
   border: 1px #d0d0d0 solid;
   margin-bottom: 20px;
 }

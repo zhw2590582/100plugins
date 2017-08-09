@@ -19,11 +19,13 @@
 
     <div class="demo">
       <div class="turntableDemo1"></div>
+      <input class="play01" type="button" value="播放">
       鼠标经过
     </div>
 
     <div class="demo">
       <div class="turntableDemo2"></div>
+      <input class="play02" type="button" value="播放">
       页面滚动
     </div>
 
@@ -33,20 +35,45 @@
   <script src="js/app.js"></script>
   <script>
 
-    var images = [];
+    var images1 = [];
     for (var i = 1; i < 29; i++) {
-      images.push('./img/plant' + i + '.JPG')
+      images1.push('./img/demo01/plant' + i + '.JPG')
     }
 
-    new Turntable('.turntableDemo1', {
-      images: images,
+    var turntableDemo01 = new Turntable('.turntableDemo1', {
+      images: images1,
       trigger: 'hover'
     });
 
-    new Turntable('.turntableDemo2', {
-      images: images,
+    document.querySelector('.play01').addEventListener('click', function (e) {
+      turntableDemo01.play();
+    })
+
+    //-----------------------------------------------------
+
+    var images2 = [];
+    for (var i = 1; i < 1050; i++) {
+      var index;
+      if(i < 10){
+        index = '000' + i;
+      } else if (i < 100) {
+        index = '00' + i;
+      } else if (i < 1000) {
+        index = '0' + i;
+      } else if (i < 10000) {
+        index = '' + i;
+      }
+      images2.push('./img/demo02/vid-' + index + '.jpg')
+    }
+
+    var turntableDemo02 = new Turntable('.turntableDemo2', {
+      images: images2,
       trigger: 'scroll'
     });
+
+    document.querySelector('.play02').addEventListener('click', function (e) {
+      turntableDemo02.play();
+    })
 
   </script>
 </body>

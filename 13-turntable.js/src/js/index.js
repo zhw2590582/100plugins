@@ -16,6 +16,32 @@ class Turntable {
       className: '__turntable__'
     };
 
+    window.requestAnimFrame = (function() {
+      return (
+        window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        }
+      );
+    })();
+
+    window.cancelAnimationFrame = (function() {
+      return (
+        window.cancelAnimationFrame ||
+        Window.webkitCancelAnimationFrame ||
+        window.mozCancelAnimationFrame ||
+        window.msCancelAnimationFrame ||
+        window.oCancelAnimationFrame ||
+        function(id){
+          window.clearTimeout(id);
+        }
+      );
+    })();
+
     this._eventBind = this._eventBind.bind(this);
     this._eventHover = this._eventHover.bind(this);
     this._eventScroll = this._eventScroll.bind(this);
@@ -99,6 +125,21 @@ class Turntable {
     } else if (this.options.trigger === 'scroll') {
       window.removeEventListener('scroll', this._eventScroll);
     }
+  }
+
+  play(){
+    let self = this;
+    let ImgIndex = 0;
+    let timer;
+    window.cancelAnimationFrame(timer);
+    timer = window.requestAnimFrame(function animate(){
+      if(ImgIndex >= self.config.imagesLoad.length){
+        window.cancelAnimationFrame(timer);
+      } else {
+        self._setImg(self.config.imagesLoad[ImgIndex++]);
+        timer = window.requestAnimationFrame(animate);
+      }
+    });
   }
 
   /**
