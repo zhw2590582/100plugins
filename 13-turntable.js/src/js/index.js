@@ -18,29 +18,15 @@ class Turntable {
     };
 
     window.requestAnimFrame = (function() {
-      return (
-        window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        function(callback) {
-          window.setTimeout(callback, 1000 / 60);
-        }
-      );
+      return (window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+        window.setTimeout(callback, 1000 / 60);
+      });
     })();
 
     window.cancelAnimationFrame = (function() {
-      return (
-        window.cancelAnimationFrame ||
-        Window.webkitCancelAnimationFrame ||
-        window.mozCancelAnimationFrame ||
-        window.msCancelAnimationFrame ||
-        window.oCancelAnimationFrame ||
-        function(id){
-          window.clearTimeout(id);
-        }
-      );
+      return (window.cancelAnimationFrame || Window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.msCancelAnimationFrame || window.oCancelAnimationFrame || function(id) {
+        window.clearTimeout(id);
+      });
     })();
 
     this._eventBind = this._eventBind.bind(this);
@@ -83,8 +69,8 @@ class Turntable {
     };
   }
 
-  _eventBind(){
-    if(this.options.trigger === 'hover'){
+  _eventBind() {
+    if (this.options.trigger === 'hover') {
       this._setImg(this.config.imagesLoad[0]);
       this.config.el.addEventListener('mousemove', this._eventHover);
     } else if (this.options.trigger === 'scroll') {
@@ -95,18 +81,18 @@ class Turntable {
     }
   }
 
-  _eventHover(event){
+  _eventHover(event) {
     let ImgIndex = Math.floor((event.clientX - this.config.elLeft) / (this.config.elWidth / this.config.imagesLoad.length));
     (ImgIndex <= this.config.imagesLoad.length - 1) && this._setImg(this.config.imagesLoad[ImgIndex]);
   }
 
-  _eventScroll(){
+  _eventScroll() {
     let ImgIndex = Math.floor(this._screenY() / ((document.body.offsetHeight - window.innerHeight) / this.config.imagesLoad.length));
     (ImgIndex <= this.config.imagesLoad.length - 1) && this._setImg(this.config.imagesLoad[ImgIndex]);
   }
 
-  _setImg(src){
-    if(this.config.imgDom){
+  _setImg(src) {
+    if (this.config.imgDom) {
       this.config.imgDom.src = src;
     } else {
       this.config.el.insertAdjacentHTML('beforeend', `<img class="${this.config.className}img" src="${src}">`);
@@ -119,24 +105,25 @@ class Turntable {
   */
 
   destory() {
+    this.config.imagesLoad = [];
     this.config.el.classList.remove(this.config.className);
     this.config.imgDom.parentNode.removeChild(this.config.imgDom);
-    if(this.options.trigger === 'hover'){
+    if (this.options.trigger === 'hover') {
       this.config.el.removeEventListener('mousemove', this._eventHover);
     } else if (this.options.trigger === 'scroll') {
       window.removeEventListener('scroll', this._eventScroll);
     }
   }
 
-  play(){
-    if(this.config.play) return;
+  play() {
+    if (this.config.play) return;
     this.config.play = true;
     let self = this;
     let ImgIndex = 0;
     let timer;
     window.cancelAnimationFrame(timer);
-    timer = window.requestAnimFrame(function animate(){
-      if(ImgIndex >= self.config.imagesLoad.length){
+    timer = window.requestAnimFrame(function animate() {
+      if (ImgIndex >= self.config.imagesLoad.length) {
         window.cancelAnimationFrame(timer);
         self.config.play = false;
       } else {
@@ -169,9 +156,7 @@ class Turntable {
     if (window.pageYOffset !== undefined) {
       return window.pageYOffset;
     } else {
-      return (document.documentElement ||
-        document.body.parentNode ||
-        document.body).scrollTop;
+      return (document.documentElement || document.body.parentNode || document.body).scrollTop;
     }
   }
 
