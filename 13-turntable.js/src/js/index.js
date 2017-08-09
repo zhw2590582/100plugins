@@ -13,7 +13,8 @@ class Turntable {
       elHeidth: 0,
       triggerType: ['hover', 'scroll'],
       imagesLoad: [],
-      className: '__turntable__'
+      className: '__turntable__',
+      play: false
     };
 
     window.requestAnimFrame = (function() {
@@ -128,6 +129,8 @@ class Turntable {
   }
 
   play(){
+    if(this.config.play) return;
+    this.config.play = true;
     let self = this;
     let ImgIndex = 0;
     let timer;
@@ -135,6 +138,7 @@ class Turntable {
     timer = window.requestAnimFrame(function animate(){
       if(ImgIndex >= self.config.imagesLoad.length){
         window.cancelAnimationFrame(timer);
+        self.config.play = false;
       } else {
         self._setImg(self.config.imagesLoad[ImgIndex++]);
         timer = window.requestAnimationFrame(animate);
