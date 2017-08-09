@@ -12,3 +12,4 @@
 * [10-validate.js(表单验证插件)](http://zhw-island.com/100plugins_demo/10-validate.js/)
 * [11-parallax.js(时差滚动插件)](http://zhw-island.com/100plugins_demo/11-parallax.js/)
 * [12-typing.js(打字效果插件)](http://zhw-island.com/100plugins_demo/12-typing.js/)
+* [13-turntable.js(图片播放插件)](http://zhw-island.com/100plugins_demo/13-turntable.js/)
