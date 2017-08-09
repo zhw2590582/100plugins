@@ -54,7 +54,7 @@ class Turntable {
     return {
       images: [''],
       trigger: 'hover',
-      throttle: 100
+      throttle: 500
     };
   }
 
@@ -152,7 +152,7 @@ class Turntable {
 
   _throttle(method, time) {
     clearTimeout(method.tId);
-    method.tId = setTimeout(function() {
+    method.tId = setTimeout(() => {
       method();
     }, time);
   }
