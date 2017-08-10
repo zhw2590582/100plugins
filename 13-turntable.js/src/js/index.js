@@ -12,7 +12,6 @@ class Turntable {
       elWidth: 0,
       elHeidth: 0,
       triggerType: ['hover', 'scroll'],
-      imagesLoad: [],
       className: '__turntable__',
       play: false
     };
@@ -64,14 +63,13 @@ class Turntable {
     let img = new Image();
     img.src = url;
     img.onload = function() {
-      self.config.imagesLoad.push(url);
       self._throttle(self._eventBind, self.options.throttle); //节流
     };
   }
 
   _eventBind() {
     if (this.options.trigger === 'hover') {
-      this._setImg(this.config.imagesLoad[0]);
+      this._setImg(this.options.images[0]);
       this.config.el.addEventListener('mousemove', this._eventHover);
     } else if (this.options.trigger === 'scroll') {
       this._eventScroll();
@@ -82,13 +80,13 @@ class Turntable {
   }
 
   _eventHover(event) {
-    let ImgIndex = Math.floor((event.clientX - this.config.elLeft) / (this.config.elWidth / this.config.imagesLoad.length));
-    (ImgIndex <= this.config.imagesLoad.length - 1) && this._setImg(this.config.imagesLoad[ImgIndex]);
+    let ImgIndex = Math.floor((event.clientX - this.config.elLeft) / (this.config.elWidth / this.options.images.length));
+    (ImgIndex <= this.options.images.length - 1) && this._setImg(this.options.images[ImgIndex]);
   }
 
   _eventScroll() {
-    let ImgIndex = Math.floor(this._screenY() / ((document.body.offsetHeight - window.innerHeight) / this.config.imagesLoad.length));
-    (ImgIndex <= this.config.imagesLoad.length - 1) && this._setImg(this.config.imagesLoad[ImgIndex]);
+    let ImgIndex = Math.floor(this._screenY() / ((document.body.offsetHeight - window.innerHeight) / this.options.images.length));
+    (ImgIndex <= this.options.images.length - 1) && this._setImg(this.options.images[ImgIndex]);
   }
 
   _setImg(src) {
@@ -105,7 +103,7 @@ class Turntable {
   */
 
   destory() {
-    this.config.imagesLoad = [];
+    this.options.images = [];
     this.config.el.classList.remove(this.config.className);
     this.config.imgDom.parentNode.removeChild(this.config.imgDom);
     if (this.options.trigger === 'hover') {
@@ -123,11 +121,11 @@ class Turntable {
     let timer;
     window.cancelAnimationFrame(timer);
     timer = window.requestAnimFrame(function animate() {
-      if (ImgIndex >= self.config.imagesLoad.length) {
+      if (ImgIndex >= self.options.images.length) {
         window.cancelAnimationFrame(timer);
         self.config.play = false;
       } else {
-        self._setImg(self.config.imagesLoad[ImgIndex++]);
+        self._setImg(self.options.images[ImgIndex++]);
         timer = window.requestAnimationFrame(animate);
       }
     });
