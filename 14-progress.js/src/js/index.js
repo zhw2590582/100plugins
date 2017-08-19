@@ -1,4 +1,3 @@
-
 class Progress {
   constructor(options) {
     this.options = {
