@@ -8,7 +8,7 @@ class Progress {
     };
 
     this.config = {
-      parent: null,
+      parentDom: null,
       progressDom: null,
       barDom: null,
       percent: 0,
@@ -24,8 +24,8 @@ class Progress {
 
   _creatDom(){
     if(this._isRendered()) return;
-    this.config.parent = document.querySelector(this.options.parent);
-    this.config.parent.insertAdjacentHTML('beforeend', this.options.template);
+    this.config.parentDom = document.querySelector(this.options.parent);
+    this.config.parentDom.insertAdjacentHTML('beforeend', this.options.template);
     this.config.progressDom = document.getElementById('progress');
     this.config.barDom = this.config.progressDom.querySelector('.bar');
     this.config.barDom.style.transition = `all ${this.options.speed}ms ease`;
