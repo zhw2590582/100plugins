@@ -86,17 +86,13 @@ class Progress {
     if(!this._isRendered()) return;
     clearTimeout(this.config.timer);
     this.config.barDom.style.width = '100%';
-    this.remove();
-  }
-
-  remove(){
-    this.config.percent = 0;
     this.config.progressDom.classList.add('hide');
     window.setTimeout(() => {
+      this.config.percent = 0;
       this._removeElement(this.config.progressDom);
     }, 300);
   }
-
+  
   /**
   * ================================== HELPER ==================================
   */
