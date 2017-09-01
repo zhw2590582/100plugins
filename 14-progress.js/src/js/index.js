@@ -36,7 +36,7 @@ class Progress {
 
   _animate(percent = 0, type){
     !!type && (this.config.barDom.style.width = this.config.percent + '%');
-    clearTimeout(this.config.timer);
+    !!type && clearTimeout(this.config.timer);
     percent = this._clamp(percent, 0, 1) * 100;
     this.config.percent = type === 'set' ? percent : (this.config.percent + percent);
     this.config.percent += Math.floor(Math.random() * this.config.maxRandomStep + 1);
@@ -67,6 +67,7 @@ class Progress {
   }
 
   start(){
+    if(this._isRendered()) return;
     this._creatDom();
     this._animate();
   }
@@ -93,7 +94,7 @@ class Progress {
     this.config.progressDom.classList.add('hide');
     window.setTimeout(() => {
       this._removeElement(this.config.progressDom);
-    }, 1000);
+    }, 300);
   }
 
   /**

@@ -35,8 +35,12 @@
     }, 1000);
 
     window.setTimeout(() => {
-      Progress.done();
+      Progress.set(0.8);
     }, 1500);
+
+    window.setTimeout(() => {
+      Progress.done();
+    }, 2500);
   </script>
 </body>
 
