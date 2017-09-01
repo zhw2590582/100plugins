@@ -1,27 +1,31 @@
-## turntable.js
+## progress.js
 
-一个很简单的Javascript原生面向对象的图片动画插件
+一个很简单的Javascript原生面向对象的加载条插件（精简版的 [NProgress.js](https://github.com/rstacruz/nprogress)）
 
 ## 使用
 ```js
 
-import Turntable from './js/turntable.js';
+import Progress from './js/progress.js';
 
-//接收两个参数
-//第一个参数为字符串或者DOM
-//第二个参数为配置对象
+//配置
+Progress.configure({
+  parent: 'body', //父元素
+  speed: 300, //速度
+  delay: 500, //延迟
+  template: '<div id="progress"><div class="bar"></div></div>' //加载条Html
+})
 
-var turntableDemo = new Turntable('.turntableDemo1', {
-  images: ['./images01.png', './images02.png', './images03.png'],  //需要被显示的序列图片数组，为必填
-  trigger: 'hover', //触发方式，可选鼠标经过：'hover'、页面滚动：'scroll'
-  throttle: 100 //由于需要异步预加载所有图片，故实例的初始化方法可能触发多次，可以根据具体图片加载情况来设置时间容差，达到限制初始化次数
-});
+//开始
+Progress.start();
 
-//销毁实例
-turntableDemo.destory();
+//设置，范围为：0 ~ 1；
+Progress.set(0.2);
 
-//手动播放
-turntableDemo.play();
+//增加，范围为：0 ~ 1；
+Progress.inc(0.2);
+
+//完成
+Progress.done();
 
 ```
 ## 开发
