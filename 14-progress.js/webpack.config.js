@@ -10,7 +10,9 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'docs'),
-    filename: name + "/" + name + ".js"
+    filename: name + "/" + name + ".js",
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
     loaders: [
