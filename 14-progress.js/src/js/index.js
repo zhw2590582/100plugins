@@ -8,7 +8,7 @@ class Progress {
     };
 
     this.config = {
-      parent: document.querySelector(this.options.parent),
+      parent: null,
       progressDom: null,
       barDom: null,
       percent: 0,
@@ -24,6 +24,7 @@ class Progress {
 
   _creatDom(){
     if(this._isRendered()) return;
+    this.config.parent = document.querySelector(this.options.parent);
     this.config.parent.insertAdjacentHTML('beforeend', this.options.template);
     this.config.progressDom = document.getElementById('progress');
     this.config.barDom = this.config.progressDom.querySelector('.bar');
@@ -92,7 +93,7 @@ class Progress {
       this._removeElement(this.config.progressDom);
     }, 300);
   }
-  
+
   /**
   * ================================== HELPER ==================================
   */
