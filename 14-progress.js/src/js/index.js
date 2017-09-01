@@ -83,6 +83,10 @@ class Progress {
     this._animate(percent, 'inc');
   }
 
+  setColor(val){
+    this.config.barDom.style.backgroundColor = val;
+  }
+
   done(){
     if(!this._isRendered()) return;
     clearTimeout(this.config.timer);
