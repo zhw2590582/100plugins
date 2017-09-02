@@ -16,7 +16,7 @@
 
 <body>
   <div class="btns">
-    <input class="btn" type="button" value="开始" onclick="Progress.start()">
+    <input class="btn" type="button" value="开始(0)" onclick="Progress.start()" id="start">
     <input class="btn" type="button" value="设置（0.4）" onclick="Progress.set(0.4)">
     <input class="btn" type="button" value="增加（0.1）" onclick="Progress.inc(0.1)">
     <input class="btn" type="button" value="完成" onclick="Progress.done()">
@@ -24,23 +24,32 @@
   <script src="progress/progress.js"></script>
   <script src="js/app.js"></script>
   <script>
+
+    Progress.configure({
+      speed: 300,
+      getPercent: function (val) {
+        document.getElementById('start').value = '开始(' + val + ')';
+      }
+    })
+
     Progress.start();
 
-    window.setTimeout(() => {
+    window.setTimeout(function (){
       Progress.set(0.2);
     }, 500);
 
-    window.setTimeout(() => {
+    window.setTimeout(function (){
       Progress.inc(0.3);
     }, 1000);
 
-    window.setTimeout(() => {
+    window.setTimeout(function (){
       Progress.set(0.8);
     }, 1500);
 
-    window.setTimeout(() => {
+    window.setTimeout(function (){
       Progress.done();
     }, 2500);
+
   </script>
 </body>
 

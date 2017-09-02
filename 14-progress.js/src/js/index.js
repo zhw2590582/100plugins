@@ -5,6 +5,7 @@ class Progress {
       speed: 300,
       delay: 500,
       template: '<div id="progress"><div class="bar"></div></div>',
+      getPercent: new Function,
     };
 
     this.config = {
@@ -36,24 +37,33 @@ class Progress {
   }
 
   _animate(percent = 0, type){
-    !!type && (this.config.barDom.style.width = this.config.percent + '%');
-    !!type && clearTimeout(this.config.timer);
     percent = this._clamp(percent, 0, 1) * 100;
-    this.config.percent = type === 'set' ? percent : (this.config.percent + percent);
-    this.config.percent += Math.floor(Math.random() * this.config.maxRandomStep + 1);
+    if(type){
+      clearTimeout(this.config.timer);
+      this.config.barDom.style.width = this.config.percent + '%';
+      this.config.percent = type === 'set' ? percent : (this.config.percent + percent);
+    } else {
+      this.config.percent += Math.floor(Math.random() * this.config.maxRandomStep + 1);
+    }
     this._update();
   }
 
   _update(){
     if(this.config.percent > 99) {
       clearTimeout(this.config.timer);
-      this.config.barDom.style.width = '99%';
+      this._setPercent(99);
     } else {
       this.config.timer = window.setTimeout(() => {
-        this.config.barDom.style.width = this.config.percent + '%';
+        this._setPercent(this.config.percent);
         this._animate();
       }, this.options.delay);
     }
+  }
+
+  _setPercent(val){
+    this.config.percent = val;
+    this.options.getPercent(val);
+    this.config.barDom.style.width = val + '%';
   }
 
   /**
@@ -90,12 +100,12 @@ class Progress {
   done(){
     if(!this._isRendered()) return;
     clearTimeout(this.config.timer);
-    this.config.barDom.style.width = '100%';
+    this._setPercent(100);
     this.config.progressDom.classList.add('hide');
     window.setTimeout(() => {
-      this.config.percent = 0;
+      this._setPercent(0);
       this._removeElement(this.config.progressDom);
-    }, 300);
+    }, 500);
   }
 
   /**
