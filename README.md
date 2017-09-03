@@ -14,3 +14,4 @@
 * [12-typing.js(打字效果插件)](http://zhw-island.com/100plugins_demo/12-typing.js/)
 * [13-turntable.js(图片播放插件)](http://zhw-island.com/100plugins_demo/13-turntable.js/)
 * [14-progress.js(加载条插件)](http://zhw-island.com/100plugins_demo/14-progress.js/)
+* [15-lottery.js(抽奖插件)](http://zhw-island.com/100plugins_demo/15-lottery.js/)
