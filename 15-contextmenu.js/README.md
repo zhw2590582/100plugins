@@ -1,11 +1,11 @@
-## PopMenu.js
+## Contextmenu.js
 
 一个很简单的Javascript原生面向对象的弹出菜单插件
 
 ## 使用
 ```js
 
-import PopMenu from './js/popMenu.js';
+import Contextmenu from './js/contextmenu.js';
 
 
 

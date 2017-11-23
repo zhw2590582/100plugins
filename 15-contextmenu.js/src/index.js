@@ -1,9 +1,9 @@
 import './index.scss';
 
-class PopMenu {
+class Contextmenu {
   constructor(options) {
     this.options = {
-      ...PopMenu.DEFAULTS,
+      ...Contextmenu.DEFAULTS,
       ...options
     };
 
@@ -33,5 +33,5 @@ class PopMenu {
    */
 }
 
-window.PopMenu = PopMenu;
-module.exports = PopMenu;
+window.Contextmenu = Contextmenu;
+module.exports = Contextmenu;
