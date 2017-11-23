@@ -1,5 +1,5 @@
 {
-  "name": "lottery",
+  "name": "popMenu",
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
@@ -36,7 +36,7 @@
     "postcss-loader": "^2.0.6",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.18.2",
-    "uglify-js": "^3.0.27",
+    "uglifyjs-webpack-plugin": "^1.1.0",
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.3.0"
   }

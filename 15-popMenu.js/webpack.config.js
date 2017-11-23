@@ -1,6 +1,7 @@
 var path = require("path");
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 var env = process.env.WEBPACK_ENV;
 var name = require("./package.json").name;
 
@@ -49,11 +50,11 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin(name + "/" + name + ".css"),
-    new webpack.optimize.UglifyJsPlugin({
+    new UglifyJSPlugin({ uglifyOptions: {
       compress: {
         warnings: false
       }
-    })
+    }})
   ],
   devtool: "inline-source-map"
 };
