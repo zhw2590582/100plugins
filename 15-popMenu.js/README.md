@@ -1,11 +1,11 @@
-## Lottery.js
+## PopMenu.js
 
-一个很简单的Javascript原生面向对象的抽奖插件
+一个很简单的Javascript原生面向对象的弹出菜单插件
 
 ## 使用
 ```js
 
-import Lottery from './js/lottery.js';
+import PopMenu from './js/popMenu.js';
 
 
 
