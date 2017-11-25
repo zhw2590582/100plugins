@@ -93,7 +93,7 @@ class Contextmenu {
 
   // 遍历菜单
   _menuMap(item){
-    let {name, children, callback} = item;
+    let {name, children, callback, disabled, border} = item;
     if(!(typeof name === 'string' || typeof name === 'number')){
       throw new TypeError('name required type of `string` or `number`.');
     } else if (children && Object.prototype.toString.call(children) !== '[object Array]'){
@@ -113,7 +113,13 @@ class Contextmenu {
       });
       menuIten.appendChild(menuItenUl);      
     } else {
-      if(callback){
+      if(disabled){
+        menuIten.classList.add('disabled');
+      }
+      if(border){
+        menuIten.classList.add('border');
+      }
+      if(callback && !disabled){
         menuIten.addEventListener('click', callback.bind(this, this.config.eventCache), false);
         item.target = menuIten;
       }
@@ -140,6 +146,7 @@ class Contextmenu {
     this._removeElement(this.config.menuEl);
     this.config.menuEl = null;
     this.config.listEl = null;
+    this.config.eventCache = null;
     let removeEvent = item => {
       if(item.children && item.children.length > 0){
         item.children.forEach(item => {

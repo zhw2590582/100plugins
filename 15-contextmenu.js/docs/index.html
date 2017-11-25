@@ -21,24 +21,52 @@
   <script>
     var app = new Contextmenu('.app', {
       menu: [{
-        name: '菜单01',
+        name: '返回',
+        disabled: true
+      },{
+        name: '前进',
+        disabled: true
+      },{
+        name: '重新加载',
+        border: true,
+        callback: function(){
+          console.log('你点击了：重新加载');
+          app.hide();
+        }
+      },{
+        name: '另存为...',
+        callback: function(){
+          console.log('你点击了：另存为');
+          app.hide();
+        }
+      },{
+        name: '打印...',
+        callback: function(){
+          console.log('你点击了：打印');
+          app.hide();
+        }
+      },{
+        name: '投射...',
+        border: true,
+        callback: function(){
+          console.log('你点击了：投射');
+          app.hide();
+        }
+      },{
+        name: '更多...',
         children: [{
-          name: '菜单01-01',
+          name: '显示网页源码',
+          callback: function(){
+            console.log('你点击了：显示网页源码');
+            app.hide();
+          }
         },{
-          name: '菜单01-02',
-        },{
-          name: '菜单01-03'
+          name: '检测视图',
+          callback: function(){
+            console.log('你点击了：检测视图');
+            app.hide();
+          }
         }]
-      },{
-        name: '菜单02',
-        callback: (containerEv, menuEv) => {
-          app.hide();
-        }
-      },{
-        name: '菜单03',
-        callback: (containerEv, menuEv) => {
-          app.hide();
-        }
       }]
     });
   </script>
