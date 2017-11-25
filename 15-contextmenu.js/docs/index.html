@@ -15,10 +15,36 @@
 </head>
 
 <body>
+  <div class="app">区域内鼠标右键</div>
   <script src="contextmenu/contextmenu.js"></script>
   <script src="js/app.js"></script>
   <script>
-    new Contextmenu();
+    var app = new Contextmenu('.app', {
+      menu: [{
+        name: 'test01',
+        callback: el => {
+          console.log(el)
+        },
+        children: [{
+          name: 'test01-01',
+        }]
+      },{
+        name: 'test02',
+        callback: el => {
+          console.log(el)
+          app.update([{
+            name: 'test03'
+          }])
+        },
+        children: []
+      },{
+        name: 'test03',
+        callback: el => {
+          console.log(el)
+        },
+        children: []
+      }]
+    });
   </script>
 </body>
 
