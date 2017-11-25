@@ -11,7 +11,8 @@ class Contextmenu {
       el: el,
       containerEl: el instanceof Element ? el : document.querySelector(el),
       menuEl: null,
-      listEl: null
+      listEl: null,
+      eventCache: null
     };
 
     this._init();
@@ -19,20 +20,28 @@ class Contextmenu {
 
   static get DEFAULTS() {
     return {
-      target: '[data-menu]',
       menu: []
     };
   }
 
   _init() {
-    // 点击指定容器
+    // 容器以内右键
     this.config.containerEl.oncontextmenu = e => {
+      this.config.eventCache = e;
       this._creatDom();
       this._setPos(e);
       return false;
     }
 
-    // 点击容器以外
+    // 容器以外右键
+    document.oncontextmenu = e => {
+      if(!this.config.menuEl) return;
+      if(!this._closest(e.target, this.config.el)){
+        this.hide();
+      }
+    }
+
+    // 菜单以外左键
     document.addEventListener('click', e => {
       if(!this.config.menuEl) return;
       if(!this._closest(e.target, '#contextmenu')){
@@ -92,20 +101,20 @@ class Contextmenu {
     } else if (callback && typeof callback !== 'function'){
       throw new TypeError('callback required type of `function`.');
     }
-    let menuIten;
+    let menuIten = document.createElement('li');
+    menuIten.innerHTML = name;
     if(children && children.length > 0){
-      menuIten = document.createElement('ul');
-      menuIten.innerHTML = name;
+      menuIten.classList.add('children');
+      let menuItenUl = document.createElement('ul');
       children.map(item => {
         return this._menuMap(item);
       }).forEach(item => {
-        menuIten.appendChild(item);
-      })
+        menuItenUl.appendChild(item);
+      });
+      menuIten.appendChild(menuItenUl);      
     } else {
-      menuIten = document.createElement('li');
-      menuIten.innerHTML = name;
       if(callback){
-        menuIten.addEventListener('click', callback, false);
+        menuIten.addEventListener('click', callback.bind(this, this.config.eventCache), false);
         item.target = menuIten;
       }
     }

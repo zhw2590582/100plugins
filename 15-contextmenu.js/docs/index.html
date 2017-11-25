@@ -21,28 +21,24 @@
   <script>
     var app = new Contextmenu('.app', {
       menu: [{
-        name: 'test01',
-        callback: el => {
-          console.log(el)
-        },
+        name: '菜单01',
         children: [{
-          name: 'test01-01',
+          name: '菜单01-01',
+        },{
+          name: '菜单01-02',
+        },{
+          name: '菜单01-03'
         }]
       },{
-        name: 'test02',
-        callback: el => {
-          console.log(el)
-          app.update([{
-            name: 'test03'
-          }])
-        },
-        children: []
+        name: '菜单02',
+        callback: (containerEv, menuEv) => {
+          app.hide();
+        }
       },{
-        name: 'test03',
-        callback: el => {
-          console.log(el)
-        },
-        children: []
+        name: '菜单03',
+        callback: (containerEv, menuEv) => {
+          app.hide();
+        }
       }]
     });
   </script>
