@@ -1,6 +1,7 @@
 # 100plugins
-100个JS面向对象的原生插件将是一个很漫长的路，学习到不知所措时就写个插件，具体插件参数可以到具体目录查看。
+100个JS面向对象的原生插件将是一个很漫长的路，学习到不知所措时就写个插件压压惊，具体插件参数可以到具体目录查看。
 
+## Demo
 * [01-mouseTooltip.js(跟随鼠标提示插件)](https://zhw-island.com/100plugins_demo/01-mouseTooltip.js/)
 * [02-distpicker.js(中国地区三级联动选择器)](https://zhw-island.com/100plugins_demo/02-distpicker.js/)
 * [03-lazyLoad.js(图片懒加载插件)](https://zhw-island.com/100plugins_demo/03-lazyLoad.js/)
