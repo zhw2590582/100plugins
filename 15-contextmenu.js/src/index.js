@@ -26,20 +26,20 @@ class Contextmenu {
 
   _init() {
     // 容器以内右键
-    this.config.containerEl.oncontextmenu = e => {
+    this.config.containerEl.addEventListener('contextmenu', e => {
+      e.preventDefault();      
       this.config.eventCache = e;
       this._creatDom();
       this._setPos(e);
-      return false;
-    }
+    });
 
     // 容器以外右键
-    document.oncontextmenu = e => {
+    document.addEventListener('contextmenu', e => {
       if(!this.config.menuEl) return;
       if(!this._closest(e.target, this.config.el)){
         this.hide();
       }
-    }
+    });
 
     // 菜单以外左键
     document.addEventListener('click', e => {
