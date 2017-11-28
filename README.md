@@ -11,7 +11,7 @@
 * [08-crop.js(图片剪裁插件--未完成)](https://zhw-island.com/100plugins_demo/08-crop.js/)
 * [09-pullrefresh.js(下拉刷新插件)](https://zhw-island.com/100plugins_demo/09-pullrefresh.js/)
 * [10-validate.js(表单验证插件)](https://zhw-island.com/100plugins_demo/10-validate.js/)
-* [11-parallax.js(时差滚动插件)](https://zhw-island.com/100plugins_demo/11-parallax.js/)
+* [11-parallax.js(视差滚动插件)](https://zhw-island.com/100plugins_demo/11-parallax.js/)
 * [12-typing.js(打字效果插件)](https://zhw-island.com/100plugins_demo/12-typing.js/)
 * [13-turntable.js(图片播放插件)](https://zhw-island.com/100plugins_demo/13-turntable.js/)
 * [14-progress.js(加载条插件)](https://zhw-island.com/100plugins_demo/14-progress.js/)
