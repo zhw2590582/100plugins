@@ -18,20 +18,6 @@ import Contextmenu from './js/contextmenu.js';
 // callback: 点击的回调，有两个事件对象，分别对应为当前右键的dom和菜单的dom，可用以更丰富的功能扩展
 // children: 子菜单列表，属性同menu
 
-// 实例对象有三个公用方法
-// update用于动态更新菜单项，更新方式为直接覆盖
-app.update({
-    name: '新菜单01'
-},{
-    name: '新菜单02'
-});
-
-// destory用于销毁实例
-app.destory();
-
-// hide用于隐藏当前菜单，想在点击菜单后隐藏菜单，需要显式调用该方法
-app.hide();
-
 var app = new Contextmenu('.app', {
   menu: [
     {
@@ -93,6 +79,20 @@ var app = new Contextmenu('.app', {
     }
   ]
 });
+
+// 实例对象有三个公用方法
+// update用于动态更新菜单项，更新方式为直接覆盖
+app.update({
+    name: '新菜单01'
+},{
+    name: '新菜单02'
+});
+
+// destory用于销毁实例
+app.destory();
+
+// hide用于隐藏当前菜单，想在点击菜单后隐藏菜单，需要显式调用该方法
+app.hide();
 ```
 
 ## 开发

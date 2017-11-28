@@ -15,11 +15,21 @@
 </head>
 
 <body>
-  <div class="app"></div>
+  <div class="paginate-container"></div>
   <script src="pagination/pagination.js"></script>
   <script src="js/app.js"></script>
   <script>
-    var app = new Pagination();
+    var app = new Pagination('.paginate-container', {
+      current: 25,
+      total: 50,
+      show: 10,
+      previous: 'Previous',
+      next: 'Next',
+      callback: function(e){
+        app.set('current', e.pagination.nextPage);
+        console.log(e.pagination);
+      }
+    });
   </script>
 </body>
 
