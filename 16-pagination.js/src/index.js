@@ -63,10 +63,10 @@ class Pagination {
    */
 
   _validate(){
-    let current = Number(this.options.current);
-    let total = Number(this.options.total);
-    let show = Number(this.options.show);
-    if(isNaN(current) || isNaN(total) || isNaN(show)){
+    let current = this.options.current;
+    let total = this.options.total;
+    let show = this.options.show;
+    if(typeof current !== 'number' || typeof total !== 'number' || typeof show !== 'number'){
       throw new TypeError(`current | total | show: required 'number' type`);
     } else if(current <= 0 || total <= 0 || show <= 0){
       throw new TypeError(`current | total | show: required greater than 0`);
