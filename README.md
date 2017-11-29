@@ -17,3 +17,4 @@
 * [14-progress.js(加载条插件)](https://zhw-island.com/100plugins_demo/14-progress.js/)
 * [15-contextmenu.js(弹出菜单插件)](https://zhw-island.com/100plugins_demo/15-contextmenu.js/)
 * [16-pagination.js(分页插件)](https://zhw-island.com/100plugins_demo/16-pagination.js/)
+* [17-masonry.js(瀑布流排版插件)](https://zhw-island.com/100plugins_demo/17-masonry.js/)

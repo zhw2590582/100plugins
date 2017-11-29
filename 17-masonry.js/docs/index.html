@@ -15,12 +15,21 @@
 </head>
 
 <body>
-  <div class="masonry-container"></div>
+  <div class="container">
+    <div class="masonry-container"></div>
+  </div>
   <script src="masonry/masonry.js"></script>
   <script src="js/app.js"></script>
   <script>
     var app = new Masonry('.masonry-container', {
-
+      margin: 20,
+      columns: 6,
+      breakAt: {
+        1200: 5,
+        940: 3,
+        520: 2,
+        400: 1
+      }
     });
   </script>
 </body>
