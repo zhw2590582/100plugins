@@ -20,8 +20,9 @@ class Masonry {
     this._itemPos = this._itemPos.bind(this);
     this._init = this._init.bind(this);
     
-    this._init();
+    this._init()
     window.addEventListener('resize', e => {
+      this.config.verticalList = [];
       this._throttle(this._init, 100);
     });
   }
@@ -41,9 +42,7 @@ class Masonry {
 
   _init() {
     this._initContainer();
-    this._initList();
     this._itemSize();
-    console.log(this)
   }
 
   /**
@@ -52,12 +51,13 @@ class Masonry {
 
   _initContainer(){
     let bodyWidth = document.body.clientWidth;
+    let bodyHeight = document.body.clientHeight;
     this.config.containerEl.style.position = 'relative';
     this.config.containerWidth = this.config.containerEl.clientWidth;
     if(bodyWidth > this.config.containerWidth){
       this.config.columns = this.options.columns;
     } else {
-      this.config.containerWidth = bodyWidth - 10;
+      this.config.containerWidth = bodyWidth;
       let sizeList = Object.keys(this.options.breakAt).map(item => parseInt(item)).sort((a, b) => b - a);
       if(sizeList.length > 0){
         sizeList.forEach((item, index) => {
@@ -70,10 +70,6 @@ class Masonry {
         this.config.columns = this.options.columns;
       }
     }
-  }
-
-  // 初始化数组结构
-  _initList(){
     this.config.listEl = [].slice.call(this.config.containerEl.children).map((target, index) => {
       return {
         index: index,
@@ -86,7 +82,7 @@ class Masonry {
     });
   }
 
-  // 计算元素width、heidth
+  // 计算元素width和heidth
   _itemSize(){
     this.config.itemWidth = (this.config.containerWidth - this.options.margin * (this.config.columns - 1)) / this.config.columns;
     this.config.listEl.forEach((item, index) => {
@@ -95,7 +91,7 @@ class Masonry {
       item.target.style.width = this.config.itemWidth + 'px';
       this._imgLoad(imgItem).then(() => {
         item.imgLoad = true;
-        item.height = this._outerHeight(item.target);
+        item.height = this._outerSize(item.target).height;
         this._throttle(this._itemPos, 100);
       })
     })
@@ -173,6 +169,9 @@ class Masonry {
    * ================================== PUBLIC METHODS ==================================
    */
 
+  update(){
+    this._init();
+  }
 
   /**
    * ================================== HELPER ==================================
@@ -183,12 +182,19 @@ class Masonry {
     return window.getComputedStyle(element, null).getPropertyValue(property);
   }
 
-  _outerHeight(element){
-    let arr = ['margin-top', 'margin-bottom', 'border-top-width', 'border-bottom-width'];
-    let outerHeight = element.offsetHeight;
-    return arr.reduce((total, item) => {
+  _outerSize(element){
+    let heightList = ['margin-top', 'margin-bottom', 'border-top-width', 'border-bottom-width'];
+    let widthList = ['margin-left', 'margin-right', 'border-left-width', 'border-right-width'];
+    let outerHeight = heightList.reduce((total, item) => {
       return total + parseInt(this._getStyle(element, item))
     }, element.offsetHeight);
+    let outerWidth = widthList.reduce((total, item) => {
+      return total + parseInt(this._getStyle(element, item))
+    }, element.offsetWidth);
+    return {
+      height: outerHeight,
+      width: outerWidth
+    }
   }
 
   _throttle(method, time) {

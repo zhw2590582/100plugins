@@ -4,10 +4,24 @@
     border-radius: 4px;
     overflow: hidden;
     border: 1px solid #eee;
+    animation: fade-in;
+    animation-duration: 0.5s;
+    box-sizing: border-box;
     .masonry-image {
       width: 100%;
       display: block;
       height: auto;
+    }
+  }
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    40% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
     }
   }
 }
