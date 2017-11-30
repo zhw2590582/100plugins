@@ -14,6 +14,7 @@ class Masonry {
       containerheight: 0,
       listEl: [],
       itemWidth: 0,
+      verticalList: []
     };
 
     this._itemPos = this._itemPos.bind(this);
@@ -42,6 +43,7 @@ class Masonry {
     this._initContainer();
     this._initList();
     this._itemSize();
+    console.log(this)
   }
 
   /**
@@ -84,16 +86,13 @@ class Masonry {
     });
   }
 
-  // 计算元素width、heidth和left
+  // 计算元素width、heidth
   _itemSize(){
     this.config.itemWidth = (this.config.containerWidth - this.options.margin * (this.config.columns - 1)) / this.config.columns;
     this.config.listEl.forEach((item, index) => {
-      let rest = index % this.config.columns;
       let imgItem = item.target.querySelector('img');
       item.target.style.position = 'absolute';
       item.target.style.width = this.config.itemWidth + 'px';
-      item.left = (this.config.itemWidth + this.options.margin) * rest;
-      item.target.style.left = item.left + 'px';
       this._imgLoad(imgItem).then(() => {
         item.imgLoad = true;
         item.height = this._outerHeight(item.target);
@@ -102,36 +101,47 @@ class Masonry {
     })
   }
 
-  // 计算元素top
+  // 计算元素top和left
   _itemPos(){
     this.config.listEl.forEach((item, index) => {
+      let { minHeight, minIndex } = this._containerHeight(item, index);
+      let rest = index % this.config.columns;
+      item.left = (this.config.itemWidth + this.options.margin) * ((index + 1) > this.config.columns ? minIndex : rest);
+      item.target.style.left = item.left + 'px';
       if((index + 1) > this.config.columns){
-        let i = 0;
-        let top = 0;
-        while((index - this.config.columns * ++i) >= 0){
-          let addIndex = index - this.config.columns * i;
-          top += this.config.listEl[addIndex].height;
-        }
-        item.top = top;
-        item.target.style.top = top + 'px';
+        item.top = minHeight;
+        item.target.style.top = minHeight + 'px';
       } else {
         item.top = 0;
         item.target.style.top = '0px';
       }
     })
-    this._containerHeight();
+    
   }
 
   // 计算容器高度
-  _containerHeight(){
+  _containerHeight(lastItem, lastIndex){
+    if((lastIndex + 1) <= this.config.columns){
+      this.config.verticalList[lastIndex] = [lastItem]
+    }
     let list = [];
-    this.config.listEl.forEach((item, index) => {
-      let rest = index % this.config.columns;
-      if(!list[rest]) list[rest] = 0;
-      list[rest] += item.height;
-    });
+    this.config.verticalList.forEach((column, index) => {
+      column.forEach(item => {
+        if(!list[index]) list[index] = 0;
+        list[index] += item.height;
+      })
+    })
     this.config.containerheight = Math.max.apply(Math, list);
     this.config.containerEl.style.height = this.config.containerheight + 'px';
+    let minHeight = Math.min.apply(Math, list);
+    let minIndex = list.indexOf(minHeight);
+    if((lastIndex + 1) > this.config.columns){
+      this.config.verticalList[minIndex].push(lastItem);
+    }
+    return {
+      minHeight: minHeight,
+      minIndex: minIndex
+    };
   }
 
   // 图片是否加载完成
