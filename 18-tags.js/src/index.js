@@ -86,7 +86,7 @@ class Tags {
   _inputTag(){
     this.config.containerEl.classList.remove('add-tag');
     let value = this.config.inputEl.value.trim();
-    let newValue = this.options.filter(value, this.config.tags.length + 1);
+    let newValue = this.options.filter(value, this.config.tags.length);
     this.config.inputEl.value = '';
     if(!value || this.config.tags.includes(value)) return;
     this.config.tags.push(newValue || value);
