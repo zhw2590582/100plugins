@@ -88,10 +88,10 @@ class Tags {
     let value = this.config.inputEl.value.trim();
     let newValue = this.options.filter(value, this.config.tags.length);
     this.config.inputEl.value = '';
-    if(!value || this.config.tags.includes(value)) return;
-    this.config.tags.push(newValue || value);
-    this.config.addEl.insertAdjacentHTML('beforebegin', `<span class="tag">${newValue || value}${this.options.closable ? `<i data-role="remove"></i>` : ``}</span>`);
-    this.options.add.call(this, this.config.tags, newValue || value);
+    if(!newValue || this.config.tags.includes(newValue)) return;
+    this.config.tags.push(newValue);
+    this.config.addEl.insertAdjacentHTML('beforebegin', `<span class="tag">${newValue}${this.options.closable ? `<i data-role="remove"></i>` : ``}</span>`);
+    this.options.add.call(this, this.config.tags, newValue);
   }
 
   /**
