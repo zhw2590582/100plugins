@@ -16,13 +16,26 @@
 
 <body>
   <div class="container">
-    <div class="masonry-container"></div>
+    <div class="tags-container">
+      <!-- <span class="tag">小型标签<i data-role="remove"></i></span>
+      <span class="tag add">+ 新增标签</span>
+      <input class="tag input"> -->
+    </div>
+    <div class="data"></div>
   </div>
   <script src="tags/tags.js"></script>
   <script src="js/app.js"></script>
   <script>
+    var dataEl = document.querySelector('.data');
     var app = new Tags('.tags-container', {
-
+      default: ['标签一', '标签二', '标签三'],
+      closable: true,
+      init: function(data, value) {
+        dataEl.innerHTML = JSON.stringify(data);
+      },
+      update: function(data, value) {
+        dataEl.innerHTML = JSON.stringify(data);
+      }
     });
   </script>
 </body>
