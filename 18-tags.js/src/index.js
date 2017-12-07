@@ -23,8 +23,10 @@ class Tags {
     return {
       default: [],
       closable: false,
+      filter: val => val,
       init: new Function,
-      update: new Function
+      add: new Function,
+      remove: new Function,
     };
   }
 
@@ -44,7 +46,6 @@ class Tags {
     this.config.tags = this.options.default.slice();
     this.options.init.call(this, this.config.tags);
     this._eventBind();
-    console.log(this)
   }
 
   /**
@@ -56,39 +57,69 @@ class Tags {
       this.config.containerEl.classList.add('add-tag');
       this.config.inputEl.focus();
     });
+
     this.config.events[this.config.events.length] = listen(this.config.inputEl, 'blur', e => {
-      this.config.containerEl.classList.remove('add-tag');
       this._inputTag();
     });
+
     this.config.events[this.config.events.length] = listen(this.config.inputEl, 'keyup', e => {
-      var code = e.charCode || e.keyCode;
+      let code = e.charCode || e.keyCode;
       if(code === 13 || code === 9){
-        this.config.containerEl.classList.remove('add-tag');
         this._inputTag();
       }
     });
+
+    this.config.events[this.config.events.length] = listen(this.config.containerEl, 'click', e => {
+      let target = e.target;
+      let parentNode = target.parentNode;
+      if(target.getAttribute('data-role') === 'remove'){
+        let tagList = [].slice.call(this.config.containerEl.querySelectorAll('.tag'));
+        let index = tagList.indexOf(parentNode);
+        let value = this.config.tags[index];
+        this.config.tags.splice(index, 1);
+        this._removeElement(parentNode);
+        this.options.remove.call(this, this.config.tags, value);
+      }
+    })
   }
 
   _inputTag(){
+    this.config.containerEl.classList.remove('add-tag');
     let value = this.config.inputEl.value.trim();
+    let newValue = this.options.filter(value, this.config.tags.length + 1);
+    this.config.inputEl.value = '';
     if(!value || this.config.tags.includes(value)) return;
-    this.config.tags.push(value);
-    this.config.addEl.insertAdjacentHTML('beforebegin', `<span class="tag">${value}${this.options.closable ? `<i data-role="remove"></i>` : ``}</span>`);
-    this.options.update.call(this, this.config.tags, value);
+    this.config.tags.push(newValue || value);
+    this.config.addEl.insertAdjacentHTML('beforebegin', `<span class="tag">${newValue || value}${this.options.closable ? `<i data-role="remove"></i>` : ``}</span>`);
+    this.options.add.call(this, this.config.tags, newValue || value);
   }
 
   /**
    * ================================== PUBLIC METHODS ==================================
    */
 
-  destory(){
+  destroy(type){
+    this.config.events.forEach(item => {
+      item.destroy();
+    });
+    if(type){
+      this.config.containerEl.classList.remove('__tags__');
+      this.config.containerEl.innerHTML = '';
+    }
+  }
 
+  getTags(){
+    return this.config.tags;
   }
 
   /**
    * ================================== HELPER ==================================
    */
 
+  // 删除dom
+  _removeElement(el){
+    el && el.parentNode && el.parentNode.removeChild(el);
+  }
 
 }
 
