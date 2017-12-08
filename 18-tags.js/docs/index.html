@@ -26,8 +26,8 @@
     var app = new Tags('.tags-container', {
       default: ['标签一', '标签二', '标签三'],
       closable: true,
-      filter: function(val, index){
-        return index + '-' + val
+      filter: function(val, index) {
+        return index + '-' + val;
       },
       init: function(data, value) {
         dataEl.innerHTML = JSON.stringify(data);

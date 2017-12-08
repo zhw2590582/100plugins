@@ -65,7 +65,7 @@ class Tags {
     this.config.events[this.config.events.length] = listen(this.config.inputEl, 'keyup', e => {
       let code = e.charCode || e.keyCode;
       if(code === 13 || code === 9){
-        this._inputTag();
+        this.config.inputEl.blur();
       }
     });
 
