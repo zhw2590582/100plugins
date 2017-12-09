@@ -19,3 +19,4 @@
 * [16-pagination.js(分页插件)](https://zhw-island.com/100plugins_demo/16-pagination.js/)
 * [17-masonry.js(瀑布流排版插件)](https://zhw-island.com/100plugins_demo/17-masonry.js/)
 * [18-tags.js(标签插件)](https://zhw-island.com/100plugins_demo/18-tags.js/)
+* [19-tsorter.js(表格排序插件)](https://zhw-island.com/100plugins_demo/19-tsorter.js/)
