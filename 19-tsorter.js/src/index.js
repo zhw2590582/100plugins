@@ -2,7 +2,7 @@ import './index.scss';
 import listen from './listener.js';
 
 class Tsorter {
-  constructor(el = '.table-container', options) {
+  constructor(el = '.tsorter', options) {
     this.options = {
       ...Tsorter.DEFAULTS,
       ...options
@@ -17,18 +17,23 @@ class Tsorter {
 
   static get DEFAULTS() {
     return {
-
+      sorters: [],
+      default: '',
+      update: new Function
     };
   }
 
   _init() {
-
+    this.config.containerEl.classList.add('__tsorter__');
+    
+    console.log(this)
   }
 
   /**
    * ================================== PRIVATE METHODS ==================================
    */
 
+   
 
   /**
    * ================================== PUBLIC METHODS ==================================

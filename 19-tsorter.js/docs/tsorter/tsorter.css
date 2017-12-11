@@ -1,0 +1,2 @@
+.__tsorter__ thead tr th{position:relative;cursor:pointer}.__tsorter__ thead tr th:after{position:absolute;right:10px;content:"";background-repeat:no-repeat;background-size:contain;background-position:50%}.__tsorter__ thead tr th.ascend:after{content:"1"}.__tsorter__ thead tr th.descend:after{content:"2"}
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJ0c29ydGVyL3Rzb3J0ZXIuY3NzIiwic291cmNlUm9vdCI6IiJ9*/
