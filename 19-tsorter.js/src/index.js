@@ -2,7 +2,7 @@ import './index.scss';
 import listen from './listener.js';
 
 class Tsorter {
-  constructor(el = '.tsorter', options) {
+  constructor(el = '.table', options) {
     this.options = {
       ...Tsorter.DEFAULTS,
       ...options
@@ -10,6 +10,7 @@ class Tsorter {
 
     this.config = {
       containerEl: el instanceof Element ? el : document.querySelector(el),
+      cache: null
     };
 
     this._init()
@@ -24,8 +25,9 @@ class Tsorter {
   }
 
   _init() {
+    this.config.cache = this.config.containerEl;
     this.config.containerEl.classList.add('__tsorter__');
-    
+
     console.log(this)
   }
 

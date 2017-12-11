@@ -10,14 +10,14 @@
     <meta name="description" content="Tsorter.js">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/normalize.css">
+    <!-- <link rel="stylesheet" href="css/normalize.css"> -->
     <link rel="stylesheet" href="tsorter/tsorter.css">
     <link rel="icon" href="favicon.ico">
 </head>
 
 <body>
     <div class="container">
-        <table class="table tsorter">
+        <table class="table">
             <thead>
                 <tr>
                     <th data-sorter-name="number">#</th>
@@ -115,7 +115,7 @@
         }
 
         // 实例化
-        var app = new Tsorter('.tsorter', {
+        var app = new Tsorter('.table', {
             sorters: [sorter01, sorter02], // 自定义排序
             default: 'firstName=descend', // 默认排序
             update: function(str){ // 排序更新钩子
