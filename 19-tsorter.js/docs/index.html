@@ -20,11 +20,11 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th data-sorter-name="number">#</th>
-                    <th data-sorter-name="firstName">First Name</th>
-                    <th data-sorter-name="lastName">Last Name</th>
-                    <th data-sorter-name="username">Username</th>
-                    <th data-sorter-name="chineseName">Chinese Name</th>
+                    <th data-tsorter-name="number" data-tsorter-type="numeric" data-tsorter-fn="sorter01">#</th>
+                    <th data-tsorter-name="firstName">First Name</th>
+                    <th data-tsorter-name="lastName">Last Name</th>
+                    <th data-tsorter-name="username">Username</th>
+                    <th data-tsorter-name="chineseName">Chinese Name</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,20 +104,19 @@
     <script src="tsorter/tsorter.js"></script>
     <script src="js/app.js"></script>
     <script>
-        // 自定义排序规则01
-        var sorter01 = function (a, b) {
-            return a - b;
-        }
-
-        // 自定义排序规则02
-        var sorter02 = function (a, b) {
-            return a - b;
+        // 自定义排序规则
+        var sorter01 = function (a, b, type) {
+            a = a.textContent;
+            b = b.textContent;
+            return type == 'ascend' ? b - a : a - b;
         }
 
         // 实例化
         var app = new Tsorter('.table', {
-            sorters: [sorter01, sorter02], // 自定义排序
-            default: 'firstName=descend', // 默认排序
+            sorters: { // 自定义排序
+                sorter01: sorter01
+            }, 
+            default: 'number=ascend', // 默认排序
             update: function(str){ // 排序更新钩子
                 console.log(str)
             }

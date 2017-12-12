@@ -12,7 +12,7 @@ function isNodeList(value) {
     value !== undefined &&
     (type === '[object NodeList]' || type === '[object HTMLCollection]') &&
     'length' in value &&
-    (value.length === 0 || exports.node(value[0]))
+    (value.length === 0 || isNode(value[0]))
   );
 }
 
