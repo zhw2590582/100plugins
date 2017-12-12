@@ -31,11 +31,11 @@ class Tsorter {
   }
 
   _init() {
-    this.config.cache = Array.from(this.config.containerEl.childNodes);
-    this.config.theadThs = Array.from(this.config.containerEl.querySelectorAll('thead tr th'));
+    this.config.cache = [].slice.call(this.config.containerEl.childNodes);
+    this.config.theadThs = [].slice.call(this.config.containerEl.querySelectorAll('thead tr th'));
     this.config.tbodyEl = this.config.containerEl.querySelector('tbody');
     this.config.theadEl = this.config.containerEl.querySelector('thead');
-    this.config.tbodyTrs = Array.from(this.config.containerEl.querySelectorAll('tbody tr')); 
+    this.config.tbodyTrs = [].slice.call(this.config.containerEl.querySelectorAll('tbody tr')); 
     this.config.containerEl.classList.add('__tsorter__');
     this.options.default && this._default();
     this._eventBind();
@@ -77,8 +77,8 @@ class Tsorter {
     let fn = this.options.sorters[target.getAttribute('data-tsorter-fn')];
     let domIndex = this.config.theadThs.indexOf(target);
     let domList = this.config.tbodyTrs.sort((a, b) => {
-      let aDomList = Array.from(a.querySelectorAll('td'));
-      let bDomList = Array.from(b.querySelectorAll('td'));
+      let aDomList = [].slice.call(a.querySelectorAll('td'));
+      let bDomList = [].slice.call(b.querySelectorAll('td'));
       let aText = aDomList[domIndex].textContent.trim();
       let bText = bDomList[domIndex].textContent.trim();
       if(fn && typeof fn === 'function') { // 自定义函数排序
@@ -89,7 +89,7 @@ class Tsorter {
         return type === 'ascend' ? aText.localeCompare(bText) : bText.localeCompare(aText);
       }
     });
-    this._removeElement(this.config.tbodyEl);
+    this._removeElement(this.config.containerEl.querySelector('tbody'));
     let tbody = document.createElement('tbody');
     let i = -1;
     let length = domList.length;

@@ -10,7 +10,7 @@ import Tsorter from './js/tsorter.js';
 // html属性
 // data-tsorter-type: 内置过滤名称，目前只有'numeric'表示按数字排序
 // data-tsorter-name: 排序的名称，可用于记录保存当前排序状态
-// data-tsorter-fn: 自定义排序函数名称
+// data-tsorter-fn: 自定义排序函数名称,优先级最大
 
 // 自定义排序规则，有三个参数，第一为当前tr元素，第二个为下一个元素，第三个为当前排序类型
 var sorter01 = function(a, b, type) {
