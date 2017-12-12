@@ -10,7 +10,7 @@ exports.blur = () => {
   document.activeElement && document.activeElement.blur();
 };
 
-exports.insertHtml = (el, html, position = 'beforeend') => {
+exports.insertHtml = (el, position = 'beforeend', html) => {
   let positions = ['beforebegin', 'afterbegin', 'beforeend', 'afterend'];
   if (!positions.includes(position)) {
     throw new TypeError(

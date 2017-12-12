@@ -35,4 +35,49 @@ function removeElement(el) {
   el && el.parentNode && el.parentNode.removeChild(el);
 }
 
-module.exports = { select, selectAll, find, removeClass, addClass, hasClass, removeElement };
+function closest(el, selector) {
+  let matchesSelector =
+    el.matches ||
+    el.webkitMatchesSelector ||
+    el.mozMatchesSelector ||
+    el.msMatchesSelector;
+  while (el) {
+    if (matchesSelector.call(el, selector)) {
+      break;
+    }
+    el = el.parentElement;
+  }
+  return el;
+}
+
+function getStyle(el, property) {
+  return window.getComputedStyle(element, null).getPropertyValue(property);
+}
+
+function blur() {
+  document.activeElement && document.activeElement.blur();
+}
+
+function insertHtml() {
+  let positions = ['beforebegin', 'afterbegin', 'beforeend', 'afterend'];
+  if (!positions.includes(position)) {
+    throw new TypeError(
+      `'position' must be one of them: ${positions.join('、')}`
+    );
+  }
+  el.insertAdjacentHTML(position, html);
+}
+
+module.exports = {
+  select,
+  selectAll,
+  find,
+  removeClass,
+  addClass,
+  hasClass,
+  removeElement,
+  closest,
+  getStyle,
+  blur,
+  insertHtml
+};
