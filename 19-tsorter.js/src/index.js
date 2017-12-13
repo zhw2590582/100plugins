@@ -48,7 +48,7 @@ class Tsorter {
   _default(){
     let target = this.config.containerEl.querySelector(`[data-tsorter-name=${this.options.default.split('=')[0]}]`);    
     let type = this.options.default.split('=')[1];    
-    this._sortDom(target, type);
+    target && type && this._sortDom(target, type);
   } 
 
   _eventBind() {
