@@ -1,6 +1,6 @@
 ## OnePageScroll.js
 
-一个很简单的 Javascript 原生面向对象的单页面滚动插件
+一个很简单的 Javascript 原生面向对象的单页面滚动插件，参考了[purejs-onepage-scroll](https://github.com/peachananr/purejs-onepage-scroll)
 
 ## 使用
 

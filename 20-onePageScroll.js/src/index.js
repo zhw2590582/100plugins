@@ -3,7 +3,7 @@ import listen from './listener.js';
 import dom from './dom.js';
 
 class OnePageScroll {
-  constructor(el = '.page-container', options) {
+  constructor(el = '.onepage-wrapper', options) {
     this.options = {
       ...OnePageScroll.DEFAULTS,
       ...options
