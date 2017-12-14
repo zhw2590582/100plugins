@@ -48,7 +48,6 @@ class OnePageScroll {
     this.options.pagination && this._pagination();    
     this._activeClass();
     this._eventBind();
-    console.log(this);
   }
 
   /**
