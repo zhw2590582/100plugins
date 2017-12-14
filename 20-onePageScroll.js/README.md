@@ -12,7 +12,6 @@ var app = new OnePageScroll('.page-container', {
   easing: 'ease',
   animationTime: 1000,
   pagination: true,
-  updateURL: false,
   loop: false,
   keyboard: true,
   beforeMove: function(index) {
