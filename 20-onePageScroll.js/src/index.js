@@ -12,6 +12,7 @@ class OnePageScroll {
     this.config = {
       containerEl: el instanceof Element ? el : document.querySelector(el),
       sectionsEl: [],
+      paginationsEl: [],
       events: [],
       pageView: 1
     };
@@ -26,7 +27,6 @@ class OnePageScroll {
       easing: 'ease',
       animationTime: 1000,
       pagination: true,
-      updateURL: false,
       keyboard: true,
       beforeMove: new Function(),
       afterMove: new Function(),
@@ -45,6 +45,8 @@ class OnePageScroll {
       el.classList.add('ops-section');
       el.setAttribute('data-index', index + 1);
     });
+    this.options.pagination && this._pagination();    
+    this._activeClass();
     this._eventBind();
     console.log(this);
   }
@@ -64,12 +66,69 @@ class OnePageScroll {
       'DOMMouseScroll',
       this._scrollEvent
     );
+    if (this.options.keyboard) {
+      this.config.events[this.config.events.length] = listen(
+        document,
+        'keyup',
+        e => {
+          let tag = e.target.tagName.toLowerCase();
+          switch (e.which) {
+            case 38:
+              if (tag != 'input' && tag != 'textarea') this._keyup(false);
+              break;
+            case 40:
+              if (tag != 'input' && tag != 'textarea') this._keyup(true);
+              break;
+            default:
+              return;
+          }
+        }
+      );
+    }
+  }
+
+  _pagination(){
+    let pageSize = this.config.sectionsEl.length;
+    let pagination = document.createElement('ul'); 
+    pagination.classList.add('onepage-pagination');
+    let i = -1;
+    let html = '';
+    while(++i < pageSize){
+      html += `<li><a data-index="${i + 1}" href="#${i + 1}"></a></li>`
+    }
+    pagination.insertAdjacentHTML('beforeend', html);
+    document.body.appendChild(pagination);
+    this.config.paginationsEl = dom.find(pagination, 'a');
+    this.config.paginationsEl.map(el => {
+      this.config.events[this.config.events.length] = listen(
+        el,
+        'click',
+        e => {
+          e.preventDefault();
+          let page = e.target.dataset.index;
+          this.config.pageView = Number(page);
+          this._activeClass();          
+          let pos = this.config.pageView === 1 ? 0 : -((this.config.pageView - 1) * 100);
+          this._setStyle(pos);
+        }
+      );
+    })
+  }
+
+  _keyup(scrolDown) {
+    let pos = this._getPos(scrolDown);
+    this._setStyle(pos);
   }
 
   _scrollEvent(event) {
     event.preventDefault();
     let delta = event.wheelDelta || -event.detail;
-    let pos = this._getPos(delta);
+    let scrolDown = Math.sign(delta) === -1;
+    let pos = this._getPos(scrolDown);
+    this._setStyle(pos);
+  }
+
+  _setStyle(pos) {
     let transformCSS =
       '-webkit-transform: translate3d(0, ' +
       pos +
@@ -97,20 +156,22 @@ class OnePageScroll {
       this.options.easing +
       ';';
     this.config.containerEl.style.cssText = transformCSS;
-
     let transitionEnd = this._whichTransitionEvent();
-    let transitionEndEvent = listen(this.config.containerEl, transitionEnd, e => {
-      if(typeof this.options.afterMove == 'function'){
-        this.options.afterMove(this.config.pageView);
-        transitionEndEvent.destroy();
+    let transitionEndEvent = listen(
+      this.config.containerEl,
+      transitionEnd,
+      e => {
+        if (typeof this.options.afterMove == 'function') {
+          this.options.afterMove(this.config.pageView);
+          transitionEndEvent.destroy();
+        }
       }
-    });
+    );
   }
 
-  _getPos(delta) {
-    let scrolDown = Math.sign(delta) === -1;
+  _getPos(scrolDown) {
     let pageSize = this.config.sectionsEl.length;
-    if(typeof this.options.beforeMove == 'function'){
+    if (typeof this.options.beforeMove == 'function') {
       this.options.beforeMove(this.config.pageView);
     }
     if (scrolDown) {
@@ -130,9 +191,16 @@ class OnePageScroll {
     return this.config.pageView === 1 ? 0 : -((this.config.pageView - 1) * 100);
   }
 
-  _activeClass(){
+  _activeClass() {
+    this.config.paginationsEl.map(el => el.classList.remove('active'));
     this.config.sectionsEl.map(el => el.classList.remove('active'));
-    this.config.sectionsEl[this.config.pageView].classList.add('active');
+    this.config.sectionsEl[this.config.pageView - 1].classList.add('active');
+    this.config.paginationsEl[this.config.pageView - 1].classList.add('active');
+    document.body.className = document.body.className.replace(
+      /\bviewing-page-\d.*?\b/g,
+      ''
+    );
+    document.body.classList.add('viewing-page-' + this.config.pageView);
   }
 
   _whichTransitionEvent() {
