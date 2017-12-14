@@ -30,7 +30,7 @@ function isFn(value) {
 // 是否window
 function isWindow(value) {
   var type = Object.prototype.toString.call(value);
-  return type === '[object Window]';
+  return type === '[object Window]' || type === '[object HTMLDocument]' || type === '[object HTMLBodyElement]';
 }
 
 // Dom节点事件
