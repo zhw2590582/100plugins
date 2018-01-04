@@ -1,7 +1,9 @@
 import './index.scss';
 
 let scrolldir = options => {
-  console.log(options);
+  Promise.resolve().then(() => {
+    console.log('hi');
+  })
 };
 
 window.scrolldir = scrolldir;
