@@ -27,29 +27,30 @@
             <div class="item">8</div>
             <div class="item">9</div>
             <div class="item">10</div>
+            <a class="start" href="#">开始</a>
         </div>
-        <a class="start" href="#">开始</a>
     </div>
     <script src="lottery/lottery.js"></script>
     <script src="js/app.js"></script>
     <script>
         var app = new Lottery(".lottery", {
-            item: '.item',
-            num: 10,
-            time: 5000,
+            items: '.item',
+            itemsLength: 10,
+            time: 10000,
             begin: function () {
                 console.log('抽奖开始');
             }, 
             end: function (index) {
-                console.log('中奖号码为：' + index);
+                alert('中奖号码下标为：' + index)
             }
         });
 
-        let start = document.querySelector('.start');
-        start.addEventListener('click', function (e) {
+        let startEl = document.querySelector('.start');
+        startEl.addEventListener('click', function (e) {
+            e.preventDefault();
             // 模拟异步请求
             setTimeout(function () {
-                app.prize(5).star();
+                app.prize(7).start();
             }, 100)
         });
     </script>
