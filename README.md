@@ -8,7 +8,7 @@
 * [04-slider.js(幻灯片插件)](https://zhw-island.com/100plugins_demo/04-slider.js/)
 * [05-drag.js(拖动插件)](https://zhw-island.com/100plugins_demo/05-drag.js/)
 * [06-zoom.js(图片缩放插件)](https://zhw-island.com/100plugins_demo/06-zoom.js/)
-* [08-crop.js(图片剪裁插件---未完成)](https://zhw-island.com/100plugins_demo/08-crop.js/)
+* [08-crop.js(图片剪裁插件--未完成)](https://zhw-island.com/100plugins_demo/08-crop.js/)
 * [09-pullrefresh.js(下拉刷新插件)](https://zhw-island.com/100plugins_demo/09-pullrefresh.js/)
 * [10-validate.js(表单验证插件)](https://zhw-island.com/100plugins_demo/10-validate.js/)
 * [11-parallax.js(视差滚动插件)](https://zhw-island.com/100plugins_demo/11-parallax.js/)
