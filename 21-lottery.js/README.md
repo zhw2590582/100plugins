@@ -10,7 +10,6 @@ import Lottery from "./js/lottery.js";
 // 第一个参数为容器，第二个参数为配置对象
 var app = new Lottery(".lottery", {
   items: ".item", // 奖品类名
-  itemsLength: 10, // 奖品个数，必须与实际奖品类名的个数一致
   time: 10000, // 运行时间（与实际时间不一致，有待优化）
   begin: function() { // 开始钩子
     console.log("抽奖开始");

@@ -11,6 +11,7 @@ class Lottery {
     this.config = {
       containerEl: el instanceof Element ? el : document.querySelector(el),
       items: [],
+      itemsLength: 0,
       current: -1,
       prize: null,
       disabled: false,
@@ -24,7 +25,6 @@ class Lottery {
   static get DEFAULTS() {
     return {
       items: '.item',
-      itemsLength: 10,
       time: 5000,
       begin: new Function, 
       end: new Function
@@ -34,8 +34,9 @@ class Lottery {
   _init(){
     dom.addClass(this.config.containerEl, '__lottery__');
     this.config.items = dom.find(this.config.containerEl, this.options.items);
-    if(this.config.items.length !== this.options.itemsLength){
-      throw new TypeError(`items dom length(${this.config.items.length}) is not equal to options itemsLength(${this.options.itemsLength})`);
+    this.config.itemsLength = this.config.items.length;
+    if(this.config.itemsLength === 0){
+      throw new TypeError(`Unable to find items dom`);
     }
     if(this.options.time < 5000){
       throw new TypeError(`options time(${this.options.time}) can\'t be less than 5000`);
@@ -65,7 +66,7 @@ class Lottery {
       this.config.currentSpeed = 100;
     }
 
-    // 两秒减速
+    // 三秒减速
     if(taketime >= this.options.time - 3000 && taketime < this.options.time){
       this.config.currentSpeed += 6;
     }
@@ -87,7 +88,7 @@ class Lottery {
     } else if(this.config.spaceStep > 0){
       this._animateStep();
     } else {
-      this.config.spaceStep = this.options.itemsLength - this.config.current + this.config.prize;
+      this.config.spaceStep = this.config.itemsLength - this.config.current + this.config.prize;
       this._animateStep();
     }
   }
@@ -107,7 +108,7 @@ class Lottery {
   _itemClass(index){
     this.config.items.forEach(item => dom.removeClass(item, '__lottery__active'));
     dom.addClass(this.config.items[index], '__lottery__active');
-    if(this.config.current === this.options.itemsLength - 1){
+    if(this.config.current === this.config.itemsLength - 1){
       this.config.current = -1;
     }
   }
@@ -126,8 +127,8 @@ class Lottery {
       throw new TypeError(`Expected number type, but get ${typeof index}`);
     }
 
-    if(index < 0 || index > this.options.itemsLength - 1){
-      throw new TypeError(`Expected number greater than 0 and Less than ${this.options.itemsLength - 1};`);
+    if(index < 0 || index > this.config.itemsLength - 1){
+      throw new TypeError(`Expected number greater than 0 and Less than ${this.config.itemsLength - 1};`);
     }
     if(this.config.disabled) return this;
     this.config.prize = index;
