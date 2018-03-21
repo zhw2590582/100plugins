@@ -16,12 +16,42 @@
 
 <body>
     <div class="main">
-
+        <div class="lottery">
+            <div class="item">1</div>
+            <div class="item">2</div>
+            <div class="item">3</div>
+            <div class="item">4</div>
+            <div class="item">5</div>
+            <div class="item">6</div>
+            <div class="item">7</div>
+            <div class="item">8</div>
+            <div class="item">9</div>
+            <div class="item">10</div>
+        </div>
+        <a class="start" href="#">开始</a>
     </div>
     <script src="lottery/lottery.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new Lottery();
+        var app = new Lottery(".lottery", {
+            item: '.item',
+            num: 10,
+            time: 5000,
+            begin: function () {
+                console.log('抽奖开始');
+            }, 
+            end: function (index) {
+                console.log('中奖号码为：' + index);
+            }
+        });
+
+        let start = document.querySelector('.start');
+        start.addEventListener('click', function (e) {
+            // 模拟异步请求
+            setTimeout(function () {
+                app.prize(5).star();
+            }, 100)
+        });
     </script>
 </body>
 
