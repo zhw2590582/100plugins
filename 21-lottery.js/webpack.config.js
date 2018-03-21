@@ -1,14 +1,10 @@
 var path = require("path");
 var webpack = require("webpack");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var UglifyJSPlugin = require("uglifyjs-webpack-plugin");
+var autoprefixer = require("autoprefixer");
 var env = process.env.WEBPACK_ENV;
 var name = require("./package.json").name;
-
-const extractSass = new ExtractTextPlugin({
-  filename: name + "/" + name + ".css",
-  disable: process.env.NODE_ENV === "development"
-});
 
 module.exports = {
   entry: {
@@ -29,23 +25,38 @@ module.exports = {
         }
       },
       {
-        test: /\.scss$/,
-        use: extractSass.extract({
-          use: [
-            {
-              loader: "css-loader"
-            },
-            {
-              loader: "sass-loader"
+        test: /\.(scss|css)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              minimize: {
+                safe: true
+              }
             }
-          ],
-          fallback: "style-loader"
-        })
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              autoprefixer: {
+                browsers: ["last 2 versions"]
+              },
+              plugins: () => [autoprefixer]
+            }
+          },
+          {
+            loader: "sass-loader",
+            options: {}
+          }
+        ]
       }
     ]
   },
   plugins: [
-    extractSass,
+    new MiniCssExtractPlugin({
+      filename: name + "/" + name + ".css"
+    }),
     new UglifyJSPlugin({
       uglifyOptions: {
         compress: {

@@ -20,4 +20,5 @@
 * [17-masonry.js(瀑布流排版插件)](https://zhw-island.com/100plugins_demo/17-masonry.js/)
 * [18-tags.js(标签插件)](https://zhw-island.com/100plugins_demo/18-tags.js/)
 * [19-tsorter.js(表格排序插件)](https://zhw-island.com/100plugins_demo/19-tsorter.js/)
-* [20-onePageScroll.js(单页面滚动)](https://zhw-island.com/100plugins_demo/20-onePageScroll.js/)
+* [20-onePageScroll.js(单页面滚动插件)](https://zhw-island.com/100plugins_demo/20-onePageScroll.js/)
+* [21-lottery.js(抽奖插件)](https://zhw-island.com/100plugins_demo/21-lottery.js/)
