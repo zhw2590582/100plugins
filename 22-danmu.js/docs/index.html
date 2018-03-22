@@ -16,12 +16,32 @@
 
 <body>
     <div class="main">
-
+        <div id="danmu"></div>
+        <a class="send" href="#">发送</a>
     </div>
     <script src="danmu/danmu.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new Danmu();
+        var app = new Danmu("#danmu", {
+            zIndex: 100,
+            speed: 7000,
+            color: "#FFFFFF",
+            fontSize: [18, 24],
+            opacity: "0.9",
+            maxCountInScreen: 40,
+            maxCountPerSec: 10
+        });
+
+        let sendEl = document.querySelector('.send');
+        sendEl.addEventListener('click', function (e) {
+            e.preventDefault();
+            app.send({
+                text: "这是弹幕",
+                color: "#fff",
+                border: "red",
+                size: 0
+            });
+        });
     </script>
 </body>
 

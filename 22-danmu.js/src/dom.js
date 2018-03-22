@@ -58,7 +58,7 @@ function blur() {
   document.activeElement && document.activeElement.blur();
 }
 
-function insertHtml() {
+function insertHtml(el, position, html) {
   let positions = ['beforebegin', 'afterbegin', 'beforeend', 'afterend'];
   if (!positions.includes(position)) {
     throw new TypeError(
