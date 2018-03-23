@@ -23,3 +23,4 @@
 * [20-onePageScroll.js(单页面滚动插件)](https://zhw2590582.github.io/100plugins/20-onePageScroll.js/)
 * [21-lottery.js(抽奖插件)](https://zhw2590582.github.io/100plugins/21-lottery.js/)
 * [22-danmu.js(弹幕插件)](https://zhw2590582.github.io/100plugins/22-danmu.js/)
+* [23-magnifier.js(放大镜插件)](https://zhw2590582.github.io/100plugins/23-magnifier.js/)
