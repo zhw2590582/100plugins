@@ -61,11 +61,6 @@ class Lottery {
       this.config.currentSpeed -= 6;
     }
 
-    // 匀速
-    if(taketime >= 2000 && taketime <= this.options.time - 3000){
-      this.config.currentSpeed = 100;
-    }
-
     // 三秒减速
     if(taketime >= this.options.time - 3000 && taketime < this.options.time){
       this.config.currentSpeed += 6;
@@ -84,7 +79,9 @@ class Lottery {
   _location(){
     this.config.spaceStep = this.config.prize - this.config.current;
     if(this.config.spaceStep === 0){
-      this._end();
+      setTimeout(() => {
+        this._end();
+      }, this.config.currentSpeed)
     } else if(this.config.spaceStep > 0){
       this._animateStep();
     } else {
