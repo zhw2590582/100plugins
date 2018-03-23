@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "webpack-dev-server --mode development --open --inline --content-base docs/",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production && node publish.js",
     "test": "jest"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "css-loader": "^0.28.11",
+    "fs-extra": "^5.0.0",
     "jest": "^22.4.2",
     "mini-css-extract-plugin": "^0.2.0",
     "node-sass": "^4.7.2",
