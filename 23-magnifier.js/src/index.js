@@ -33,7 +33,6 @@ class Magnifier {
   static get DEFAULTS() {
     return {
       size: 200,
-      ratio: 5,
       position: "right",
       margin: 20,
       showTitle: true
@@ -126,7 +125,6 @@ class Magnifier {
 
     targetObj.trackerLeft = trackerX;
     targetObj.tracker.style.left = trackerX + 'px';
-
     targetObj.trackerTop = trackerY;
     targetObj.tracker.style.top = trackerY + 'px';
   }
