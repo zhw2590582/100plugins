@@ -7,8 +7,15 @@
 ```js
 import Magnifier from "./js/magnifier.js";
 
-var app = new Magnifier();
+// 默认遍历含有'data-magnifier'属性的DOM元素
+var app = new Magnifier({
+    size: 200, // 放大镜大小
+    position: "right", // 放大镜位置：top/right/bottom/left
+    margin: 20, // 放大镜边距
+    showTitle: true // 是否显示title
+});
 
+```
 ## 开发
 
 安装依赖
