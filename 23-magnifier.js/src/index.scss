@@ -1,1 +1,39 @@
-.__magnifier__{}
+[data-magnifier] {
+  position: relative;
+  text-decoration: none;
+  outline-style: none;
+
+  img {
+    vertical-align: top;
+  }
+
+  .magnifier-tracker {
+    box-sizing: border-box;
+    position: absolute;
+    cursor: crosshair;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+
+  .magnifier-zoom {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .magnifier-loader {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    visibility: visible;
+    opacity: 0.6;
+  }
+}

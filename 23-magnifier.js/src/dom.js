@@ -51,7 +51,7 @@ function closest(el, selector) {
 }
 
 function getStyle(el, property) {
-  return window.getComputedStyle(element, null).getPropertyValue(property);
+  return window.getComputedStyle(el, null).getPropertyValue(property);
 }
 
 function blur() {

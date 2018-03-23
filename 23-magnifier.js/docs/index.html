@@ -15,11 +15,22 @@
 </head>
 
 <body>
-    <div class="main"></div>
+    <div class="main">
+        <a href="img/original.jpg" title="medal sygnowany S.D. (Sebastian Dadler) wybity w 1636 roku" data-magnifier>
+            <img src="img/thumb.jpg" alt="thumb"/>
+        </a>
+    </div>
     <script src="magnifier/magnifier.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new Magnifier();
+        var app = new Magnifier({
+            width: 250,
+            height: 250,
+            position: "right",
+            margin: 20,
+            titlePosition: "bottom",
+            showTitle: true
+        });
     </script>
 </body>
 
