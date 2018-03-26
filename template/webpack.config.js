@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const autoprefixer = require("autoprefixer");
 const env = process.env.WEBPACK_ENV;
-const name = require("./package.json").name;
+const name = '{{name}}';
 
 module.exports = {
   cache: false,
