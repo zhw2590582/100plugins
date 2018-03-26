@@ -1,6 +1,5 @@
 const path = require("path");
 const chalk = require("chalk");
-const execa = require("execa");
 const Metalsmith = require("metalsmith");
 const Handlebars = require("handlebars");
 const render = require("consolidate").handlebars.render;
@@ -8,11 +7,13 @@ const async = require("async");
 const ora = require('ora');
 
 const pluginDir = process.argv[2];
-const pluginName = pluginDir.split('-')[1].split('.js')[0];
+let pluginName = '';
 
-if (!pluginName) {
-  console.log(chalk.red("请输入初始化的插件名字: npm run init pluginName"));
-  return;
+try {
+  pluginName = pluginDir.split('-')[1].split('.js')[0];
+} catch (error) {
+  console.log(chalk.red("请输入初始化的插件名字: npm run init 01-pluginName.js"));
+  return false;
 }
 
 const spinner = ora('Creating template');
