@@ -91,9 +91,9 @@ class Lottery {
   }
 
   _animateStep(){
-    this._itemClass(++this.config.current);
-    this.config.spaceStep -= 1;
     setTimeout(() => {
+      this._itemClass(++this.config.current);
+      this.config.spaceStep -= 1;
       if(this.config.spaceStep === 0){
         this._end();
       } else {
@@ -103,6 +103,7 @@ class Lottery {
   }
 
   _itemClass(index){
+    console.log(index)
     this.config.items.forEach(item => dom.removeClass(item, '__lottery__active'));
     dom.addClass(this.config.items[index], '__lottery__active');
     if(this.config.current === this.config.itemsLength - 1){
