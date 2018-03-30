@@ -15,11 +15,27 @@
 </head>
 
 <body>
-    <div class="main">clipboard</div>
+    <div class="main">
+        <textarea id="bar">Mussum ipsum cacilds...</textarea>
+        <button id="btn">Cut to clipboard</button>
+    </div>
     <script src="clipboard/clipboard.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new CLIPBOARD();
+        var app = new Clipboard({
+            target: "#bar",
+            trigger: "#btn"
+        });
+
+        app.on("success", function(e){
+            console.log(e);
+        });
+
+        app.on("error", function(e){
+            console.log(e);
+        });
+
+        // app.destroy();
     </script>
 </body>
 

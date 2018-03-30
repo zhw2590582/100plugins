@@ -1,10 +1,10 @@
 import './index.scss';
 import dom from './dom.js';
 
-class CLIPBOARD {
+class Clipboard {
   constructor(options) {
     this.options = {
-      ...CLIPBOARD.DEFAULTS,
+      ...Clipboard.DEFAULTS,
       ...options
     };
 
@@ -20,7 +20,15 @@ class CLIPBOARD {
   _init() {
     console.log(this)
   }
+  
+  on(){
+    
+  }
+
+  destroy(){
+
+  }
 }
 
-window.CLIPBOARD = CLIPBOARD;
-module.exports = CLIPBOARD;
+window.Clipboard = Clipboard;
+module.exports = Clipboard;

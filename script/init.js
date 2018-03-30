@@ -33,6 +33,8 @@ metalsmith
     console.log(chalk.green("打包发布: npm run build"));
   });
 
+const capitalize = ([first, ...rest]) => first.toUpperCase() + rest.join('');  
+
 function renderTemplateFiles() {
   return (files, metalsmith, done) => {
     const keys = Object.keys(files);
@@ -45,7 +47,7 @@ function renderTemplateFiles() {
         }
         render(str, {
           name: pluginName,
-          className: pluginName.toLocaleUpperCase()
+          className: capitalize(pluginName)
         }, (err, res) => {
           if (err) {
             err.message = `[${file}] ${err.message}`;
