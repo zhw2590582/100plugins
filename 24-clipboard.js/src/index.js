@@ -1,8 +1,9 @@
-import './index.scss';
-import dom from './dom.js';
+import Emitter from 'tiny-emitter';
 
-class Clipboard {
+class Clipboard extends Emitter {
   constructor(options) {
+    super();
+
     this.options = {
       ...Clipboard.DEFAULTS,
       ...options
@@ -13,21 +14,18 @@ class Clipboard {
 
   static get DEFAULTS() {
     return {
-
+      target: '',
+      trigger: ''
     };
   }
 
   _init() {
-    console.log(this)
-  }
-  
-  on(){
-    
+    console.log(this);
   }
 
-  destroy(){
+  on() {}
 
-  }
+  destroy() {}
 }
 
 window.Clipboard = Clipboard;
