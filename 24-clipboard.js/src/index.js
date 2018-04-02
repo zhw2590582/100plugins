@@ -93,12 +93,13 @@ class Clipboard extends Emitter {
     };
 
     if (succeeded) {
-      typeof this.options.success === 'function' &&
-        this.options.success(result);
-      this.emit('success', result);
+      typeof this.options.success === 'function'
+        ? this.options.success(result)
+        : this.emit('success', result);
     } else {
-      typeof this.options.error === 'function' && this.options.error(result);
-      this.emit('error', result);
+      typeof this.options.error === 'function'
+        ? this.options.error(result)
+        : this.emit('error', result);
     }
   }
 
