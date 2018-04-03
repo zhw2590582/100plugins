@@ -79,7 +79,7 @@ class Clipboard extends Emitter {
       element.focus();
       selectedText = element.value;
     } else {
-      selectedText = this.targetEl.textContent;
+      selectedText = element.textContent;
     }
     return selectedText;
   }
