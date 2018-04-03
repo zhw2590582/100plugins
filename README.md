@@ -8,6 +8,7 @@
 * [04-slider.js(幻灯片插件)](https://zhw2590582.github.io/100plugins/04-slider.js/)
 * [05-drag.js(拖动插件)](https://zhw2590582.github.io/100plugins/05-drag.js/)
 * [06-zoom.js(图片缩放插件)](https://zhw2590582.github.io/100plugins/06-zoom.js/)
+* [07-upload.js(图片上传插件)](https://zhw2590582.github.io/100plugins/07-upload.js/)
 * [08-crop.js(图片剪裁插件--未完成)](https://zhw2590582.github.io/100plugins/08-crop.js/)
 * [09-pullrefresh.js(下拉刷新插件)](https://zhw2590582.github.io/100plugins/09-pullrefresh.js/)
 * [10-validate.js(表单验证插件)](https://zhw2590582.github.io/100plugins/10-validate.js/)
