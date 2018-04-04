@@ -8,6 +8,7 @@ const ora = require('ora');
 const fs = require('fs-extra');
 
 const pluginDir = process.argv[2];
+const description = process.argv[3] || '';
 let pluginName = '';
 
 try {
@@ -53,7 +54,8 @@ function renderTemplateFiles() {
           str,
           {
             name: pluginName,
-            className: capitalize(pluginName)
+            className: capitalize(pluginName),
+            description: description
           },
           (err, res) => {
             if (err) {
@@ -72,8 +74,8 @@ function renderTemplateFiles() {
 
 function addLink() {
   const mark = '<!-- new -->';
-  const newPlugin = `* [${pluginDir}(插件)](https://zhw2590582.github.io/100plugins/${pluginDir}/)\n${mark}`;
+  const newPlugin = `* [${pluginDir}(${description}插件)](https://zhw2590582.github.io/100plugins/${pluginDir}/)\n${mark}`;
   const markup = fs.readFileSync(path.join(__dirname, '../README.md'), 'utf8');
-  if (!markup.includes(mark) || markup.includes(newPlugin)) return;
+  if (!markup.includes(mark) || markup.includes(pluginDir)) return;
   fs.writeFileSync(path.join(__dirname, '../README.md'), markup.replace(mark, newPlugin));
 }

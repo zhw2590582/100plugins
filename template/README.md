@@ -1,6 +1,6 @@
 ## {{name}}.js
 
-一个很简单的 Javascript 原生面向对象的{{name}}插件
+一个很简单的 Javascript 原生面向对象的{{description}}插件
 
 ## 使用
 
