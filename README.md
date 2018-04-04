@@ -26,6 +26,7 @@
 * [22-danmu.js(弹幕插件)](https://zhw2590582.github.io/100plugins/22-danmu.js/)
 * [23-magnifier.js(放大镜插件)](https://zhw2590582.github.io/100plugins/23-magnifier.js/)
 * [24-clipboard.js(复制插件)](https://zhw2590582.github.io/100plugins/24-clipboard.js/)
+* [25-hotkey.js(键盘绑定插件)](https://zhw2590582.github.io/100plugins/25-hotkey.js/)
 <!-- new -->
   
 ## 新建插件
