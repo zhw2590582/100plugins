@@ -31,5 +31,5 @@
 ## 新建插件
 
 ```sh
-$ npm run init 01-pluginName.js
+$ npm run init 01-pluginName.js 插件中文名
 ```
