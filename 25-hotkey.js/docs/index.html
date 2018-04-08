@@ -10,7 +10,6 @@
     <meta name="description" content="hotkey.js">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="hotkey/hotkey.css">
     <link rel="icon" href="favicon.ico">
 </head>
 
@@ -19,7 +18,9 @@
     <script src="hotkey/hotkey.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new Hotkey();
+        hotkey('a', function (event, handler) {
+           console.log(event, handler); 
+        });
     </script>
 </body>
 

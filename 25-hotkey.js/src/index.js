@@ -1,26 +1,15 @@
-import './index.scss';
-import dom from './dom.js';
+import { keycode, keyrev } from './keycode';
 
-class Hotkey {
-  constructor(options) {
-    this.options = {
-      ...Hotkey.DEFAULTS,
-      ...options
-    };
+let listeners = [];
 
-    this._init();
-  }
+let hotkey = (key, callback) => {
+  console.log('hotkey');
+};
 
-  static get DEFAULTS() {
-    return {
+let dispatch = e => {
+  console.log('dispatch');
+};
 
-    };
-  }
-
-  _init() {
-    console.log(this)
-  }
-}
-
-window.Hotkey = Hotkey;
-module.exports = Hotkey;
+window.addEventListener('keydown', dispatch);
+hotkey.destroy = () => window.removeEventListener('keydown', dispatch);
+window.hotkey = module.exports = hotkey;
