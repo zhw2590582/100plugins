@@ -1,9 +1,11 @@
+import mitt from 'mitt';
 import { keycode, keyrev } from './keycode';
 
-let listeners = [];
+let emitter = mitt();
 
 let hotkey = (key, callback) => {
-  console.log('hotkey');
+  key = key.replace(/\s/g, '');
+  emitter.on(key, callback);
 };
 
 let dispatch = e => {

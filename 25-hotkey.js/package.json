@@ -36,5 +36,8 @@
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.12",
     "webpack-dev-server": "^3.1.1"
+  },
+  "dependencies": {
+    "mitt": "^1.1.3"
   }
 }
