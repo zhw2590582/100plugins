@@ -68,13 +68,12 @@ let aliases = {
 };
 
 let keyrev = {};
-
-for (i = 97; i < 123; i++) keycode[String.fromCharCode(i)] = i - 32;
-for (var i = 48; i < 58; i++) keycode[i - 48] = i;
-for (i = 1; i < 13; i++) keycode['f' + i] = i + 111;
-for (i = 0; i < 10; i++) keycode['numpad ' + i] = i + 96;
-for (var alias in aliases) keycode[alias] = aliases[alias];
-for (i in keycode) keyrev[keycode[i]] = i;
+for (let i = 97; i < 123; i++) keycode[String.fromCharCode(i)] = i - 32;
+for (let i = 48; i < 58; i++) keycode[i - 48] = i;
+for (let i = 1; i < 13; i++) keycode['f' + i] = i + 111;
+for (let i = 0; i < 10; i++) keycode['numpad ' + i] = i + 96;
+for (let i in aliases) keycode[i] = aliases[i];
+for (let i in keycode) keyrev[keycode[i]] = i;
 
 module.exports = {
   keycode,
