@@ -18,8 +18,22 @@
     <script src="hotkey/hotkey.js"></script>
     <script src="js/app.js"></script>
     <script>
-        hotkey('a', function (event, handler) {
-           console.log(event, handler); 
+        // 监听所有按键
+        hotkey('*', function (type, handler) {
+            handler.event.preventDefault();
+            console.log(type);
+        });
+
+        // 监听单个按键
+        hotkey('a', function (handler) {
+            handler.event.preventDefault();
+            console.log(handler);
+        });
+
+        // 监听组合按键
+        hotkey('ctrl + a', function (handler) {
+            handler.event.preventDefault();
+            console.log(handler);
         });
     </script>
 </body>
