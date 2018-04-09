@@ -14,26 +14,28 @@
 </head>
 
 <body>
-    <div class="main">hotkey</div>
+    <div class="key"></div>
     <script src="hotkey/hotkey.js"></script>
     <script src="js/app.js"></script>
     <script>
+        var keyEl = document.querySelector(".key");
+
         // 监听所有按键
-        hotkey('*', function (type, handler) {
-            handler.event.preventDefault();
-            console.log(type);
+        hotkey('*', function (type, { event, key, name }) {
+            event.preventDefault();
+            keyEl.innerHTML = name;
         });
 
         // 监听单个按键
-        hotkey('a', function (handler) {
-            handler.event.preventDefault();
-            console.log(handler);
+        hotkey('a', function ({ event, key, name }) {
+            event.preventDefault();
+            console.log(name);
         });
 
         // 监听组合按键
-        hotkey('ctrl + a', function (handler) {
-            handler.event.preventDefault();
-            console.log(handler);
+        hotkey('ctrl + a', function ({ event, key, name }) {
+            event.preventDefault();
+            console.log(name);
         });
     </script>
 </body>
