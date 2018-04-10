@@ -14,16 +14,34 @@
 </head>
 
 <body>
-    <div class="key"></div>
+    <div class="hotkey">
+        <div class="item name">
+            <span>键符</span>
+        </div>
+        <span>=></span>
+        <div class="item key">
+            <span>键码</span>
+        </div>
+    </div>
     <script src="hotkey/hotkey.js"></script>
     <script src="js/app.js"></script>
     <script>
+        var nameEl = document.querySelector(".name");
         var keyEl = document.querySelector(".key");
 
-        // 监听所有按键，注意此时回调函数返回两个参数：type === name
+        // 监听所有按键，注意此时回调函数返回两个参数
         hotkey('*', function (type, { event, key, name }) {
             event.preventDefault();
-            keyEl.innerHTML = name + key;
+            var nameStr = name.split('+').map(function (item) {
+                return "<span>" + item + "</span>";
+            }).join("");
+
+            var keyStr = key.split('+').map(function (item) {
+                return "<span>" + item + "</span>";
+            }).join("");
+
+            nameEl.innerHTML = nameStr;
+            keyEl.innerHTML = keyStr;
         });
 
         // 监听单个字符串按键
@@ -41,7 +59,7 @@
         // 监听组合按键，顺序为：shift、ctrl、alt、command
         hotkey('shift + ctrl + a', function ({ event, key, name }) {
             event.preventDefault();
-            console.log({ event, key, name });
+            console.log("你按下了" + name + "键");
         });
     </script>
 </body>
