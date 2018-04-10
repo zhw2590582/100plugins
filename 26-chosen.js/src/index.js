@@ -6,9 +6,15 @@ class Chosen {
   constructor(el, options) {
     this.options = {
       ...Chosen.DEFAULTS,
-      ...options
+      ...options,
+      placeholder: '',
+      multiple: false,
+      original_width: 0
     };
 
+    this.selectEl = el instanceof Element ? el : document.querySelector(el);
+    this.optionEl = Array.from(this.selectEl.querySelectorAll('option'));
+    this.optionsArr = [];
     this.listeners = [];
     this.selected = [];
     this._selectClick = this._selectClick.bind(this);
@@ -22,60 +28,152 @@ class Chosen {
   static get DEFAULTS() {
     return {
       search: true,
-      no_results: "No Results!",
+      no_results: 'No Results!',
       max_selected: null,
-      deselect: false
+      deselect: false,
+      width: '100%'
     };
   }
 
   _init() {
+    this.options.original_width = dom.getStyle(this.selectEl, 'width', true);
+    this.selectEl.style.display = 'none';
+    this.optionsArr = this.optionEl.filter(option => !!option.textContent).map((option, index) => ({
+      index: index,
+      text: option.textContent,
+      vaule: option.value
+    }));
+    this.options.placeholder = this.selectEl.dataset.placeholder;
+    this.options.multiple = this.selectEl.multiple;
     this._creatDom();
     this._eventBind();
     console.log(this);
   }
 
   _creatDom() {
-
+    let width_ratio = Number.parseFloat(this.options.width.replace(/%/, ''));
+    let new_width = this.options.original_width * width_ratio / 100;
+    let htmlStr = `
+      <div class="chosen-container ${
+        this.options.multiple
+          ? 'chosen-container-multi'
+          : 'chosen-container-single'
+      }" style="width: ${new_width}px;">
+        ${
+          this.options.multiple
+            ? `
+          <ul class="chosen-choices">
+            <li class="search-field">
+              <input class="chosen-search-input default" type="text" autocomplete="off" value="${
+                this.options.placeholder
+              }">
+            </li>
+          </ul>
+          `
+            : `
+          <a class="chosen-single chosen-default">
+            <input class="chosen-search-input" type="text" autocomplete="off">
+            <span>${this.options.placeholder}</span>
+            <div><b></b></div>
+          </a>
+        `
+        }
+        <div class="chosen-drop">
+          ${
+            !this.options.multiple && this.options.search
+              ? '<div class="chosen-search"><input type="text" autocomplete="off" /></div>'
+              : ''
+          }
+          <ul class="chosen-results"></ul>
+        </div>
+      </div>
+    `;
+    dom.insertHtml(this.selectEl, 'afterend', htmlStr);
+    this.containerEl = this.selectEl.nextElementSibling;
+    this.resultsEl = this.containerEl.querySelector('.chosen-results');
+    this.singleEl = this.containerEl.querySelector('.chosen-single');
+    this.multipleEl = this.containerEl.querySelector('.chosen-choices');
+    this.searchEl = this.containerEl.querySelector('.chosen-drop input');
   }
 
   _eventBind() {
-    
+    this[this.options.multiple ? 'multipleEl' : 'singleEl'].addEventListener('click', this._selectClick);
+    if (this.resultsEl.children.length === 0) {
+      let liStr = this.optionsArr.map((item, index) => {
+        return `<li class="active-result" data-option-array-index="${index}" style="">${item.text}</li>`;
+      }).join('');
+      dom.insertHtml(this.resultsEl, 'beforeend', liStr);
+
+      if(this.selected.length === 0){
+        dom.addClass(this.resultsEl.children[0], 'highlighted');
+      } else {
+        this.selected.forEach(item => {
+          dom.addClass(this.resultsEl.children[item.index], 'highlighted');
+        });
+      }
+    }
+    return this;
   }
 
-  _selectClick(){
-
+  _selectClick() {
+    if (dom.hasClass(this.containerEl, 'chosen-container-active')) {
+      this._openDrop(false);
+    } else {
+      this._openDrop(true);
+    }
+    return this;
   }
 
-  _optionClick(){
-
+  _openDrop(type) {
+    if(type){
+      dom.addClass(this.containerEl, 'chosen-with-drop');
+      dom.addClass(this.containerEl, 'chosen-container-active');
+      this.searchEl.focus();
+    } else {
+      dom.removeClass(this.containerEl, 'chosen-with-drop');
+      dom.removeClass(this.containerEl, 'chosen-container-active');
+    }
   }
 
-  _searchChange(){
-
+  _optionClick() {
+    //
   }
 
-  _selectedDelClick(){
-
+  _optionMouseover() {
+    //
   }
 
-  _deselectClick(){
-
+  _optionMouseout() {
+    //
   }
 
-  _triggerChange(){
+  _searchChange() {
+    //
+  }
+
+  _selectedDelClick() {
+    //
+  }
+
+  _deselectClick() {
+    //
+  }
+
+  _triggerChange() {
     this.listeners.forEach(cb => cb(this.selected));
     return this;
   }
 
   change(callback) {
-    error(typeof callback !== 'function', 'The change function parameter required function type, but get ' + typeof callback);
+    error(
+      typeof callback !== 'function',
+      `The change function parameter required function type, but get ${typeof callback}`
+    );
     this.listeners.push(callback);
     return this;
   }
 
-  destroy(){
-
-  }
+  destroy() {}
 }
 
 window.Chosen = Chosen;

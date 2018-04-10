@@ -1,6 +1,6 @@
 ## chosen.js
 
-一个很简单的 Javascript 原生面向对象的下拉框插件
+一个很简单的 Javascript 原生面向对象的下拉框插件，样式来自 [chosen](https://github.com/harvesthq/chosen)
 
 ## 使用
 

@@ -16,7 +16,7 @@
 
 <body>
     <div class="main">
-        <select data-placeholder="Choose a Country..." multiple class="select">
+        <select data-placeholder="Choose a Country..." class="select">
             <option value=""></option>
             <option value="United States">United States</option>
             <option value="United Kingdom">United Kingdom</option>
@@ -274,11 +274,12 @@
     <script src="chosen/chosen.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new Chosen('.app .select', {
+        var app = new Chosen('.select', {
             search: true,
             no_results: "No Results!",
             max_selected: 10,
-            deselect: true
+            deselect: true,
+            width: "95%"
         });
 
         // 监听变化

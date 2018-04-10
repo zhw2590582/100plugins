@@ -50,8 +50,9 @@ function closest(el, selector) {
   return el;
 }
 
-function getStyle(el, property) {
-  return window.getComputedStyle(el, null).getPropertyValue(property);
+function getStyle(el, property, num) {
+  let val = window.getComputedStyle(el, null).getPropertyValue(property);
+  return num ? Number.parseFloat(val, 10) : val;
 }
 
 function blur() {
