@@ -31,6 +31,9 @@ hotkey('shift + ctrl + a', function ({ event, key, name }) {
     console.log("你按下了" + name + "键");
 });
 
+// 销毁插件
+hotkey.destroy();
+
 ```
 ## 开发
 
