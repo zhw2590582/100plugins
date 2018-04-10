@@ -18,7 +18,8 @@ class Chosen {
     this.listeners = [];
     this.selected = [];
     this._selectClick = this._selectClick.bind(this);
-    this._optionClick = this._optionClick.bind(this);
+    this._resultsClick = this._resultsClick.bind(this);
+    this._resultsMouseover = this._resultsMouseover.bind(this);
     this._searchChange = this._searchChange.bind(this);
     this._selectedDelClick = this._selectedDelClick.bind(this);
     this._deselectClick = this._deselectClick.bind(this);
@@ -38,7 +39,7 @@ class Chosen {
   _init() {
     this.options.original_width = dom.getStyle(this.selectEl, 'width', true);
     this.selectEl.style.display = 'none';
-    this.optionsArr = this.optionEl.filter(option => !!option.textContent).map((option, index) => ({
+    this.optionsArr = this.optionEl.map((option, index) => ({
       index: index,
       text: option.textContent,
       vaule: option.value
@@ -103,14 +104,10 @@ class Chosen {
         return `<li class="active-result" data-option-array-index="${index}" style="">${item.text}</li>`;
       }).join('');
       dom.insertHtml(this.resultsEl, 'beforeend', liStr);
-
-      if(this.selected.length === 0){
-        dom.addClass(this.resultsEl.children[0], 'highlighted');
-      } else {
-        this.selected.forEach(item => {
-          dom.addClass(this.resultsEl.children[item.index], 'highlighted');
-        });
-      }
+      this.resultsChildrenEl = Array.from(this.resultsEl.children);
+      dom.addClass(this.resultsEl.children[0], 'highlighted');
+      this.resultsEl.addEventListener('mouseover', this._resultsMouseover);
+      this.resultsEl.addEventListener('click', this._resultsClick);
     }
     return this;
   }
@@ -129,22 +126,39 @@ class Chosen {
       dom.addClass(this.containerEl, 'chosen-with-drop');
       dom.addClass(this.containerEl, 'chosen-container-active');
       this.searchEl.focus();
+      this.selected.forEach(item => {
+        dom.addClass(this.resultsEl.children[item.index], 'highlighted');
+      });
     } else {
       dom.removeClass(this.containerEl, 'chosen-with-drop');
       dom.removeClass(this.containerEl, 'chosen-container-active');
+      this.resultsChildrenEl.forEach(item => {
+        dom.removeClass(item, 'highlighted');
+      });
     }
   }
 
-  _optionClick() {
-    //
+  _resultsClick(e) {
+    let target = e.target;
+    if(target.nodeName.toLowerCase() == 'li') {
+      let index = target.dataset.optionArrayIndex;
+      if(this.options.multiple){
+        // Todo
+      } else {
+        this.selected = [this.optionsArr[index]];
+      }
+      this._openDrop(false);
+    }
   }
 
-  _optionMouseover() {
-    //
-  }
-
-  _optionMouseout() {
-    //
+  _resultsMouseover(e) {
+    let target = e.target;
+    if(target.nodeName.toLowerCase() == 'li') {
+      this.resultsChildrenEl.forEach(item => {
+        dom.removeClass(item, 'highlighted');
+      });
+      dom.addClass(target, 'highlighted');
+    }
   }
 
   _searchChange() {
