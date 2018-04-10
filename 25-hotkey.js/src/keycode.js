@@ -1,6 +1,9 @@
+let isOsx = ~navigator.userAgent.indexOf('Mac OS X');
+
 let keycode = {
     'backspace': 8,
     'tab': 9,
+    'clear': 12,
     'enter': 13,
     'shift': 16,
     'ctrl': 17,
@@ -20,8 +23,6 @@ let keycode = {
     'insert': 45,
     'delete': 46,
     'command': 91,
-    'left command': 91,
-    'right command': 93,
     'numpad *': 106,
     'numpad +': 107,
     'numpad -': 109,
@@ -44,38 +45,22 @@ let keycode = {
     "'": 222
 };
 
-let aliases = {
-    'windows': 91,
-    '⇧': 16,
-    '⌥': 18,
-    '⌃': 17,
-    '⌘': 91,
-    'ctl': 17,
-    'control': 17,
-    'option': 18,
-    'pause': 19,
-    'break': 19,
-    'caps': 20,
-    'return': 13,
-    'escape': 27,
-    'spc': 32,
-    'spacebar': 32,
-    'pgup': 33,
-    'pgdn': 34,
-    'ins': 45,
-    'del': 46,
-    'cmd': 91
-};
-
 let keyrev = {};
 for (let i = 97; i < 123; i++) keycode[String.fromCharCode(i)] = i - 32;
 for (let i = 48; i < 58; i++) keycode[i - 48] = i;
 for (let i = 1; i < 13; i++) keycode['f' + i] = i + 111;
 for (let i = 0; i < 10; i++) keycode['numpad ' + i] = i + 96;
-for (let i in aliases) keycode[i] = aliases[i];
 for (let i in keycode) keyrev[keycode[i]] = i;
+
+let modprops = {
+  'metaKey': 'command',
+  'altKey': 'alt',
+  'ctrlKey': 'ctrl',
+  'shiftKey': 'shift'
+};
 
 module.exports = {
   keycode,
-  keyrev
+  keyrev,
+  modprops
 };
