@@ -49,7 +49,6 @@ class Chosen {
     this._creatDom();
     this._defaultSelected();
     this._eventBind();
-    console.log(this);
   }
 
   // 默认选择
