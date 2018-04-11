@@ -32,7 +32,7 @@ class Chosen {
       no_results: 'No Results!',
       max_selected: null,
       deselect: false,
-      width: '100%'
+      width: null
     };
   }
 
@@ -52,14 +52,13 @@ class Chosen {
   }
 
   _creatDom() {
-    let width_ratio = Number.parseFloat(this.options.width.replace(/%/, ''));
-    let new_width = this.options.original_width * width_ratio / 100;
+    let width = this.options.width ? this.options.width : this.options.original_width + 'px';
     let htmlStr = `
       <div class="chosen-container ${
         this.options.multiple
           ? 'chosen-container-multi'
           : 'chosen-container-single'
-      }" style="width: ${new_width}px;">
+      }" style="width: ${width};">
         ${
           this.options.multiple
             ? `
@@ -106,10 +105,15 @@ class Chosen {
       dom.insertHtml(this.resultsEl, 'beforeend', liStr);
       this.resultsChildrenEl = Array.from(this.resultsEl.children);
       dom.addClass(this.resultsEl.children[0], 'highlighted');
-      this.resultsEl.addEventListener('mouseover', this._resultsMouseover);
-      this.resultsEl.addEventListener('click', this._resultsClick);
     }
+    this.resultsEl.addEventListener('mouseover', this._resultsMouseover);
+    this.resultsEl.addEventListener('click', this._resultsClick);
     return this;
+  }
+
+  _resultsUpdate() {
+    this.resultsEl.innerHTML = '';
+    // 
   }
 
   _selectClick() {
@@ -122,7 +126,7 @@ class Chosen {
   }
 
   _openDrop(type) {
-    if(type){
+    if (type) {
       dom.addClass(this.containerEl, 'chosen-with-drop');
       dom.addClass(this.containerEl, 'chosen-container-active');
       this.searchEl.focus();
@@ -140,9 +144,9 @@ class Chosen {
 
   _resultsClick(e) {
     let target = e.target;
-    if(target.nodeName.toLowerCase() == 'li') {
+    if (target.nodeName.toLowerCase() == 'li') {
       let index = target.dataset.optionArrayIndex;
-      if(this.options.multiple){
+      if (this.options.multiple) {
         // Todo
       } else {
         this.selected = [this.optionsArr[index]];
@@ -153,7 +157,7 @@ class Chosen {
 
   _resultsMouseover(e) {
     let target = e.target;
-    if(target.nodeName.toLowerCase() == 'li') {
+    if (target.nodeName.toLowerCase() == 'li') {
       this.resultsChildrenEl.forEach(item => {
         dom.removeClass(item, 'highlighted');
       });
