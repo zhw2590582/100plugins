@@ -8,7 +8,6 @@ class Chosen {
       ...Chosen.DEFAULTS,
       ...options,
       placeholder: '',
-      multiple: false,
       original_width: 0
     };
 
@@ -16,12 +15,10 @@ class Chosen {
     this.optionEl = Array.from(this.selectEl.querySelectorAll('option'));
     this.optionsArr = [];
     this.listeners = [];
-    this.selected = [];
     this._selectClick = this._selectClick.bind(this);
     this._resultsClick = this._resultsClick.bind(this);
     this._resultsMouseover = this._resultsMouseover.bind(this);
     this._searchChange = this._searchChange.bind(this);
-    this._selectedDelClick = this._selectedDelClick.bind(this);
     this._deselectClick = this._deselectClick.bind(this);
     this._init();
   }
@@ -29,58 +26,54 @@ class Chosen {
   static get DEFAULTS() {
     return {
       search: true,
-      no_results: 'No Results!',
-      max_selected: null,
+      no_results: 'Oops, nothing found!',
       deselect: false,
       width: null
     };
   }
 
+  // 初始化
   _init() {
     this.options.original_width = dom.getStyle(this.selectEl, 'width', true);
     this.selectEl.style.display = 'none';
     this.optionsArr = this.optionEl.map((option, index) => ({
+      selected: option.selected,
+      disabled: option.disabled,
       index: index,
       text: option.textContent,
       vaule: option.value
     }));
+    this.optionsArrCopy = [...this.optionsArr];
     this.options.placeholder = this.selectEl.dataset.placeholder;
-    this.options.multiple = this.selectEl.multiple;
     this._creatDom();
+    this._defaultSelected();
     this._eventBind();
     console.log(this);
   }
 
+  // 默认选择
+  _defaultSelected() {
+    let selected = this._getSelected();
+    if (selected.length === 0) return;
+    let index = selected[selected.length - 1].index;
+    this._singleResults(index);
+  }
+
+  // 构建DOM
   _creatDom() {
-    let width = this.options.width ? this.options.width : this.options.original_width + 'px';
+    let width = this.options.width
+      ? this.options.width
+      : this.options.original_width + 'px';
     let htmlStr = `
-      <div class="chosen-container ${
-        this.options.multiple
-          ? 'chosen-container-multi'
-          : 'chosen-container-single'
-      }" style="width: ${width};">
-        ${
-          this.options.multiple
-            ? `
-          <ul class="chosen-choices">
-            <li class="search-field">
-              <input class="chosen-search-input default" type="text" autocomplete="off" value="${
-                this.options.placeholder
-              }">
-            </li>
-          </ul>
-          `
-            : `
-          <a class="chosen-single chosen-default">
-            <input class="chosen-search-input" type="text" autocomplete="off">
-            <span>${this.options.placeholder}</span>
-            <div><b></b></div>
-          </a>
-        `
-        }
+      <div class="chosen-container chosen-container-single" style="width: ${width};">
+        <a class="chosen-single chosen-default">
+          <input class="chosen-search-input" type="text" autocomplete="off">
+          <span>${this.options.placeholder}</span>
+          <div><b></b></div>
+        </a>
         <div class="chosen-drop">
           ${
-            !this.options.multiple && this.options.search
+            this.options.search
               ? '<div class="chosen-search"><input type="text" autocomplete="off" /></div>'
               : ''
           }
@@ -92,31 +85,58 @@ class Chosen {
     this.containerEl = this.selectEl.nextElementSibling;
     this.resultsEl = this.containerEl.querySelector('.chosen-results');
     this.singleEl = this.containerEl.querySelector('.chosen-single');
-    this.multipleEl = this.containerEl.querySelector('.chosen-choices');
-    this.searchEl = this.containerEl.querySelector('.chosen-drop input');
+    this.singleResultsEl = this.containerEl.querySelector('.chosen-single span');
+    this.singleSearchEl = this.containerEl.querySelector('.chosen-drop input');
   }
 
+  // 事件绑定
   _eventBind() {
-    this[this.options.multiple ? 'multipleEl' : 'singleEl'].addEventListener('click', this._selectClick);
-    if (this.resultsEl.children.length === 0) {
-      let liStr = this.optionsArr.map((item, index) => {
-        return `<li class="active-result" data-option-array-index="${index}" style="">${item.text}</li>`;
-      }).join('');
-      dom.insertHtml(this.resultsEl, 'beforeend', liStr);
-      this.resultsChildrenEl = Array.from(this.resultsEl.children);
-      dom.addClass(this.resultsEl.children[0], 'highlighted');
-    }
+    this.singleEl.addEventListener('click', this._selectClick);
     this.resultsEl.addEventListener('mouseover', this._resultsMouseover);
     this.resultsEl.addEventListener('click', this._resultsClick);
+    if (this.options.search) {
+      this.singleSearchEl.addEventListener('input', this._searchChange);
+    }
     return this;
   }
 
-  _resultsUpdate() {
+  // 更新搜索列表
+  _resultsUpdate(keyword = '') {
     this.resultsEl.innerHTML = '';
-    // 
+    let optionsArr = keyword ? this._search(keyword) : this.optionsArr;
+    let liStr = '';
+    if (optionsArr.length === 0) {
+      liStr = `<li class="no-results">${
+        this.options.no_results
+      } <span>${keyword}</span></li>`;
+    } else {
+      liStr = optionsArr
+        .map((item, index) => {
+          return `<li class="${
+            item.disabled
+              ? 'disabled-result'
+              : `active-result ${item.selected ? 'result-selected' : ''}`
+          }" data-option-array-index="${item.index}" style="">${
+            item.text
+          }</li>`;
+        })
+        .join('');
+    }
+    dom.insertHtml(this.resultsEl, 'beforeend', liStr);
+    this.resultsChildrenEl = Array.from(this.resultsEl.children);
+    return this;
   }
 
+  _search(keyword) {
+    keyword = keyword.toLowerCase().trim();
+    return this.optionsArr.filter(item =>
+      item.text.toLowerCase().includes(keyword)
+    );
+  }
+
+  // 点击弹出列表
   _selectClick() {
+    this._resultsUpdate();
     if (dom.hasClass(this.containerEl, 'chosen-container-active')) {
       this._openDrop(false);
     } else {
@@ -125,39 +145,57 @@ class Chosen {
     return this;
   }
 
+  // 弹出列表
   _openDrop(type) {
+    let selected = this._getSelected();
     if (type) {
       dom.addClass(this.containerEl, 'chosen-with-drop');
       dom.addClass(this.containerEl, 'chosen-container-active');
-      this.searchEl.focus();
-      this.selected.forEach(item => {
+      this.options.search && this.singleSearchEl.focus();
+      if (selected.length === 0) return;
+      selected.forEach(item => {
         dom.addClass(this.resultsEl.children[item.index], 'highlighted');
       });
     } else {
       dom.removeClass(this.containerEl, 'chosen-with-drop');
       dom.removeClass(this.containerEl, 'chosen-container-active');
+      this.options.search && (this.singleSearchEl.value = '');
       this.resultsChildrenEl.forEach(item => {
         dom.removeClass(item, 'highlighted');
       });
     }
+    return this;
   }
 
+  // 点击列表
   _resultsClick(e) {
     let target = e.target;
-    if (target.nodeName.toLowerCase() == 'li') {
+    if (
+      target.nodeName.toLowerCase() == 'li' &&
+      !dom.hasClass(target, 'disabled-result')
+    ) {
       let index = target.dataset.optionArrayIndex;
-      if (this.options.multiple) {
-        // Todo
-      } else {
-        this.selected = [this.optionsArr[index]];
-      }
+      this._singleResults(index);
       this._openDrop(false);
+      this._triggerChange();
     }
   }
 
+  // 点击列表-单选
+  _singleResults(index) {
+    this.optionsArr.forEach(item => (item.selected = false));
+    this.optionsArr[index].selected = true;
+    this.singleResultsEl.innerHTML = this.optionsArr[index].text;
+    dom.removeClass(this.singleEl, 'chosen-default');
+  }
+
+  // 列表鼠标经过
   _resultsMouseover(e) {
     let target = e.target;
-    if (target.nodeName.toLowerCase() == 'li') {
+    if (
+      target.nodeName.toLowerCase() == 'li' &&
+      !dom.hasClass(target, 'disabled-result')
+    ) {
       this.resultsChildrenEl.forEach(item => {
         dom.removeClass(item, 'highlighted');
       });
@@ -165,20 +203,23 @@ class Chosen {
     }
   }
 
-  _searchChange() {
-    //
-  }
-
-  _selectedDelClick() {
-    //
+  _searchChange(e) {
+    let keyword = e.target.value;
+    this._resultsUpdate(keyword);
+    return this;
   }
 
   _deselectClick() {
     //
   }
 
+  _getSelected() {
+    return this.optionsArr.filter(item => item.selected);
+  }
+
   _triggerChange() {
-    this.listeners.forEach(cb => cb(this.selected));
+    let selected = this._getSelected();
+    this.listeners.forEach(cb => cb(selected));
     return this;
   }
 
@@ -191,7 +232,20 @@ class Chosen {
     return this;
   }
 
-  destroy() {}
+  value() {
+    return this._getSelected();
+  }
+
+  destroy() {
+    this.selectEl.style.display = '';
+    this.singleEl.removeEventListener('click', this._selectClick);
+    this.resultsEl.removeEventListener('mouseover', this._resultsMouseover);
+    this.resultsEl.removeEventListener('click', this._resultsClick);
+    if (this.options.search) {
+      this.singleSearchEl.removeEventListener('input', this._searchChange);
+    }
+    dom.removeElement(this.containerEl);
+  }
 }
 
 window.Chosen = Chosen;
