@@ -43,7 +43,8 @@ class Chosen {
       disabled: option.disabled,
       index: index,
       text: option.textContent,
-      vaule: option.value
+      vaule: option.value,
+      target: option
     }));
     this.options.placeholder = this.selectEl.dataset.placeholder;
     this._creatDom();
@@ -213,7 +214,7 @@ class Chosen {
         dom.removeClass(item, 'result-selected');
       }
     });
-    dom.addClass(this.resultsChildrenEl[index], 'result-selected');
+    dom.addClass(this.optionsArr[index].target, 'result-selected');
   }
 
   // 列表鼠标经过
@@ -324,7 +325,7 @@ class Chosen {
 
   _closeByDoc(e){
     let chosen = dom.closest(e.target, '.chosen-container');
-    if(!chosen) this._openDrop(false);
+    if(!chosen && dom.hasClass(this.containerEl, 'chosen-container-active')) this._openDrop(false);
   }
 
   change(callback) {
