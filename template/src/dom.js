@@ -59,6 +59,23 @@ function blur() {
   document.activeElement && document.activeElement.blur();
 }
 
+function setAttributes(element, attributes) {
+  Object.keys(attributes).forEach(function(prop) {
+    const value = attributes[prop];
+    if (value !== false) {
+      element.setAttribute(prop, attributes[prop]);
+    } else {
+      element.removeAttribute(prop);
+    }
+  });
+}
+
+function setStyles(element, styles) {
+  Object.keys(styles).forEach(prop => {
+    element.style[prop] = styles[prop];
+  });
+}
+
 function insertHtml(el, position, html) {
   let positions = ['beforebegin', 'afterbegin', 'beforeend', 'afterend'];
   if (!positions.includes(position)) {
@@ -80,5 +97,7 @@ module.exports = {
   closest,
   getStyle,
   blur,
-  insertHtml
+  insertHtml,
+  setAttributes,
+  setStyles
 };
