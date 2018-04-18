@@ -19,7 +19,20 @@
     <script src="consola/consola.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new Consola();
+        var app = new Consola({
+            interception: true,
+            target: ".main",
+            position: "bottom",
+            size: 200,
+            zIndex: 99,
+            closeable: true,
+            onInput: function (input) {
+                return input;
+            },
+            onUpdate: function (output) {
+                alert(output);
+            }
+        });
     </script>
 </body>
 
