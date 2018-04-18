@@ -28,6 +28,7 @@
 * [24-clipboard.js(复制插件)](https://zhw2590582.github.io/100plugins/24-clipboard.js/)
 * [25-hotkey.js(键盘绑定插件)](https://zhw2590582.github.io/100plugins/25-hotkey.js/)
 * [26-chosen.js(下拉框插件)](https://zhw2590582.github.io/100plugins/26-chosen.js/)
+* [27-consola.js(日志拦截插件)](https://zhw2590582.github.io/100plugins/27-consola.js/)
 <!-- new -->
   
 ## 新建插件
