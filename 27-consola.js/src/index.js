@@ -13,7 +13,9 @@ let methods = ['log', 'warn', 'error', 'info', 'debug'];
 let targetEl, wrapEl, countEl, cleanEl;
 
 consola.creat = (options = {}) => {
-  options = { ...defaultOptions, ...options };
+  options = { ...defaultOptions,
+    ...options
+  };
   if (document.querySelector('.consola-container')) return;
   targetEl = document.querySelector(options.target);
   dom.insertHtml(
@@ -60,7 +62,7 @@ consola.clean = () => {
 function hookNative(nativeTarget, methods, callback) {
   for (let method of methods) {
     const nativeMethod = nativeTarget[method];
-    nativeTarget[method] = function() {
+    nativeTarget[method] = function () {
       nativeMethod.apply(this, arguments);
       callback(method, [...arguments]);
     };
@@ -70,14 +72,33 @@ function hookNative(nativeTarget, methods, callback) {
 function HTMLEncode(html) {
   let temp = document.createElement('div');
   html = html.map(item => {
-    return Array.isArray(item) ? `[${item.toString()}]` : item;
+    return typeof item === 'object' ? objToString(item) : item;
   });
-  temp.textContent != null
-    ? (temp.textContent = html)
-    : (temp.innerText = html);
+  temp.textContent != null ?
+    (temp.textContent = html) :
+    (temp.innerText = html);
   let output = temp.innerHTML;
   temp = null;
   return output;
+}
+
+function objToString(obj, ndeep) {
+  if (obj == null) {
+    return String(obj);
+  }
+  switch (typeof obj) {
+    case "string":
+      return '"' + obj + '"';
+    case "function":
+      return obj.toString();
+    case "object":
+      var isArray = Array.isArray(obj);
+      return '{[' [+isArray] + Object.keys(obj).map(function (key) {
+        return key + ': ' + objToString(obj[key], (ndeep || 1) + 1);
+      }).join(',') + '}]' [+isArray];
+    default:
+      return obj.toString();
+  }
 }
 
 window.consola = consola;
