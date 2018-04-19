@@ -1,6 +1,6 @@
 ## hoverParallax.js
 
-一个很简单的 Javascript 原生面向对象的鼠标经过时差插件
+一个很简单的 Javascript 原生面向对象的鼠标经过视差插件
 
 ## 使用
 
