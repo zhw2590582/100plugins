@@ -5,9 +5,18 @@
 ## 使用
 
 ```js
-import Consola from "./js/consola.js";
+import consola from "./js/consola.js";
 
-var app = new Consola();
+// 创建
+consola.creat({
+    target: 'body', // 目标父元素，默认body
+    position: 'right', // 挂载位置right、bottom，默认bottom
+    size: '300px', // 尺寸大小，默认300px
+    zIndex: 99 // z-index，默认99
+});
+
+// 清空
+consola.clean();
 
 ```
 ## 开发
