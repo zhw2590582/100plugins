@@ -3,7 +3,6 @@ import dom from './dom.js';
 
 class HoverParallax {
   constructor(el = '.parallax') {
-    this.raf = -1;
     this.event = null;
     this.contanterEl = el instanceof Element ? el : document.querySelector(el);
     this.layerEls = [];
@@ -15,7 +14,7 @@ class HoverParallax {
   }
 
   _init() {
-    if(!this.contanterEl) throw new TypeError(`Can't find dom element: ${el}`);
+    if (!this.contanterEl) throw new TypeError(`Can't find dom element: ${el}`);
     window.addEventListener('mousemove', this._mousemove);
     this.contanterEl.addEventListener('mouseenter', this._mouseenter);
     this.contanterEl.addEventListener('mouseleave', this._mouseleave);
@@ -27,19 +26,21 @@ class HoverParallax {
     });
   }
 
-  _mousemove(event){
+  _mousemove(event) {
     this.event = event;
     let target = event.target;
-    if(event.path.includes(this.contanterEl)){
+    if (event.path.includes(this.contanterEl)) {
       let relPos = this._getRelPos();
       let baseOffset = Math.min(this.contanterEl.clientWidth, this.contanterEl.clientHeight) / 10;
       this.layerEls.forEach(layer => {
-        layer.el.style.transform = `translate3d(${layer.depth * relPos.x * baseOffset}px, ${layer.depth * relPos.y * baseOffset}px, 0px)`;
+        let x = layer.depth * relPos.x * baseOffset;
+        let y = layer.depth * relPos.y * baseOffset;
+        layer.el.style.transform = `translate3d(${x}px, ${y}px, 0px)`;
       });
     }
   }
 
-  _mouseenter(){
+  _mouseenter() {
     this.layerEls.forEach(layer => {
       layer.el.style.transition = `all 100ms ease`;
     });
@@ -50,14 +51,14 @@ class HoverParallax {
     }, 100);
   }
 
-  _mouseleave(){
+  _mouseleave() {
     this.layerEls.forEach(layer => {
       layer.el.style.transform = `translate3d(0px, 0px, 0px)`;
       layer.el.style.transition = `all 300ms ease`;
     });
   }
 
-  _getRelPos(){
+  _getRelPos() {
     let mX = this.event.pageX;
     let mY = this.event.pageY;
     let cX = this.contanterEl.offsetLeft;
@@ -72,11 +73,11 @@ class HoverParallax {
     }
   }
 
-  _clampNumber(num, a, b){
+  _clampNumber(num, a, b) {
     return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
   }
 
-  destroy(){
+  destroy() {
     window.removeEventListener('mousemove', this._mousemove);
     this.contanterEl.removeEventListener('mouseenter', this._mouseenter);
     this.contanterEl.removeEventListener('mouseleave', this._mouseleave);
