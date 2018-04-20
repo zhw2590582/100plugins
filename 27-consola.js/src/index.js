@@ -72,7 +72,13 @@ function hookNative(nativeTarget, methods, callback) {
 function HTMLEncode(html) {
   let temp = document.createElement('div');
   html = html.map(item => {
-    return typeof item === 'object' ? objToString(item) : item;
+    if(typeof item === 'object'){
+      return objToString(item);
+    } else if(typeof item === 'undefined'){
+      return 'undefined';
+    } else {
+      return item;
+    }
   });
   temp.textContent != null ?
     (temp.textContent = html) :
