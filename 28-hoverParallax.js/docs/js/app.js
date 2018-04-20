@@ -1,3 +1,3 @@
-consola.creat({
-  position: 'right'
-});
+// consola.creat({
+//   position: 'right'
+// });

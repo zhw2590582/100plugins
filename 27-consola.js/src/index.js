@@ -1,3 +1,4 @@
+import objToString from "obj-to-string";
 import './index.scss';
 import dom from './dom.js';
 
@@ -86,27 +87,6 @@ function HTMLEncode(html) {
   let output = temp.innerHTML;
   temp = null;
   return output;
-}
-
-function objToString(obj) {
-  switch (typeof obj) {
-      case "undefined":
-          return 'undefined';
-      case "object":
-          let type = Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
-          switch (type) {
-              case "null":
-                  return 'null';
-              case "array":
-                  return '[' + obj.map(key => objToString(key)).join(', ') + ']';
-              case 'object':
-                  return '{ ' + Object.keys(obj).map(key => key + ': ' + objToString(obj[key])).join(', ') + ' }';
-              default:
-                  return '[Unknown type: ' + type + ']';
-          }
-      default:
-          return obj.toString();
-  }
 }
 
 window.consola = consola;
