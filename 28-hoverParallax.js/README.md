@@ -7,7 +7,11 @@
 ```js
 import HoverParallax from "./js/hoverParallax.js";
 
-var app = new HoverParallax();
+// 只需要传一个dom选择器，视差偏移值在html的data-depth设置
+var app = new HoverParallax('.parallax');
+
+// 销毁插件
+app.destroy();
 
 ```
 ## 开发
