@@ -88,22 +88,24 @@ function HTMLEncode(html) {
   return output;
 }
 
-function objToString(obj, ndeep) {
-  if (obj == null) {
-    return String(obj);
-  }
+function objToString(obj) {
   switch (typeof obj) {
-    case "string":
-      return '"' + obj + '"';
-    case "function":
-      return obj.toString();
-    case "object":
-      var isArray = Array.isArray(obj);
-      return '{[' [+isArray] + Object.keys(obj).map(function (key) {
-        return key + ': ' + objToString(obj[key], (ndeep || 1) + 1);
-      }).join(',') + '}]' [+isArray];
-    default:
-      return obj.toString();
+      case "undefined":
+          return 'undefined';
+      case "object":
+          let type = Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
+          switch (type) {
+              case "null":
+                  return 'null';
+              case "array":
+                  return '[' + obj.map(key => objToString(key)).join(', ') + ']';
+              case 'object':
+                  return '{ ' + Object.keys(obj).map(key => key + ': ' + objToString(obj[key])).join(', ') + ' }';
+              default:
+                  return '[Unknown type: ' + type + ']';
+          }
+      default:
+          return obj.toString();
   }
 }
 
