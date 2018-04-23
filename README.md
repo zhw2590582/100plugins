@@ -30,7 +30,8 @@
 * [26-chosen.js(下拉框插件)](https://zhw2590582.github.io/100plugins/26-chosen.js/)
 * [27-consola.js(日志拦截插件)](https://zhw2590582.github.io/100plugins/27-consola.js/)
 * [28-hoverParallax.js(鼠标经过视差插件)](https://zhw2590582.github.io/100plugins/28-hoverParallax.js/)
-* [29-domInfo.js(DOM属性查看插件)](https://zhw2590582.github.io/100plugins/29-domInfo.js/)
+* [29-domInfo.js(DOM属性查看插件--未完成)](https://zhw2590582.github.io/100plugins/29-domInfo.js/)
+* [30-flexTest.js(flex测试插件)](https://zhw2590582.github.io/100plugins/30-flexTest.js/)
 <!-- new -->
   
 ## 新建插件
