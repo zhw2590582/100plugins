@@ -3,8 +3,9 @@ const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const autoprefixer = require("autoprefixer");
+const { CheckerPlugin } = require('awesome-typescript-loader')
 const env = process.env.WEBPACK_ENV;
-const name = 'domInfo';
+const name = '{{name}}';
 
 module.exports = {
   cache: false,
@@ -19,7 +20,6 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
   },
-  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -69,6 +69,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new CheckerPlugin(),
     new MiniCssExtractPlugin({
       filename: name + "/" + name + ".css"
     }),

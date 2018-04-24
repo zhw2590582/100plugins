@@ -73,6 +73,7 @@ function renderTemplateFiles() {
 }
 
 function addLink() {
+  if(pluginDir === '00-test.js') return;
   const mark = '<!-- new -->';
   const newPlugin = `* [${pluginDir}(${description}插件)](https://zhw2590582.github.io/100plugins/${pluginDir}/)\n${mark}`;
   const markup = fs.readFileSync(path.join(__dirname, '../README.md'), 'utf8');
