@@ -16,6 +16,10 @@ module.exports = {
     filename: name + "/" + name + ".js",
     libraryTarget: "umd"
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js']
+  },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -26,6 +30,13 @@ module.exports = {
           options: {
             presets: ["env"]
           }
+        }
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "awesome-typescript-loader"
         }
       },
       {
