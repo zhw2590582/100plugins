@@ -29,7 +29,7 @@ interface ChildrenConfigs {
 }
 
 import './index.scss';
-import { setStyles, hasClass, insertHtml } from './utils';
+import { setStyles, hasClass } from './utils';
 
 class Split {
   private options: Options;
