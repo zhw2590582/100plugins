@@ -70,14 +70,14 @@ export function setAttributes(el: Element, attributes: any): void {
   });
 }
 
-export function setStyles(el: HTMLElement, styles: any): void {
+export function setStyles(el: any, styles: any): void {
   Object.keys(styles).forEach((prop: any) => {
     el.style[prop] = styles[prop];
   });
 }
 
 export function insertHtml(
-  el: HTMLElement,
+  el: any,
   position: InsertPosition,
   html: string
 ): void {

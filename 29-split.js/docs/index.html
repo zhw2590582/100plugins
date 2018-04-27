@@ -16,13 +16,32 @@
 </head>
 
 <body>
-    <div class="main">split</div>
+    <div class="main">
+        <div class="split-parent" data-split="vertical" data-min-size="50" data-max-size="200" data-default-size="100" style="color: #000">
+            <div class="split-children"></div>
+            <div class="split-children">
+                <div class="split-parent" data-split="horizontal" data-step="50" data-min-size="50" data-max-size="200" data-default-size="100">
+                    <div class="split-children" style="color: #111"></div>
+                    <div class="split-children"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="js/consola.js"></script>
     <script>consola.creat({ position: 'right' });</script>
     <script src="split/split.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new Split();
+        var app = new Split({
+            parent: '.split-parent',
+            children: '.split-children',
+            onDragStart: function(){
+                //
+            },
+            onDragEnd: function(){
+                //
+            },
+        });
     </script>
 </body>
 

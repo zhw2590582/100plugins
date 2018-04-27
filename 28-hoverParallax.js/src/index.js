@@ -14,7 +14,7 @@ class HoverParallax {
   }
 
   _init() {
-    if (!this.contanterEl) throw new TypeError(`Can't find dom element: ${el}`);
+    if (!this.contanterEl) throw new TypeError(`Can't find dom element`);
     window.addEventListener('mousemove', this._mousemove);
     this.contanterEl.addEventListener('mouseenter', this._mouseenter);
     this.contanterEl.addEventListener('mouseleave', this._mouseleave);
