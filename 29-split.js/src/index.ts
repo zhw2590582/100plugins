@@ -15,6 +15,11 @@ interface Configs {
   defaultSize: number;
   resizerEl?: HTMLElement;
   cacheStyle?: string;
+  move: boolean;
+  cachePos?: {
+    x: number;
+    y: number;
+  };
 }
 
 interface ChildrenConfigs {
@@ -30,7 +35,6 @@ class Split {
   private options: Options;
   private parentEl: HTMLElement;
   private configs: Configs;
-  private move: boolean;
 
   private constructor(options: Options = {}) {
     this.options = {
@@ -74,6 +78,8 @@ class Split {
     let childrenEl = children.filter(el =>
       hasClass(el, this.options.children.slice(1))
     );
+    let defaultSize = Number(parentEl.dataset.defaultSize || 100);
+    let split = ['vertical', 'horizontal'].includes(parentEl.dataset.split) ? parentEl.dataset.split : 'vertical';
     return {
       parentEl: parentEl,
       childrenConfigs: childrenEl.map((children: HTMLElement) => {
@@ -90,9 +96,14 @@ class Split {
       }),
       minSize: Number(parentEl.dataset.minSize || 0),
       maxSize: Number(parentEl.dataset.maxSize || 0),
-      defaultSize: Number(parentEl.dataset.defaultSize || 100),
-      split: parentEl.dataset.split || 'vertical',
-      step: Number(parentEl.dataset.step || 0)
+      defaultSize: defaultSize,
+      split: split,
+      step: Number(parentEl.dataset.step || 0),
+      move: false,
+      cachePos: {
+        x: parentEl.dataset.split === 'vertical' ? defaultSize : 0,
+        y: parentEl.dataset.split === 'horizontal' ? defaultSize : 0
+      }
     };
   }
 
@@ -169,15 +180,15 @@ class Split {
   }
 
   private _mousedown(e: MouseEvent): void {
-    console.log('_mousedown')
+    console.log('_mousedown');
   }
 
   private _mousemove(e: MouseEvent): void {
-    console.log('_mousemove')
+    console.log('_mousemove');
   }
 
   private _mouseup(e: MouseEvent): void {
-    console.log('_mouseup')
+    console.log('_mouseup');
   }
 
   private _after(target: Element, dom: Element): void {
