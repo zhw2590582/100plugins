@@ -30,6 +30,7 @@ class Split {
   private options: Options;
   private parentEl: HTMLElement;
   private configs: Configs;
+  private move: boolean;
 
   private constructor(options: Options = {}) {
     this.options = {
@@ -39,6 +40,9 @@ class Split {
 
     this.parentEl = document.querySelector(options.parent);
     this.configs = this._getConfigs(this.parentEl);
+    this._mousedown = this._mousedown.bind(this);
+    this._mousemove = this._mousemove.bind(this);
+    this._mouseup = this._mouseup.bind(this);
     this._init();
   }
 
@@ -155,7 +159,25 @@ class Split {
   }
 
   private _eventBind(configs: Configs): void {
-    //
+    configs.resizerEl.addEventListener('mousedown', this._mousedown);
+    configs.resizerEl.addEventListener('mousemove', this._mousemove);
+    configs.resizerEl.addEventListener('mouseup', this._mouseup);
+    if (!configs.childrenConfigs) return;
+    configs.childrenConfigs.forEach(item => {
+      item.subConfigs && this._eventBind(item.subConfigs);
+    });
+  }
+
+  private _mousedown(e: MouseEvent): void {
+    console.log('_mousedown')
+  }
+
+  private _mousemove(e: MouseEvent): void {
+    console.log('_mousemove')
+  }
+
+  private _mouseup(e: MouseEvent): void {
+    console.log('_mouseup')
   }
 
   private _after(target: Element, dom: Element): void {
@@ -167,10 +189,12 @@ class Split {
   }
 
   public destroy(configs: Configs): void {
-    // 解绑事件
+    configs.resizerEl.removeEventListener('mousedown', this._mousedown);
+    configs.resizerEl.removeEventListener('mousemove', this._mousemove);
+    configs.resizerEl.removeEventListener('mouseup', this._mouseup);
     setStyles(configs.parentEl, configs.cacheStyle);
+    if (!configs.childrenConfigs) return;
     configs.childrenConfigs.forEach(item => {
-      // 解绑事件
       setStyles(item.children, item.cacheStyle);
       item.subConfigs && this.destroy(item.subConfigs);
     });
