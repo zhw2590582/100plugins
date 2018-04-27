@@ -1,8 +1,14 @@
+interface Options {
+
+}
+
 import './index.scss';
-import dom from './dom.js';
+import {} from './utils';
 
 class {{className}} {
-  constructor(options) {
+  private options: Options;
+
+  private constructor(options: Options = {}) {
     this.options = {
       ...{{className}}.DEFAULTS,
       ...options
@@ -17,10 +23,14 @@ class {{className}} {
     };
   }
 
-  _init() {
+  private _init() {
     console.log(this)
+  }
+
+  public destroy() {
+
   }
 }
 
-window.{{className}} = {{className}};
-module.exports = {{className}};
+(<any>window).{{className}} = {{className}};
+export default {{className}};

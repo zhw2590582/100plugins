@@ -17,8 +17,9 @@
 
 <body>
     <div class="main">{{name}}</div>
-    <script src="{{name}}/{{name}}.js"></script>
     <script src="js/consola.js"></script>
+    <script>consola.creat({ position: 'right' });</script>
+    <script src="{{name}}/{{name}}.js"></script>
     <script src="js/app.js"></script>
     <script>
         var app = new {{className}}();

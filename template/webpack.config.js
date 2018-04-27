@@ -18,7 +18,7 @@ module.exports = {
     libraryTarget: "umd"
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    extensions: ['.ts', '.js', '.scss']
   },
   module: {
     rules: [

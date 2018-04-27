@@ -1,3 +1,0 @@
-consola.creat({
-  position: 'right'
-});
