@@ -30,6 +30,7 @@
 * [26-chosen.js(下拉框插件)](https://zhw2590582.github.io/100plugins/26-chosen.js/)
 * [27-consola.js(日志拦截插件)](https://zhw2590582.github.io/100plugins/27-consola.js/)
 * [28-hoverParallax.js(鼠标经过视差插件)](https://zhw2590582.github.io/100plugins/28-hoverParallax.js/)
+* [29-split.js(视图分割插件)](https://zhw2590582.github.io/100plugins/29-split.js/)
 <!-- new -->
   
 ## 新建插件
