@@ -17,12 +17,27 @@
 
 <body>
     <div class="main">
-        <div class="split-parent" data-split="vertical" data-min-size="50" data-max-size="200" data-default-size="100">
-            <div class="split-children"></div>
+        <div class="split-parent" data-split="vertical" data-min-size="50" data-max-size="500" data-default-size="100">
+            <div class="split-children">1</div>
             <div class="split-children">
-                <div class="split-parent" data-split="horizontal" data-step="50" data-min-size="50" data-max-size="200" data-default-size="100">
-                    <div class="split-children"></div>
-                    <div class="split-children"></div>
+                <div class="split-parent" data-split="horizontal">
+                    <div class="split-children">2</div>
+                    <div class="split-children">
+                        <div class="split-parent" data-split="vertical">
+                            <div class="split-children">3</div>
+                            <div class="split-children">
+                                <div class="split-parent" data-split="horizontal">
+                                    <div class="split-children">4</div>
+                                    <div class="split-children">
+                                        <div class="split-parent" data-split="vertical">
+                                            <div class="split-children">5</div>
+                                            <div class="split-children">6</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,11 +50,11 @@
         var app = new Split({
             parent: '.split-parent',
             children: '.split-children',
-            onDragStart: function(){
-                //
+            onDragStart: function(e){
+                console.log(e)
             },
-            onDragEnd: function(){
-                //
+            onDragEnd: function(e){
+                console.log(e)
             },
         });
     </script>
