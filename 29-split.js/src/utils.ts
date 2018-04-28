@@ -84,5 +84,3 @@ export function insertHtml(
   let positions = ['beforebegin', 'afterbegin', 'beforeend', 'afterend'];
   positions.includes(position) && el.insertAdjacentHTML(position, html);
 }
-
-export default {}

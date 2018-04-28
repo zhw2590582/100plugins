@@ -4,16 +4,14 @@ interface Options {
   defaultSize?: number;
   minSize?: number;
   maxSize?: number;
-  step?: number;
-  onDragStart?(e: MouseEvent): void;
-  onDragEnd?(e: MouseEvent): void;
+  onDragStart?(e: MouseEvent, el: Element): void;
+  onDragEnd?(e: MouseEvent, el: Element): void;
 }
 
 interface Config {
   parentEl: HTMLElement;
   childrenConfig: ChildrenConfig[];
   split: string;
-  step: number;
   minSize: number;
   maxSize: number;
   defaultSize: number;
@@ -65,7 +63,6 @@ class Split {
       defaultSize: 100,
       minSize: 0,
       maxSize: Infinity,
-      step: 0,
       onDragStart: function() {},
       onDragEnd: function() {}
     };
@@ -97,12 +94,9 @@ class Split {
       Number(parentEl.dataset.defaultSize || this.options.defaultSize) || 0;
     let minSize = Number(parentEl.dataset.minSize || this.options.minSize) || 0;
     let maxSize = Number(parentEl.dataset.maxSize || this.options.maxSize) || 0;
-    let step = Number(parentEl.dataset.step || this.options.step) || 0;
 
-    if (defaultSize < 0 || minSize < 0 || maxSize < 0 || step < 0) {
-      throw new TypeError(
-        `defaultSize | minSize | maxSize | step: can't less than 0`
-      );
+    if (defaultSize < 0 || minSize < 0 || maxSize < 0) {
+      throw new TypeError(`defaultSize | minSize | maxSize: can't less than 0`);
     }
 
     if (minSize > maxSize) {
@@ -132,7 +126,6 @@ class Split {
       maxSize: maxSize,
       defaultSize: defaultSize,
       split: split,
-      step: this._clampNumber(step, 0, 100),
       cacheStyle: parentEl.getAttribute('style'),
       move: false
     });
@@ -238,7 +231,7 @@ class Split {
     if (newSize === oldSize) return;
     if (newSize > config.minSize && newSize < config.maxSize) {
       this._unFocus(document, window);
-      this.options.onDragStart(e);
+      this.options.onDragStart(e, childrenEl);
       setStyles(childrenEl, {
         [sizeType]: newSize + 'px'
       });
@@ -248,8 +241,12 @@ class Split {
   }
 
   private _mouseup(e: MouseEvent): void {
-    this.moveIndex = -1;
-    this.options.onDragEnd(e);
+    if (this.moveIndex > -1) {
+      let config = this.configs[this.moveIndex];
+      let childrenEl = config.childrenConfig[0].childrenEl;
+      this.moveIndex = -1;
+      this.options.onDragEnd(e, childrenEl);
+    }
   }
 
   private _after(target: Element, dom: Element): void {

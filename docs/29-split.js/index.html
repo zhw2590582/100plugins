@@ -50,11 +50,14 @@
         var app = new Split({
             parent: '.split-parent',
             children: '.split-children',
-            onDragStart: function(e){
-                console.log(e)
+            defaultSize: 100,
+            minSize: 50,
+            maxSize: 500,
+            onDragStart: function(e, el){
+                console.log('开始：' + el.textContent);
             },
-            onDragEnd: function(e){
-                console.log(e)
+            onDragEnd: function(e, el){
+                console.log('结束：' + el.textContent);
             },
         });
     </script>

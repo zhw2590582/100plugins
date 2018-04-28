@@ -51,9 +51,9 @@ export function closest(el: Element, selector: string): Element {
 }
 
 export function getStyle(
-  el: Element,
+  el: any,
   property: string,
-  isNum: boolean
+  isNum?: boolean
 ): string | number {
   let val = window.getComputedStyle(el, null).getPropertyValue(property);
   return isNum ? parseFloat(val) : val;
@@ -70,19 +70,17 @@ export function setAttributes(el: Element, attributes: any): void {
   });
 }
 
-export function setStyles(el: HTMLElement, styles: any): void {
+export function setStyles(el: any, styles: any): void {
   Object.keys(styles).forEach((prop: any) => {
     el.style[prop] = styles[prop];
   });
 }
 
 export function insertHtml(
-  el: HTMLElement,
+  el: any,
   position: InsertPosition,
   html: string
 ): void {
   let positions = ['beforebegin', 'afterbegin', 'beforeend', 'afterend'];
   positions.includes(position) && el.insertAdjacentHTML(position, html);
 }
-
-export default {}
