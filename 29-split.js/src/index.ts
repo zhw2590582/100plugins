@@ -229,15 +229,11 @@ class Split {
     let newSize = oldSize + (sizeType === 'width' ? moveX : moveY);
     newSize = this._clampNumber(newSize, config.minSize, config.maxSize);
     if (newSize === oldSize) return;
-    if (newSize > config.minSize && newSize < config.maxSize) {
-      this._unFocus(document, window);
-      this.options.onDragStart(e, childrenEl);
-      setStyles(childrenEl, {
-        [sizeType]: newSize + 'px'
-      });
-    } else {
-      this._mouseup(e);
-    }
+    this._unFocus(document, window);
+    this.options.onDragStart(e, childrenEl);
+    setStyles(childrenEl, {
+      [sizeType]: newSize + 'px'
+    });
   }
 
   private _mouseup(e: MouseEvent): void {
