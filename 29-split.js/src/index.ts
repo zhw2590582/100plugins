@@ -20,10 +20,6 @@ interface Config {
   resizerEl?: HTMLElement;
   cacheStyle: string | null;
   move: boolean;
-  cachePos: {
-    x: number;
-    y: number;
-  };
 }
 
 interface ChildrenConfig {
@@ -32,13 +28,18 @@ interface ChildrenConfig {
 }
 
 import './index.scss';
-import { setStyles, hasClass } from './utils';
+import { setStyles, getStyle, hasClass } from './utils';
 
 class Split {
   private options: Options;
   private containerEl: HTMLElement;
   private configs: Config[];
   private moveIndex: number;
+  private mousedown: boolean;
+  private cachePos: {
+    x: number;
+    y: number;
+  };
 
   private constructor(options: Options = {}) {
     this.options = {
@@ -49,6 +50,8 @@ class Split {
     this.containerEl = document.querySelector(options.parent);
     this.configs = [];
     this.moveIndex = -1;
+    this.mousedown = false;
+    this.cachePos = { x: 0, y: 0 };
     this._mousedown = this._mousedown.bind(this);
     this._mousemove = this._mousemove.bind(this);
     this._mouseup = this._mouseup.bind(this);
@@ -60,8 +63,8 @@ class Split {
       parent: '.split-parent',
       children: '.split-children',
       defaultSize: 100,
-      minSize: 10,
-      maxSize: 1000,
+      minSize: 0,
+      maxSize: Infinity,
       step: 0,
       onDragStart: function() {},
       onDragEnd: function() {}
@@ -78,7 +81,6 @@ class Split {
       this._creatResizer(config);
       this._eventBind(config);
     });
-    console.log(this);
   }
 
   private _getConfigs(parentEl: HTMLElement): void {
@@ -91,21 +93,28 @@ class Split {
       hasClass(el, this.options.children.slice(1))
     );
 
-    let defaultSize = Number(parentEl.dataset.defaultSize || this.options.defaultSize) || 0;
+    let defaultSize =
+      Number(parentEl.dataset.defaultSize || this.options.defaultSize) || 0;
     let minSize = Number(parentEl.dataset.minSize || this.options.minSize) || 0;
     let maxSize = Number(parentEl.dataset.maxSize || this.options.maxSize) || 0;
     let step = Number(parentEl.dataset.step || this.options.step) || 0;
 
-    if(defaultSize < 0 || minSize < 0 || maxSize < 0 || step < 0){
-      throw new TypeError(`defaultSize | minSize | maxSize | step: can't less than 0`);
+    if (defaultSize < 0 || minSize < 0 || maxSize < 0 || step < 0) {
+      throw new TypeError(
+        `defaultSize | minSize | maxSize | step: can't less than 0`
+      );
     }
 
-    if(minSize > maxSize){
-      throw new TypeError(`minSize(${minSize}) can't greater than minSize(${maxSize})`);
+    if (minSize > maxSize) {
+      throw new TypeError(
+        `minSize(${minSize}) can't greater than minSize(${maxSize})`
+      );
     }
 
-    if(minSize > defaultSize || maxSize < defaultSize){
-      throw new TypeError(`defaultSize(${defaultSize}) can't less than minSize(${minSize}), or can't greater than maxSize(${maxSize})`);
+    if (minSize > defaultSize || maxSize < defaultSize) {
+      throw new TypeError(
+        `defaultSize(${defaultSize}) can't less than minSize(${minSize}), or can't greater than maxSize(${maxSize})`
+      );
     }
 
     let split = ['vertical', 'horizontal'].includes(parentEl.dataset.split)
@@ -125,11 +134,7 @@ class Split {
       split: split,
       step: this._clampNumber(step, 0, 100),
       cacheStyle: parentEl.getAttribute('style'),
-      move: false,
-      cachePos: {
-        x: parentEl.dataset.split === 'vertical' ? defaultSize : 0,
-        y: parentEl.dataset.split === 'horizontal' ? defaultSize : 0
-      }
+      move: false
     });
 
     children.forEach(el => {
@@ -200,29 +205,46 @@ class Split {
   }
 
   private _eventBind(config: Config): void {
-    window.addEventListener('mousedown', this._mousedown);
-    window.addEventListener('mousemove', this._mousemove);
-    window.addEventListener('mouseup', this._mouseup);
+    document.addEventListener('mousedown', this._mousedown);
+    document.addEventListener('mousemove', this._mousemove);
+    document.addEventListener('mouseup', this._mouseup);
   }
 
   private _mousedown(e: MouseEvent): void {
     this.moveIndex = this.configs.findIndex(
       config => config.resizerEl === e.target
     );
+    if (this.moveIndex < 0) return;
+    this.cachePos = {
+      x: e.pageX,
+      y: e.pageY
+    };
   }
 
   private _mousemove(e: MouseEvent): void {
-    let resizerEl = e.target;
     if (this.moveIndex < 0) return;
-
-    if (this.configs[this.moveIndex].resizerEl !== resizerEl) {
-      this.moveIndex = -1;
-      this.options.onDragEnd(e);
-      return;
+    let config = this.configs[this.moveIndex];
+    let childrenEl = config.childrenConfig[0].childrenEl;
+    let moveX = e.pageX - this.cachePos.x;
+    let moveY = e.pageY - this.cachePos.y;
+    this.cachePos = {
+      x: e.pageX,
+      y: e.pageY
+    };
+    let sizeType = config.split === 'vertical' ? 'width' : 'height';
+    let oldSize = <number>getStyle(childrenEl, sizeType, true);
+    let newSize = oldSize + (sizeType === 'width' ? moveX : moveY);
+    newSize = this._clampNumber(newSize, config.minSize, config.maxSize);
+    if (newSize === oldSize) return;
+    if (newSize > config.minSize && newSize < config.maxSize) {
+      this._unFocus(document, window);
+      this.options.onDragStart(e);
+      setStyles(childrenEl, {
+        [sizeType]: newSize + 'px'
+      });
+    } else {
+      this._mouseup(e);
     }
-
-    this.options.onDragStart(e);
-    console.log('_mousemove', this.moveIndex);
   }
 
   private _mouseup(e: MouseEvent): void {
@@ -242,11 +264,21 @@ class Split {
     return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
   }
 
+  private _unFocus(document: any, window: any) {
+    if (document.selection) {
+      document.selection.empty();
+    } else {
+      try {
+        window.getSelection().removeAllRanges();
+      } catch (e) {}
+    }
+  }
+
   public destroy(): void {
     this.configs.forEach(config => {
-      window.removeEventListener('mousedown', this._mousedown);
-      window.removeEventListener('mousemove', this._mousemove);
-      window.removeEventListener('mouseup', this._mouseup);
+      document.removeEventListener('mousedown', this._mousedown);
+      document.removeEventListener('mousemove', this._mousemove);
+      document.removeEventListener('mouseup', this._mouseup);
       config.parentEl.style.cssText = config.cacheStyle || '';
       if (!config.childrenConfig) return;
       config.childrenConfig.forEach(item => {

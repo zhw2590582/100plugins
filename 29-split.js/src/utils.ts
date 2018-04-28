@@ -51,9 +51,9 @@ export function closest(el: Element, selector: string): Element {
 }
 
 export function getStyle(
-  el: Element,
+  el: any,
   property: string,
-  isNum: boolean
+  isNum?: boolean
 ): string | number {
   let val = window.getComputedStyle(el, null).getPropertyValue(property);
   return isNum ? parseFloat(val) : val;
