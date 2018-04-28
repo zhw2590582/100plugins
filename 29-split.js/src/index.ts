@@ -48,7 +48,6 @@ class Split {
     this.containerEl = document.querySelector(options.parent);
     this.configs = [];
     this.moveIndex = -1;
-    this.mousedown = false;
     this.cachePos = { x: 0, y: 0 };
     this._mousedown = this._mousedown.bind(this);
     this._mousemove = this._mousemove.bind(this);
@@ -171,7 +170,7 @@ class Split {
           }
     );
 
-    if (!config.childrenConfig) return;
+    if (!config.childrenConfig.length) return;
     config.childrenConfig.forEach((item, index) => {
       let isLast = index === config.childrenConfig.length - 1;
       setStyles(item.childrenEl, {
@@ -186,7 +185,7 @@ class Split {
   }
 
   private _creatResizer(config: Config): void {
-    if (!config.childrenConfig) return;
+    if (!config.childrenConfig.length) return;
     config.childrenConfig.forEach((item, index) => {
       let isLast = index === config.childrenConfig.length - 1;
       if (!isLast) {
@@ -273,7 +272,7 @@ class Split {
       document.removeEventListener('mousemove', this._mousemove);
       document.removeEventListener('mouseup', this._mouseup);
       config.parentEl.style.cssText = config.cacheStyle || '';
-      if (!config.childrenConfig) return;
+      if (!config.childrenConfig.length) return;
       config.childrenConfig.forEach(item => {
         let childrenEl = <HTMLElement>item.childrenEl;
         childrenEl.style.cssText = item.cacheStyle || '';
