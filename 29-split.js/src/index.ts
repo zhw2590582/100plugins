@@ -271,8 +271,8 @@ class Split {
       config.parentEl.style.cssText = config.cacheStyle || '';
       if (!config.childrenConfig.length) return;
       config.childrenConfig.forEach(item => {
-        let childrenEl = <HTMLElement>item.childrenEl;
-        childrenEl.style.cssText = item.cacheStyle || '';
+        // @ts-ignore
+        item.childrenEl.style.cssText = item.cacheStyle || '';
       });
     });
   }
