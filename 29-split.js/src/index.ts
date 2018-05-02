@@ -17,7 +17,6 @@ interface Config {
   defaultSize: number;
   resizerEl?: HTMLElement;
   cacheStyle: string | null;
-  move: boolean;
 }
 
 interface ChildrenConfig {
@@ -33,7 +32,6 @@ class Split {
   private containerEl: HTMLElement;
   private configs: Config[];
   private moveIndex: number;
-  private mousedown: boolean;
   private cachePos: {
     x: number;
     y: number;
@@ -125,8 +123,7 @@ class Split {
       maxSize: maxSize,
       defaultSize: defaultSize,
       split: split,
-      cacheStyle: parentEl.getAttribute('style'),
-      move: false
+      cacheStyle: parentEl.getAttribute('style')
     });
 
     children.forEach(el => {
