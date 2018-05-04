@@ -84,3 +84,7 @@ export function insertHtml(
   let positions = ['beforebegin', 'afterbegin', 'beforeend', 'afterend'];
   positions.includes(position) && el.insertAdjacentHTML(position, html);
 }
+
+export function clamp(num: number, a: number, b: number): number {
+  return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
+}
