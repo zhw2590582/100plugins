@@ -16,7 +16,8 @@ interface Tree {
 }
 
 interface Configs extends Tree {
-  target: HTMLElement;
+  inputTarget?: HTMLElement;
+  path?: string;
 }
 
 import './index.scss';
@@ -31,7 +32,7 @@ import {
 
 class Tree {
   private options: Options;
-  private configs: Tree[];
+  private configs: Configs[];
   private containerEl: HTMLElement;
   private treeEl: HTMLElement;
   private checkedList: string[];
@@ -43,7 +44,6 @@ class Tree {
     };
 
     this.checkedList = [];
-    this.configs = [...this.options.nodes];
     this.containerEl = document.querySelector(options.el);
     this._eventBind = this._eventBind.bind(this);
     this._init();
@@ -55,55 +55,45 @@ class Tree {
       nodes: [],
       checkbox: true,
       accordion: true,
-      onCheck: function() {},
-      onExpand: function() {}
+      onCheck: function () { },
+      onExpand: function () { }
     };
   }
 
   private _init(): this {
+    this.configs = this._setPath(this.options.nodes);
     this._creatDom();
+    this.configs = this._getPath(this.configs);
+    this.treeEl.addEventListener('click', this._eventBind);
+    console.log(this)
     return this;
   }
 
   private _creatDom(): void {
     let self = this;
-    let htmlStr = (function getStr(tree: Tree[]): string {
+    let htmlStr = (function getStr(tree: Configs[]): string {
       return tree
         .map(item => {
           return `
           <li class="tree-parent${item.expanded ? ' expanded' : ''}">
             <div class="tree-text">
-              ${
-                item.children && item.children.length > 0
-                  ? '<span class="tree-expanded">expanded</span>'
-                  : ''
-              }
-              ${
-                self.options.checkbox
-                  ? `
-                  <span class="tree-checked">
-                    <input class="tree-checkbox" type="checkbox" value="${
-                      item.value
-                    }" ${item.checked ? ' checked' : ''}>
-                  </span>
-                  `
-                  : ''
+              ${item.children && item.children.length > 0 ? '<span class="tree-expanded">expanded</span>' : ''}
+              ${self.options.checkbox ? `
+                <span class="tree-checked">
+                  <input class="tree-checkbox" type="checkbox" data-tree-path="${item.path}" value="${item.value}" ${item.checked ? ' checked' : ''}>
+                </span>
+                ` : ''
               }
               <span class="tree-label">${item.label}</span>
             </div>
-            ${item.children ? `<ol> ${getStr(item.children)} </ol>` : ''}
+            ${item.children && item.children.length > 0 ? `<ol> ${getStr(item.children)} </ol>` : ''}
           </li>
         `;
         })
         .join('');
     })(this.configs);
-    insertHtml(
-      this.containerEl,
-      'beforeend',
-      `<ol class="tree-el"> ${htmlStr} </ol>`
-    );
+    insertHtml(this.containerEl, 'beforeend', `<ol class="tree-el"> ${htmlStr} </ol>`);
     this.treeEl = this.containerEl.querySelector('.tree-el');
-    this.treeEl.addEventListener('click', this._eventBind);
   }
 
   private _eventBind(e: MouseEvent): void {
@@ -139,7 +129,7 @@ class Tree {
       const siblingCheckboxs = <HTMLInputElement[]>Array.from(olParent.children).map(item => item.children[0].querySelector('.tree-checkbox'));
       const siblingCheckboxsLength = siblingCheckboxs.length;
       const siblingCheckedLength = siblingCheckboxs.filter(item => item.checked).length;
-      if(olParent.previousElementSibling){
+      if (olParent.previousElementSibling) {
         const parentCheckbox = <HTMLInputElement>olParent.previousElementSibling.querySelector('.tree-checkbox');
         parentCheckbox.indeterminate = siblingCheckboxsLength > siblingCheckedLength && siblingCheckedLength !== 0;
         parentCheckbox.checked = siblingCheckedLength === siblingCheckboxsLength
@@ -148,8 +138,32 @@ class Tree {
     }
   }
 
+  private _setPath(tree: Tree[], deep?: string): Configs[] {
+    return (function setPath(tree, deep): Configs[] {
+      return tree.map((item, index) => {
+        let path = `${deep ? deep + '.' : ''}${index}`;
+        return Object.assign({}, item, {
+          path: path,
+          children: item.children ? setPath(item.children, path) : []
+        });
+      });
+    })(tree, deep);
+  }
+
+  private _getPath(configs: Configs[]): Configs[] {
+    let self = this;
+    return (function getPath(configs): Configs[] {
+      return configs.map(item => {
+        return Object.assign({}, item, {
+          inputTarget: self.containerEl.querySelector(`[data-tree-path='${item.path}']`),
+          children: item.children ? getPath(item.children) : []
+        });
+      })
+    })(configs);
+  }
+
   public setTree(tree: Tree[]): this {
-    this.configs = tree;
+    this.configs = this._setPath(tree);
     this.destroy()._init();
     return this;
   }
