@@ -30,7 +30,8 @@
             expanded: true,
             children: [
                 { value: 'value1-1', label: 'label1-1' },
-                { value: 'value1-2', label: 'label1-2' }
+                { value: 'value1-2', label: 'label1-2' },
+                { value: 'value1-3', label: 'label1-3' }
             ],
         }, {
             value: 'value2',
@@ -39,7 +40,8 @@
             expanded: false,
             children: [
                 { value: 'value2-1', label: 'label2-1' },
-                { value: 'value2-2', label: 'label2-2' }
+                { value: 'value2-2', label: 'label2-2' },
+                { value: 'value2-3', label: 'label2-3' }
             ]
         }, {
             value: 'value3',
@@ -47,8 +49,39 @@
             checked: false,
             expanded: true,
             children: [
-                { value: 'value3-1', label: 'label3-1' },
-                { value: 'value3-2', label: 'label3-2' }
+                {
+                    value: 'value3-3',
+                    label: 'label3-3',
+                    checked: false,
+                    expanded: true,
+                    children: [
+                        { value: 'value3-1', label: 'label3-1' },
+                        { value: 'value3-2', label: 'label3-2' },
+                        { value: 'value3-3', label: 'label3-3' }
+                    ]
+                },
+                {
+                    value: 'value3-3',
+                    label: 'label3-3',
+                    checked: false,
+                    expanded: true,
+                    children: [
+                        { value: 'value3-1', label: 'label3-1' },
+                        { value: 'value3-2', label: 'label3-2' },
+                        { value: 'value3-3', label: 'label3-3' }
+                    ]
+                },
+                {
+                    value: 'value3-3',
+                    label: 'label3-3',
+                    checked: false,
+                    expanded: true,
+                    children: [
+                        { value: 'value3-1', label: 'label3-1' },
+                        { value: 'value3-2', label: 'label3-2' },
+                        { value: 'value3-3', label: 'label3-3' }
+                    ]
+                },
             ]
         }];
 
@@ -56,6 +89,7 @@
             el: '.tree-container',
             nodes: nodes,
             checkbox: true,
+            accordion: true,
             onCheck: function (e, data) {
                 console.log(e)
             },

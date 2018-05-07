@@ -34,6 +34,10 @@ export function hasClass(el: Element, className: string): boolean {
   return el.classList.contains(className);
 }
 
+export function toggleClass(el: Element, className: string): boolean {
+  return el.classList.toggle(className);
+}
+
 export function removeElement(el: Element): void {
   el && el.parentNode && el.parentNode.removeChild(el);
 }
