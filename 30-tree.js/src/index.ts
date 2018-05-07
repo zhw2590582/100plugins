@@ -82,9 +82,9 @@ class Tree {
                 self.options.checkbox
                   ? `
                   <span class="tree-checked">
-                    <input class="tree-checkbox" type="checkbox" value="${item.value}" ${
-                      item.checked ? ' checked' : ''
-                    }>
+                    <input class="tree-checkbox" type="checkbox" value="${
+                      item.value
+                    }" ${item.checked ? ' checked' : ''}>
                   </span>
                   `
                   : ''
@@ -116,19 +116,36 @@ class Tree {
   }
 
   private _expandedEvent(e: MouseEvent): void {
-    const target = closest(<Element>e.target, '.tree-parent');
-    toggleClass(target, 'expanded');
+    const liParent = closest(<Element>e.target, '.tree-parent');
+    toggleClass(liParent, 'expanded');
     if (this.options.accordion) {
-      const parent = closest(<Element>e.target, 'ol');
-      Array.from(parent.children)
-        .filter(children => children !== target)
+      const olParent = closest(<Element>e.target, 'ol');
+      Array.from(olParent.children)
+        .filter(children => children !== liParent)
         .forEach(tree => removeClass(tree, 'expanded'));
     }
   }
 
   private _checkedEvent(e: MouseEvent): void {
     const target = <HTMLInputElement>e.target;
-    console.dir(target.value);
+    const checked = target.checked;
+    const liParent = closest(<Element>e.target, '.tree-parent');
+    const childrenCheckboxs = <HTMLInputElement[]>Array.from(liParent.querySelectorAll('.tree-checkbox')).filter(item => item !== target);
+    childrenCheckboxs.forEach(item => item.checked = checked);
+
+    let olParent = closest(<Element>e.target, 'ol');
+    while (olParent !== this.treeEl) {
+      console.log(olParent)
+      const siblingCheckboxs = <HTMLInputElement[]>Array.from(olParent.children).map(item => item.children[0].querySelector('.tree-checkbox'));
+      const siblingCheckboxsLength = siblingCheckboxs.length;
+      const siblingCheckedLength = siblingCheckboxs.filter(item => item.checked).length;
+      if(olParent.previousElementSibling){
+        const parentCheckbox = <HTMLInputElement>olParent.previousElementSibling.querySelector('.tree-checkbox');
+        parentCheckbox.indeterminate = siblingCheckboxsLength > siblingCheckedLength && siblingCheckedLength !== 0;
+        parentCheckbox.checked = siblingCheckedLength === siblingCheckboxsLength
+      }
+      olParent = closest(olParent.parentElement, 'ol');
+    }
   }
 
   public setTree(tree: Tree[]): this {
