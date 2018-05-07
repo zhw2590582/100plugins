@@ -16,13 +16,53 @@
 </head>
 
 <body>
-    <div class="main">tree</div>
+    <div class="tree-container"></div>
     <script src="js/consola.js"></script>
     <script>consola.creat({ position: 'right' });</script>
     <script src="tree/tree.js"></script>
     <script src="js/app.js"></script>
     <script>
-        var app = new Tree();
+
+        var nodes = [{
+            value: 'value1',
+            label: 'label1',
+            checked: true,
+            expanded: true,
+            children: [
+                { value: 'value1-1', label: 'label1-1' },
+                { value: 'value1-2', label: 'label1-2' }
+            ],
+        }, {
+            value: 'value2',
+            label: 'label2',
+            checked: true,
+            expanded: false,
+            children: [
+                { value: 'value2-1', label: 'label2-1' },
+                { value: 'value2-2', label: 'label2-2' }
+            ]
+        }, {
+            value: 'value3',
+            label: 'label3',
+            checked: false,
+            expanded: true,
+            children: [
+                { value: 'value3-1', label: 'label3-1' },
+                { value: 'value3-2', label: 'label3-2' }
+            ]
+        }];
+
+        var app = new Tree({
+            el: '.tree-container',
+            nodes: nodes,
+            checkbox: true,
+            onCheck: function (e, data) {
+                console.log(e)
+            },
+            onExpand: function (e, data) {
+                console.log(e)
+            }
+        });
     </script>
 </body>
 
