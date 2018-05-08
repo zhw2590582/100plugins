@@ -3,8 +3,8 @@ interface Options {
   nodes?: Tree[];
   checkbox?: boolean;
   accordion?: boolean;
-  onCheck?(e: MouseEvent, tree: Tree): void;
-  onExpand?(e: MouseEvent, tree: Tree): void;
+  onCheck?(e: MouseEvent): void;
+  onExpand?(e: MouseEvent): void;
 }
 
 interface Tree {
@@ -18,6 +18,7 @@ interface Tree {
 interface Configs extends Tree {
   inputTarget?: HTMLElement;
   path?: string;
+  children?: Configs[];
 }
 
 import './index.scss';
@@ -35,7 +36,6 @@ class Tree {
   private configs: Configs[];
   private containerEl: HTMLElement;
   private treeEl: HTMLElement;
-  private checkedList: string[];
 
   private constructor(options: Options) {
     this.options = {
@@ -43,7 +43,6 @@ class Tree {
       ...options
     };
 
-    this.checkedList = [];
     this.containerEl = document.querySelector(options.el);
     this._eventBind = this._eventBind.bind(this);
     this._init();
@@ -55,8 +54,8 @@ class Tree {
       nodes: [],
       checkbox: true,
       accordion: true,
-      onCheck: function () { },
-      onExpand: function () { }
+      onCheck: function() {},
+      onExpand: function() {}
     };
   }
 
@@ -65,7 +64,6 @@ class Tree {
     this._creatDom();
     this.configs = this._getPath(this.configs);
     this.treeEl.addEventListener('click', this._eventBind);
-    console.log(this)
     return this;
   }
 
@@ -77,22 +75,39 @@ class Tree {
           return `
           <li class="tree-parent${item.expanded ? ' expanded' : ''}">
             <div class="tree-text">
-              ${item.children && item.children.length > 0 ? '<span class="tree-expanded">expanded</span>' : ''}
-              ${self.options.checkbox ? `
+              ${
+                item.children && item.children.length > 0
+                  ? '<span class="tree-expanded"></span>'
+                  : ''
+              }
+              ${
+                self.options.checkbox
+                  ? `
                 <span class="tree-checked">
-                  <input class="tree-checkbox" type="checkbox" data-tree-path="${item.path}" value="${item.value}" ${item.checked ? ' checked' : ''}>
+                  <input class="tree-checkbox" type="checkbox" data-tree-path="${
+                    item.path
+                  }" value="${item.value}" ${item.checked ? ' checked' : ''}>
                 </span>
-                ` : ''
+                `
+                  : ''
               }
               <span class="tree-label">${item.label}</span>
             </div>
-            ${item.children && item.children.length > 0 ? `<ol> ${getStr(item.children)} </ol>` : ''}
+            ${
+              item.children && item.children.length > 0
+                ? `<ol> ${getStr(item.children)} </ol>`
+                : ''
+            }
           </li>
         `;
         })
         .join('');
     })(this.configs);
-    insertHtml(this.containerEl, 'beforeend', `<ol class="tree-el"> ${htmlStr} </ol>`);
+    insertHtml(
+      this.containerEl,
+      'beforeend',
+      `<ol class="tree-el"> ${htmlStr} </ol>`
+    );
     this.treeEl = this.containerEl.querySelector('.tree-el');
   }
 
@@ -100,8 +115,10 @@ class Tree {
     const target = e.target;
     if (hasClass(<Element>target, 'tree-expanded')) {
       this._expandedEvent(e);
+      this.options.onExpand(e);
     } else if (hasClass(<Element>target, 'tree-checkbox')) {
       this._checkedEvent(e);
+      this.options.onCheck(e);
     }
   }
 
@@ -119,23 +136,51 @@ class Tree {
   private _checkedEvent(e: MouseEvent): void {
     const target = <HTMLInputElement>e.target;
     const checked = target.checked;
-    const liParent = closest(<Element>e.target, '.tree-parent');
-    const childrenCheckboxs = <HTMLInputElement[]>Array.from(liParent.querySelectorAll('.tree-checkbox')).filter(item => item !== target);
-    childrenCheckboxs.forEach(item => item.checked = checked);
+    const path: number[] = target.dataset.treePath.split('.').map(Number);
+    let currentConfig = this._getCurrentConfig(path);
 
-    let olParent = closest(<Element>e.target, 'ol');
-    while (olParent !== this.treeEl) {
-      console.log(olParent)
-      const siblingCheckboxs = <HTMLInputElement[]>Array.from(olParent.children).map(item => item.children[0].querySelector('.tree-checkbox'));
-      const siblingCheckboxsLength = siblingCheckboxs.length;
-      const siblingCheckedLength = siblingCheckboxs.filter(item => item.checked).length;
-      if (olParent.previousElementSibling) {
-        const parentCheckbox = <HTMLInputElement>olParent.previousElementSibling.querySelector('.tree-checkbox');
-        parentCheckbox.indeterminate = siblingCheckboxsLength > siblingCheckedLength && siblingCheckedLength !== 0;
-        parentCheckbox.checked = siblingCheckedLength === siblingCheckboxsLength
+    // 向下传播
+    (function spreadDown(config: Configs): void {
+      if (config.children && config.children.length > 0) {
+        config.children.forEach(item => {
+          (<HTMLInputElement>item.inputTarget).checked = checked;
+          (<HTMLInputElement>item.inputTarget).indeterminate = false;
+          spreadDown(item);
+        });
       }
-      olParent = closest(olParent.parentElement, 'ol');
+    })(currentConfig);
+
+    // 向上传播
+    let pathCopy = [...path];
+    let self = this;
+    (function spreadUp(): void {
+      if (pathCopy.length <= 1) return;
+      pathCopy.pop();
+      let parentConfig = self._getCurrentConfig(pathCopy);
+      let checkboxsLength = parentConfig.children.length;
+      let checkboxsCheckedLength = parentConfig.children.filter(
+        item => (<HTMLInputElement>item.inputTarget).checked
+      ).length;
+      let checkboxsIndeterminateLength = parentConfig.children.filter(
+        item => (<HTMLInputElement>item.inputTarget).indeterminate
+      ).length;
+      (<HTMLInputElement>parentConfig.inputTarget).indeterminate =
+        (checkboxsLength > checkboxsCheckedLength &&
+          checkboxsCheckedLength !== 0) ||
+        checkboxsIndeterminateLength > 0;
+      (<HTMLInputElement>parentConfig.inputTarget).checked =
+        checkboxsLength === checkboxsCheckedLength;
+      spreadUp();
+    })();
+  }
+
+  private _getCurrentConfig(path: number[]): Configs {
+    let currentConfig = this.configs[path[0]];
+    if (path.length === 1) return currentConfig;
+    for (let index = 1; index < path.length; index++) {
+      currentConfig = currentConfig.children[path[index]];
     }
+    return currentConfig;
   }
 
   private _setPath(tree: Tree[], deep?: string): Configs[] {
@@ -155,21 +200,26 @@ class Tree {
     return (function getPath(configs): Configs[] {
       return configs.map(item => {
         return Object.assign({}, item, {
-          inputTarget: self.containerEl.querySelector(`[data-tree-path='${item.path}']`),
+          inputTarget: self.containerEl.querySelector(
+            `[data-tree-path='${item.path}']`
+          ),
           children: item.children ? getPath(item.children) : []
         });
-      })
+      });
     })(configs);
   }
 
-  public setTree(tree: Tree[]): this {
-    this.configs = this._setPath(tree);
-    this.destroy()._init();
-    return this;
-  }
-
   public getChecked(): string[] {
-    return this.checkedList;
+    let checkedList: string[] = [];
+    (function getChecked(configs: Configs[]) {
+      configs.forEach(item => {
+        if ((<HTMLInputElement>item.inputTarget).checked) {
+          checkedList.push(item.value);
+        }
+        item.children && getChecked(item.children);
+      });
+    })(this.configs);
+    return checkedList;
   }
 
   public destroy(): this {
