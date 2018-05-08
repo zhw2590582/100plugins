@@ -9,11 +9,11 @@ import Tree from './js/tree.js';
 
 var nodes = [
   {
-    value: 'value1',
-    label: 'label1',
-    checked: true,
-    expanded: true,
-    children: [
+    value: 'value1', // value
+    label: 'label1', // 展示文字
+    checked: true, // 默认是否选中
+    expanded: true, // 默认是否展开
+    children: [ // 子数组
       { value: 'value1-1', label: 'label1-1' },
       { value: 'value1-2', label: 'label1-2' },
       { value: 'value1-3', label: 'label1-3' }
@@ -33,6 +33,13 @@ var app = new Tree({
     console.log(e);
   }
 });
+
+// 获取当前选中项
+app.getChecked();
+
+// 销毁插件
+app.destroy();
+
 ```
 
 ## 开发
