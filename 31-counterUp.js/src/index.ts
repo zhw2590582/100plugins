@@ -15,8 +15,6 @@ interface ElItem {
   number: number;
 }
 
-import {} from './utils';
-
 class CounterUp {
   private options: Options;
   private elementArr: ElItem[];
