@@ -7,7 +7,22 @@
 ```js
 import CounterUp from "./js/counterUp.js";
 
-var app = new CounterUp();
+var app = new CounterUp('.counter', {
+    delay: 20, // 更新速度，选填
+    time: 1000, // 总时间，选填
+    counterFn: function (number, el) { // 格式化自定义数字，选填，参数为当前数字和对应的dom元素
+        return '$ ' + number;
+    },
+    startCallback: function (number, el) { // 开始钩子，选填，参数为当前数字和对应的dom元素
+        console.log('开始：' + number);
+    },
+    endCallback: function (number, el) { // 结束钩子，选填，参数为当前数字和对应的dom元素
+        console.log('结束：' + number);
+    }
+});
+
+// 开始
+app.start();
 
 ```
 ## 开发
