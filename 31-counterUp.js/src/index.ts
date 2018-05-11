@@ -19,7 +19,7 @@ class CounterUp {
   private options: Options;
   private elementArr: ElItem[];
 
-  private constructor(element: string = '.counter', options: Options) {
+  private constructor(element: string = '.counter', options: Options = {}) {
     this.options = Object.assign({}, CounterUp.DEFAULTS, options);
     this._verifyOptions(this.options);
     this.elementArr = Array.from(document.querySelectorAll(element)).map(
