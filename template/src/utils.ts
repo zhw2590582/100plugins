@@ -91,11 +91,16 @@ export function clamp(num: number, a: number, b: number): number {
 
 const captureMode = false;
 
-export function on(el: HTMLElement, event: string, fn: EventListenerObject, options = {}): void {
+export function on(el: HTMLElement, event: string, fn: EventListenerObject, options = {}): Object {
   el.addEventListener(event, fn, {
       capture: captureMode,
       ...options
   });
+  return {
+    destroy() {
+      off(el, event, fn, options)
+    }
+  }
 }
 
 export function off(el: HTMLElement, event: string, fn: EventListenerObject, options = {}): void {
