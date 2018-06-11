@@ -55,7 +55,7 @@ export function getStyle(
   property: string,
   isNum?: boolean
 ): string | number {
-  let val = window.getComputedStyle(el, null).getPropertyValue(property);
+  let val = document.defaultView.getComputedStyle(el, null).getPropertyValue(property);
   return isNum ? parseFloat(val) : val;
 }
 
@@ -88,3 +88,43 @@ export function insertHtml(
 export function clamp(num: number, a: number, b: number): number {
   return Math.max(Math.min(num, Math.max(a, b)), Math.min(a, b));
 }
+
+const captureMode = false;
+
+export function on(el: HTMLElement, event: string, fn: EventListenerObject, options = {}): void {
+  el.addEventListener(event, fn, {
+      capture: captureMode,
+      ...options
+  });
+}
+
+export function off(el: HTMLElement, event: string, fn: EventListenerObject, options = {}): void {
+  el.removeEventListener(event, fn, {
+      capture: captureMode,
+      ...options
+  });
+}
+
+export function autoBind(): void {
+  const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
+  for (let fn of methods) {
+    if (fn.charAt(0) === '_' && typeof this[fn] === 'function') {
+      this[fn] = this[fn].bind(this);
+    }
+  }
+}
+
+export function debounce(ctx: any, func: Function, wait: number): Function {
+  let timeout: any;
+  return () => {
+      const later = function () {
+          timeout = null;
+          func.apply(ctx, arguments);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (!timeout) {
+          func.apply(ctx, arguments);
+      }
+  };
+};
