@@ -55,7 +55,9 @@ export function getStyle(
   property: string,
   isNum?: boolean
 ): string | number {
-  let val = document.defaultView.getComputedStyle(el, null).getPropertyValue(property);
+  let val = document.defaultView
+    .getComputedStyle(el, null)
+    .getPropertyValue(property);
   return isNum ? parseFloat(val) : val;
 }
 
@@ -91,22 +93,32 @@ export function clamp(num: number, a: number, b: number): number {
 
 const captureMode = false;
 
-export function on(el: HTMLElement, event: string, fn: EventListenerObject, options = {}): Object {
+export function on(
+  el: HTMLElement,
+  event: string,
+  fn: EventListenerObject,
+  options = {}
+): Object {
   el.addEventListener(event, fn, {
-      capture: captureMode,
-      ...options
+    capture: captureMode,
+    ...options
   });
   return {
     destroy() {
-      off(el, event, fn, options)
+      off(el, event, fn, options);
     }
-  }
+  };
 }
 
-export function off(el: HTMLElement, event: string, fn: EventListenerObject, options = {}): void {
+export function off(
+  el: HTMLElement,
+  event: string,
+  fn: EventListenerObject,
+  options = {}
+): void {
   el.removeEventListener(event, fn, {
-      capture: captureMode,
-      ...options
+    capture: captureMode,
+    ...options
   });
 }
 
@@ -122,14 +134,38 @@ export function autoBind(): void {
 export function debounce(ctx: any, func: Function, wait: number): Function {
   let timeout: any;
   return () => {
-      const later = function () {
-          timeout = null;
-          func.apply(ctx, arguments);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (!timeout) {
-          func.apply(ctx, arguments);
-      }
+    const later = function() {
+      timeout = null;
+      func.apply(ctx, arguments);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (!timeout) {
+      func.apply(ctx, arguments);
+    }
   };
-};
+}
+
+export function recordAnimationFrames(
+  callback: Function,
+  autoStart = true
+): Object {
+  let running = true,
+    raf: number;
+  const stop = () => {
+    running = false;
+    cancelAnimationFrame(raf);
+  };
+  const start = () => {
+    running = true;
+    run();
+  };
+  const run = () => {
+    raf = requestAnimationFrame(() => {
+      callback();
+      if (running) run();
+    });
+  };
+  if (autoStart) start();
+  return { start, stop };
+}
