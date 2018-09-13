@@ -33,6 +33,7 @@
 * [29-split.js(视图分割插件)](https://zhw2590582.github.io/100plugins/29-split.js/)
 * [30-tree.js(树结构插件)](https://zhw2590582.github.io/100plugins/30-tree.js/)
 * [31-counterUp.js(数字累计插件)](https://zhw2590582.github.io/100plugins/31-counterUp.js/)
+* [32-scrollView.js(插件)](https://zhw2590582.github.io/100plugins/32-scrollView.js/)
 <!-- new -->
   
 ## 新建插件
