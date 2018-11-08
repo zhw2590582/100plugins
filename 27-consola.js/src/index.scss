@@ -1,6 +1,8 @@
 .consola-container {
   opacity: 0.9;
-  position: fixed;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
   background-color: rgb(36, 36, 36);
 
   &.right {
@@ -20,7 +22,6 @@
   }
 
   .consola-tools{
-    position: absolute;
     left: 0;
     right: 0;
     top: 0;
@@ -42,10 +43,9 @@
   }
 
   .consola-wrap {
+    flex: 1;
     position: relative;
     z-index: 1;
-    height: 100%;
-    padding-top: 30px;
     overflow-y: auto;
     word-break: break-word;
     box-sizing: border-box;

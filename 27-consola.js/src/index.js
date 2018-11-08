@@ -50,7 +50,7 @@ consola.creat = (options = {}) => {
     countEl.innerHTML = wrapEl.children.length;
     wrapEl.scrollTo(0, wrapEl.scrollHeight);
   });
-
+  
   return consola;
 };
 
